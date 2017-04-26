@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">StudyManager</string>
+    <string name="edit_question">Edit Question</string>
+    <string name="save_challenge">Save Challenge</string>
+    <string name="add_question">Add Question</string>
+    <string name="delete_question">Delete Question</string>
+    <string name="browse_challenges">Browse Challenges</string>
+    <string name="continue_challenge">Continue Challenge</string>
+    <string name="logo_of_studymanager">Logo of StudyManager</string>
+    <string name="add_challenge">Add Challenge</string>
+    <string name="select_challenge">Select Challenge</string>
+    <string name="delete_challenge">Delete Challenge</string>
+    <string name="challenge_name">Challenge Name</string>
+    <string name="inactive">Inactive</string>
+    <string name="active">Active</string>
+</resources>
