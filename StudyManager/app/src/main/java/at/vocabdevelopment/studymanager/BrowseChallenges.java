@@ -26,10 +26,10 @@ public class BrowseChallenges extends Activity implements View.OnClickListener{
 
         buttonAddChallenge = (Button) findViewById(R.id.buttonAddChallenge);
         buttonSelectChallenge = (Button) findViewById(R.id.buttonSelectChallenge);
-        challengeList = (ListView) findViewById(R.id.listViewChallanges);
+        challengeList = (ListView) findViewById(R.id.listViewChallenges);
 
-        //TODO: Just for prototype
-        File[] challengeFiles = StudyManager.storageDir.listFiles();
+        //TODO: Just for prototype, we should read the json file instead of this...
+        File[] challengeFiles = StudyManager.getStorageDir().listFiles();
         List<String> challengeNames = new ArrayList<String>();
         for (File file : challengeFiles) {
             if (file.isFile()) {
@@ -54,8 +54,7 @@ public class BrowseChallenges extends Activity implements View.OnClickListener{
 
         Button clickedButton = (Button) v;
 
-        switch(clickedButton.getId())
-        {
+        switch(clickedButton.getId()) {
             case R.id.buttonAddChallenge:
                 Intent newChallenge = new Intent(getApplicationContext(), NewChallenge.class);
                 startActivity(newChallenge);
@@ -65,11 +64,7 @@ public class BrowseChallenges extends Activity implements View.OnClickListener{
                 System.out.println("Select Button clicked");
                 break;
             default:
-                //TODO: still needs to be implemented...
-                System.out.println("Default behaviour not handled yet...");
-                break;
+                throw new IllegalArgumentException("Action can not be handled.");
         }
     }
-
-
 }
