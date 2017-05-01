@@ -29,7 +29,7 @@ public class BrowseChallenges extends Activity implements View.OnClickListener{
         challengeList = (ListView) findViewById(R.id.listViewChallenges);
 
         //TODO: Just for prototype, we should read the json file instead of this...
-        File[] challengeFiles = StudyManager.storageDir.listFiles();
+        File[] challengeFiles = StudyManager.getStorageDir().listFiles();
         List<String> challengeNames = new ArrayList<String>();
         for (File file : challengeFiles) {
             if (file.isFile()) {

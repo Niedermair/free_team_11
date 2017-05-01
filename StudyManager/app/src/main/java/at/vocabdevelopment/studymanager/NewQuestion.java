@@ -61,13 +61,13 @@ public class NewQuestion extends Activity implements View.OnClickListener{
                 String challengeAnswer = getChallengeAnswer();
                 String challengeQuestionName = getChallengeQuestionName();
 
-                if(challengeQuestionName.matches("")) {
+                if(challengeQuestionName.trim().matches("")) {
                     Toast.makeText(this, R.string.toast_empty_question_name, Toast.LENGTH_SHORT).show();
                     return;
-                } else if(challengeQuestion.matches("")){
+                } else if(challengeQuestion.trim().matches("")){
                     Toast.makeText(this, R.string.toast_empty_challenge_question, Toast.LENGTH_SHORT).show();
                     return;
-                } else if(challengeAnswer.matches("")){
+                } else if(challengeAnswer.trim().matches("")){
                     Toast.makeText(this, R.string.toast_empty_challenge_answer, Toast.LENGTH_SHORT).show();
                     return;
                 } else{
@@ -81,9 +81,7 @@ public class NewQuestion extends Activity implements View.OnClickListener{
 
                 break;
             default:
-                //TODO: still needs to be implemented...
-                System.out.println("Default behaviour not handled yet...");
-                break;
+                throw new IllegalArgumentException("Action can not be handled.");
         }
     }
 

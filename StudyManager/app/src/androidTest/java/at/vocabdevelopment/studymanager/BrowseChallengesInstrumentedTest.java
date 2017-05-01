@@ -2,8 +2,6 @@ package at.vocabdevelopment.studymanager;
 
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.view.View;
-import android.widget.Button;
 
 import org.junit.Rule;
 import org.junit.Test;

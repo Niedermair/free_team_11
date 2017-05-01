@@ -96,8 +96,8 @@ public class Start extends Activity implements View.OnClickListener{
     }
 
     public void createExternalStorageFolder(){
-        if (!StudyManager.storageDir.exists()) {
-            StudyManager.storageDir.mkdirs();
+        if (!StudyManager.getStorageDir().exists()) {
+            StudyManager.getStorageDir().mkdirs();
         }
     }
 }

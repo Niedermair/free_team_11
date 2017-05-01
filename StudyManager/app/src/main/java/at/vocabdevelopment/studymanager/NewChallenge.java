@@ -74,11 +74,9 @@ public class NewChallenge extends Activity implements View.OnClickListener{
                 extras.remove("challenge");
             }else{
                 challenge = new Challenge("", new ArrayList<Question>());
-                Log.d("app", "No 'challenge' key found in extras.");
             }
         }else{
             challenge = new Challenge("", new ArrayList<Question>());
-            Log.d("app", "No extras found in current intent.");
         }
 
         editTextChallengeName.setText(challenge.getName());
@@ -105,7 +103,7 @@ public class NewChallenge extends Activity implements View.OnClickListener{
         switch(clickedButton.getId())
         {
             case R.id.buttonSaveChallenge:
-                if(challenge.getName().matches("")){
+                if(challenge.getName().trim().matches("")){
                     Toast.makeText(this, getApplicationContext().getString(R.string.toast_empty_challenge_name), Toast.LENGTH_SHORT).show();
                     return;
                 }else if(challenge.getQuestionList().size() <= 0){
@@ -148,9 +146,7 @@ public class NewChallenge extends Activity implements View.OnClickListener{
                 System.out.println("Delete Question Button clicked");
                 break;
             default:
-                //TODO: still needs to be implemented...
-                System.out.println("Default behaviour not handled yet...");
-                break;
+                throw new IllegalArgumentException("Action can not be handled.");
         }
 
     }
@@ -159,7 +155,7 @@ public class NewChallenge extends Activity implements View.OnClickListener{
 
         JsonWriter challengeWriter = null;
 
-        File challengeFile = new File(StudyManager.storageDir + File.separator + challenge.getName() + ".json");
+        File challengeFile = new File(StudyManager.getStorageDir() + File.separator + challenge.getName() + ".json");
         if(!challengeFile.exists()){
             try {
 

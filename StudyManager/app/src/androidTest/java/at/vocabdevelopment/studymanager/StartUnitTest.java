@@ -1,8 +1,5 @@
 package at.vocabdevelopment.studymanager;
 
-import android.app.Activity;
-import android.widget.Button;
-
 import org.junit.Test;
 
 import static org.junit.Assert.*;

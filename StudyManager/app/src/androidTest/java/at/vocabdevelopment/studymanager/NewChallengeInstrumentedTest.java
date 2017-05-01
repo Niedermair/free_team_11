@@ -1,8 +1,11 @@
 package at.vocabdevelopment.studymanager;
 
+import android.content.Intent;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.widget.ListView;
 
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -37,7 +40,7 @@ public class NewChallengeInstrumentedTest {
 
     @Test
     public void testToastSaveChallengeWithoutName() throws Exception{
-        onView(withId(R.id.editTextChallengeName)).perform(typeText(""));
+        onView(withId(R.id.editTextChallengeName)).perform(typeText(" "));
         onView(withId(R.id.buttonSaveChallenge)).perform(click());
         onView(withText(R.string.toast_empty_challenge_name))
                 .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
@@ -52,7 +55,6 @@ public class NewChallengeInstrumentedTest {
                 .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
                 .check(matches(isDisplayed()));
     }
-
 
     //TODO: still to implement....
 

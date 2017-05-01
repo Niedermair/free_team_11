@@ -26,9 +26,9 @@ public class NewQuestionInstrumentedTest {
 
     @Test
     public void testToastEmptyQuestionName() throws Exception{
-        onView(withId(R.id.editTextQuestionName)).perform(typeText(""));
-        onView(withId(R.id.editTextQuestion)).perform(typeText(""));
-        onView(withId(R.id.editTextAnswer)).perform(typeText(""));
+        onView(withId(R.id.editTextQuestionName)).perform(typeText(" "));
+        onView(withId(R.id.editTextQuestion)).perform(typeText(" "));
+        onView(withId(R.id.editTextAnswer)).perform(typeText(" "));
         onView(withId(R.id.buttonSaveQuestion)).perform(click());
         onView(withText(R.string.toast_empty_question_name))
                 .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
@@ -38,8 +38,21 @@ public class NewQuestionInstrumentedTest {
     @Test
     public void testToastEmptyChallengeQuestion() throws Exception{
         onView(withId(R.id.editTextQuestionName)).perform(typeText("Question Test Name"));
-        onView(withId(R.id.editTextQuestion)).perform(typeText(""));
-        onView(withId(R.id.editTextAnswer)).perform(typeText(""));
+        onView(withId(R.id.editTextQuestion)).perform(typeText(" "));
+        onView(withId(R.id.editTextAnswer)).perform(typeText(" "));
+        onView(withId(R.id.buttonSaveQuestion)).perform(click());
+        onView(withText(R.string.toast_empty_challenge_question))
+                .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
+                .check(matches(isDisplayed()));
+    }
+
+
+
+    @Test
+    public void testToastEmptyChallengeQuestion2() throws Exception{
+        onView(withId(R.id.editTextQuestionName)).perform(typeText("Question Test Name"));
+        onView(withId(R.id.editTextQuestion)).perform(typeText(" "));
+        onView(withId(R.id.editTextAnswer)).perform(typeText("Answer Example"));
         onView(withId(R.id.buttonSaveQuestion)).perform(click());
         onView(withText(R.string.toast_empty_challenge_question))
                 .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
@@ -50,19 +63,10 @@ public class NewQuestionInstrumentedTest {
     public void testToastEmptyChallengeAnswer() throws Exception{
         onView(withId(R.id.editTextQuestionName)).perform(typeText("Question Test Name"));
         onView(withId(R.id.editTextQuestion)).perform(typeText("Question Example"));
-        onView(withId(R.id.editTextAnswer)).perform(typeText(""));
+        onView(withId(R.id.editTextAnswer)).perform(typeText(" "));
         onView(withId(R.id.buttonSaveQuestion)).perform(click());
         onView(withText(R.string.toast_empty_challenge_answer))
                 .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
                 .check(matches(isDisplayed()));
     }
-
-    //@Test
-    //public void testButtons() throws Exception {
-    //    onView(withId(R.id.buttonSaveQuestion)).perform(click());
-    //}
-
-    //TODO: Test Toggle Button extra, since we need to select a question for this
-
-
 }
