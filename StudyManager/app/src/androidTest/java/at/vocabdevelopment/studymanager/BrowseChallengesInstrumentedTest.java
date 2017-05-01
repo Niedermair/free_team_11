@@ -2,6 +2,8 @@ package at.vocabdevelopment.studymanager;
 
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.view.View;
+import android.widget.Button;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -21,22 +23,21 @@ public class BrowseChallengesInstrumentedTest {
     public ActivityTestRule<BrowseChallenges> mActivityRule = new ActivityTestRule<>(BrowseChallenges.class);
 
     @Test
-    public void testButtons() throws Exception {
-        onView(withId(R.id.buttonAddChallenge)).perform(click());
+    public void testSelectChallenge() throws Exception {
         onView(withId(R.id.buttonSelectChallenge)).perform(click());
     }
 
     @Test
-    public void testNewChallengeRedirect() throws  Exception {
+    public void testAddChallengeRedirect() throws Exception{
         onView(withId(R.id.buttonAddChallenge)).perform(click());
 
+        onView(withId(R.id.editTextChallengeName)).check(matches(isDisplayed()));
         onView(withId(R.id.buttonDeleteChallenge)).check(matches(isDisplayed()));
+        onView(withId(R.id.listViewQuestions)).check(matches(isDisplayed()));
         onView(withId(R.id.buttonSaveChallenge)).check(matches(isDisplayed()));
-        onView(withId(R.id.buttonEditQuestion)).check(matches(isDisplayed()));
         onView(withId(R.id.buttonAddQuestion)).check(matches(isDisplayed()));
         onView(withId(R.id.buttonDeleteQuestion)).check(matches(isDisplayed()));
-        onView(withId(R.id.toggleButtonQuestionStatus)).check(matches(isDisplayed()));
-        onView(withId(R.id.textInputChallengeName)).check(matches(isDisplayed()));
-        onView(withId(R.id.listViewQuestions)).check(matches(isDisplayed()));
+        onView(withId(R.id.buttonEditQuestion)).check(matches(isDisplayed()));
     }
 }
+
