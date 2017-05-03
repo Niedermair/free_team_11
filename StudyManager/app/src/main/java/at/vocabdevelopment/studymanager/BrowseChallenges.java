@@ -4,15 +4,19 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.app.Activity;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 public class BrowseChallenges extends Activity implements View.OnClickListener{
+
+    private String selectedChallenge;
 
     public Button buttonAddChallenge;
     public Button buttonSelectChallenge;
@@ -30,7 +34,7 @@ public class BrowseChallenges extends Activity implements View.OnClickListener{
 
         //TODO: Just for prototype, we should read the json file instead of this...
         File[] challengeFiles = StudyManager.getStorageDir().listFiles();
-        List<String> challengeNames = new ArrayList<String>();
+        final List<String> challengeNames = new ArrayList<String>();
         for (File file : challengeFiles) {
             if (file.isFile()) {
                 challengeNames.add(file.getName());
@@ -46,7 +50,12 @@ public class BrowseChallenges extends Activity implements View.OnClickListener{
 
         buttonAddChallenge.setOnClickListener(this);
         buttonSelectChallenge.setOnClickListener(this);
-
+        challengeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                selectedChallenge = challengeList.getItemAtPosition(position).toString();
+            }
+        });
     }
 
     @Override
@@ -60,8 +69,16 @@ public class BrowseChallenges extends Activity implements View.OnClickListener{
                 startActivity(newChallenge);
                 break;
             case R.id.buttonSelectChallenge:
-                //TODO: still needs to be implemented...
-                System.out.println("Select Button clicked");
+                if (selectedChallenge == null)
+                {
+                    Toast.makeText(this, "Please select a challenge...", Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    Intent setupChallenge = new Intent(getApplicationContext(), SetupChallenge.class);
+                    setupChallenge.putExtra("SELECTED_CHALLENGE", selectedChallenge);
+                    startActivity(setupChallenge);
+                }
                 break;
             default:
                 throw new IllegalArgumentException("Action can not be handled.");

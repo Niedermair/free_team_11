@@ -22,4 +22,13 @@
     <string name="toast_empty_challenge_question">You did not enter a Challenge Question"</string>
     <string name="toast_empty_challenge_answer">You did not enter a Challenge Answer</string>
     <string name="permission_information">We need to access your External storage. Please grant the corresponding permissions.</string>
+    <string name="edit_challenge">Edit</string>
+    <string name="toast_select_challenge">"Please select a challenge…"</string>
+    <string name="active_deck">Active Deck</string>
+    <string name="total_deck">Total Deck</string>
+    <string name="easy">Easy</string>
+    <string name="medium">Medium</string>
+    <string name="hard">Hard</string>
+    <string name="card_deck">Card Deck:</string>
+    <string name="difficulty">Difficulty:</string>
 </resources>

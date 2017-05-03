@@ -9,10 +9,14 @@ import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
 
 @RunWith(AndroidJUnit4.class)
 public class BrowseChallengesInstrumentedTest {
@@ -36,6 +40,14 @@ public class BrowseChallengesInstrumentedTest {
         onView(withId(R.id.buttonAddQuestion)).check(matches(isDisplayed()));
         onView(withId(R.id.buttonDeleteQuestion)).check(matches(isDisplayed()));
         onView(withId(R.id.buttonEditQuestion)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testToastSelectChallengeWithoutListItem() throws Exception {
+        onView(withId(R.id.buttonSelectChallenge)).perform(click());
+        onView(withText("Please select a challenge..."))
+                .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
+                .check(matches(isDisplayed()));
     }
 }
 
