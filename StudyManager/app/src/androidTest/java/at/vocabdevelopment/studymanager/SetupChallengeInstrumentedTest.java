@@ -1,6 +1,7 @@
 package at.vocabdevelopment.studymanager;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -19,7 +20,17 @@ import static org.junit.Assert.assertEquals;
 
 public class SetupChallengeInstrumentedTest {
     @Rule
-    public ActivityTestRule<SetupChallenge> mActivityRule = new ActivityTestRule<>(SetupChallenge.class);
+    public ActivityTestRule<SetupChallenge> mActivityRule = new ActivityTestRule<SetupChallenge>(SetupChallenge.class)
+    {
+        @Override
+        protected Intent getActivityIntent() {
+            Context targetContext = InstrumentationRegistry.getInstrumentation()
+                    .getTargetContext();
+            Intent result = new Intent(targetContext, SetupChallenge.class);
+            result.putExtra("SELECTED_CHALLENGE", "InstrumentedTestName");
+            return result;
+        }
+    };
 
     @Test
     public void testButtons() {
