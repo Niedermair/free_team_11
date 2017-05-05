@@ -28,6 +28,9 @@
             android:name=".NewChallenge">
         </activity>
         <activity
+            android:name=".EditChallenge">
+        </activity>
+        <activity
             android:name=".NewQuestion">
         </activity>
 
