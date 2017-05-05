@@ -139,6 +139,7 @@ public class NewChallenge extends Activity implements View.OnClickListener{
             case R.id.buttonAddQuestion:
                 Intent newQuestion = new Intent(getApplicationContext(), NewQuestion.class);
                 newQuestion.putExtra("challenge", challenge);
+                newQuestion.putExtra("fromActivity", "newChallenge");
                 startActivity(newQuestion);
                 break;
             case R.id.buttonDeleteQuestion:
