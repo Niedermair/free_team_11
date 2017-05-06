@@ -8,38 +8,60 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class NewQuestion extends Activity implements View.OnClickListener{
+public class EditQuestion extends Activity implements View.OnClickListener{
 
-    public Button buttonSaveQuestion;
-    public EditText editTextQuestion;
-    public EditText editTextAnswer;
-    public EditText editTextQuestionName;
+    public Button buttonSaveQuestionEdit;
+    public EditText editTextQuestionEdit;
+    public EditText editTextAnswerEdit;
+    public EditText editTextQuestionNameEdit;
 
     public Challenge challenge;
     public String fromActivity;
+    public int questionPosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_new_question);
+        setContentView(R.layout.activity_edit_question);
 
-        buttonSaveQuestion = (Button) findViewById(R.id.buttonSaveQuestion);
-        editTextQuestion = (EditText) findViewById(R.id.editTextQuestion);
-        editTextAnswer = (EditText) findViewById(R.id.editTextAnswer);
-        editTextQuestionName = (EditText) findViewById(R.id.editTextQuestionName);
+        buttonSaveQuestionEdit = (Button) findViewById(R.id.buttonSaveQuestionEdit);
+        editTextQuestionEdit = (EditText) findViewById(R.id.editTextQuestionEdit);
+        editTextAnswerEdit = (EditText) findViewById(R.id.editTextAnswerEdit);
+        editTextQuestionNameEdit = (EditText) findViewById(R.id.editTextQuestionNameEdit);
 
-        buttonSaveQuestion.setOnClickListener(this);
+        buttonSaveQuestionEdit.setOnClickListener(this);
 
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
 
         if(extras != null) {
-            if (extras.containsKey("challenge") && extras.containsKey("fromActivity")) {
+            if (extras.containsKey("challenge") &&
+                    extras.containsKey("fromActivity") &&
+                    extras.containsKey("questionPosition")) {
+
                 challenge = (Challenge) extras.getSerializable("challenge");
                 fromActivity = intent.getStringExtra("fromActivity");
+
+                int position = intent.getIntExtra("questionPosition", -1);
+                if(position >= 0 && position < challenge.getQuestionList().size()){
+                    questionPosition = position;
+
+                    Question currentQuestion = challenge.getQuestionList().get(questionPosition);
+                    editTextQuestionNameEdit.setText(currentQuestion.getName());
+                    editTextAnswerEdit.setText(currentQuestion.getAnswer());
+                    editTextQuestionEdit.setText(currentQuestion.getQuestion());
+
+                }else{
+                    Toast.makeText(this, getApplicationContext().getString(R.string.toast_error_corrupt_data), Toast.LENGTH_SHORT).show();
+                    Intent start = new Intent(getApplicationContext(), Start.class);
+                    startActivity(start);
+                }
+
                 extras.remove("fromActivity");
                 extras.remove("challenge");
+                extras.remove("questionPosition");
+
             } else {
                 Toast.makeText(this, getApplicationContext().getString(R.string.toast_error_missing_data), Toast.LENGTH_SHORT).show();
                 Intent start = new Intent(getApplicationContext(), Start.class);
@@ -59,22 +81,24 @@ public class NewQuestion extends Activity implements View.OnClickListener{
 
         switch(clickedButton.getId())
         {
-            case R.id.buttonSaveQuestion:
+            case R.id.buttonSaveQuestionEdit:
 
+                String challengeQuestionName = getChallengeQuestionName();
                 String challengeQuestion = getChallengeQuestion();
                 String challengeAnswer = getChallengeAnswer();
-                String challengeQuestionName = getChallengeQuestionName();
 
                 if(challengeQuestionName.trim().matches("")) {
                     Toast.makeText(this, R.string.toast_empty_question_name, Toast.LENGTH_SHORT).show();
                     return;
                 } else if(challengeQuestion.trim().matches("")){
                     Toast.makeText(this, R.string.toast_empty_challenge_question, Toast.LENGTH_SHORT).show();
+                    return;
                 } else if(challengeAnswer.trim().matches("")){
                     Toast.makeText(this, R.string.toast_empty_challenge_answer, Toast.LENGTH_SHORT).show();
+                    return;
                 } else{
-                    Question newQuestion = new Question(challengeQuestionName, challengeQuestion, challengeAnswer);
-                    challenge.addQuestion(newQuestion);
+                    Question editedQuestion = new Question(challengeQuestionName, challengeQuestion, challengeAnswer);
+                    challenge.getQuestionList().set(questionPosition, editedQuestion);
 
                     switch (fromActivity) {
                         case "newChallenge":
@@ -101,14 +125,14 @@ public class NewQuestion extends Activity implements View.OnClickListener{
     }
 
     public String getChallengeQuestion(){
-        return editTextQuestion.getText().toString();
+        return editTextQuestionEdit.getText().toString();
     }
 
     public String getChallengeAnswer(){
-        return editTextAnswer.getText().toString();
+        return editTextAnswerEdit.getText().toString();
     }
 
     public String getChallengeQuestionName(){
-        return editTextQuestionName.getText().toString();
+        return editTextQuestionNameEdit.getText().toString();
     }
 }

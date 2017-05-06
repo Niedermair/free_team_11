@@ -57,6 +57,8 @@ public class BrowseChallenges extends Activity implements View.OnClickListener{
         switch(clickedButton.getId()) {
             case R.id.buttonAddChallenge:
                 Intent newChallenge = new Intent(getApplicationContext(), NewChallenge.class);
+                Challenge challenge = new Challenge("", new ArrayList<Question>());
+                newChallenge.putExtra("challenge", challenge);
                 startActivity(newChallenge);
                 break;
             case R.id.buttonSelectChallenge:

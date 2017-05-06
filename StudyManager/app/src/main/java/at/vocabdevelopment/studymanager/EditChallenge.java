@@ -3,7 +3,11 @@ package at.vocabdevelopment.studymanager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.app.Activity;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -25,6 +29,7 @@ public class EditChallenge extends Activity implements View.OnClickListener{
     public ListView questionList;
 
     public Challenge challenge;
+    public int selectedQuestionPos = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +50,19 @@ public class EditChallenge extends Activity implements View.OnClickListener{
         buttonEditQuestion.setOnClickListener(this);
         buttonAddQuestion.setOnClickListener(this);
         buttonDeleteQuestion.setOnClickListener(this);
+
+        editTextChallengeName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                challenge.setName(s.toString());
+            }
+        });
 
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
@@ -67,6 +85,14 @@ public class EditChallenge extends Activity implements View.OnClickListener{
                         questionNames);
 
                 questionList.setAdapter(challengeQuestionsAdapter);
+
+                questionList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        selectedQuestionPos = position;
+                        Log.e("app", "Item position: "+ position);
+                    }
+                });
 
             }else{
                 Toast.makeText(this, getApplicationContext().getString(R.string.toast_error_missing_data), Toast.LENGTH_SHORT).show();
@@ -96,8 +122,15 @@ public class EditChallenge extends Activity implements View.OnClickListener{
                 System.out.println("Delete Challenge Button clicked");
                 break;
             case R.id.buttonEditChallengeEditQuestion:
-                //TODO: still needs to be implemented...
-                System.out.println("Edit Question Button clicked");
+                if(selectedQuestionPos >= 0){
+                    Intent editQuestion = new Intent(getApplicationContext(), EditQuestion.class);
+                    editQuestion.putExtra("challenge", challenge);
+                    editQuestion.putExtra("questionPosition", selectedQuestionPos);
+                    editQuestion.putExtra("fromActivity", "editChallenge");
+                    startActivity(editQuestion);
+                }else{
+                    Toast.makeText(this, R.string.toast_select_a_question, Toast.LENGTH_SHORT).show();
+                }
                 break;
             case R.id.buttonEditChallengeAddQuestion:
                 Intent newQuestion = new Intent(getApplicationContext(), NewQuestion.class);
