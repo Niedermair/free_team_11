@@ -23,6 +23,15 @@
     <string name="toast_empty_challenge_answer">You did not enter a challenge answer</string>
     <string name="toast_select_a_question">Please select a question first…</string>
     <string name="permission_information">We need to access your External storage. Please grant the corresponding permissions.</string>
+    <string name="edit_challenge">Edit</string>
+    <string name="toast_select_challenge">"Please select a challenge…"</string>
+    <string name="active_deck">Active Deck</string>
+    <string name="total_deck">Total Deck</string>
+    <string name="easy">Easy</string>
+    <string name="medium">Medium</string>
+    <string name="hard">Hard</string>
+    <string name="card_deck">Card Deck:</string>
+    <string name="difficulty">Difficulty:</string>
     <string name="toast_error_missing_data">Ups! Error while loading data occurred…</string>
     <string name="toast_error_corrupt_data">Ups! Retrieved data seems to be invalid…</string>
 </resources>

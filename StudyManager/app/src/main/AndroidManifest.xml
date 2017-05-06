@@ -36,10 +36,9 @@
         <activity
             android:name=".EditQuestion">
         </activity>
-
-
-
-
+        <activity
+            android:name=".SetupChallenge">
+        </activity>
     </application>
 
 </manifest>
