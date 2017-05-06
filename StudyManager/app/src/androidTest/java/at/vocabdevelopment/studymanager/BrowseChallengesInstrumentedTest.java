@@ -48,6 +48,7 @@ public class BrowseChallengesInstrumentedTest {
         onView(withText("Please select a challenge..."))
                 .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
                 .check(matches(isDisplayed()));
+        Thread.sleep(2000);
     }
 }
 
