@@ -8,6 +8,8 @@ import android.text.TextWatcher;
 import android.util.JsonWriter;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -31,6 +33,7 @@ public class NewChallenge extends Activity implements View.OnClickListener{
     public ListView questionList;
 
     public Challenge challenge;
+    public int selectedQuestionPos = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,27 +75,38 @@ public class NewChallenge extends Activity implements View.OnClickListener{
             if(extras.containsKey("challenge")){
                 challenge = (Challenge) extras.getSerializable("challenge");
                 extras.remove("challenge");
+
+                editTextChallengeName.setText(challenge.getName());
+
+                List<String> questionNames = new ArrayList<>();
+                for (Question question : challenge.getQuestionList()) {
+                    questionNames.add(question.getName());
+                }
+
+                ArrayAdapter<String> challengeQuestionsAdapter = new ArrayAdapter<>(
+                        this,
+                        android.R.layout.simple_list_item_1,
+                        questionNames);
+
+                questionList.setAdapter(challengeQuestionsAdapter);
+
+                questionList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        selectedQuestionPos = position;
+                        Log.e("app", "Item position: "+ position);
+                    }
+                });
             }else{
-                challenge = new Challenge("", new ArrayList<Question>());
+                Toast.makeText(this, getApplicationContext().getString(R.string.toast_error_missing_data), Toast.LENGTH_SHORT).show();
+                Intent start = new Intent(getApplicationContext(), Start.class);
+                startActivity(start);
             }
         }else{
-            challenge = new Challenge("", new ArrayList<Question>());
+            Toast.makeText(this, getApplicationContext().getString(R.string.toast_error_missing_data), Toast.LENGTH_SHORT).show();
+            Intent start = new Intent(getApplicationContext(), Start.class);
+            startActivity(start);
         }
-
-        editTextChallengeName.setText(challenge.getName());
-
-        List<String> questionNames = new ArrayList<String>();
-        for (Question question : challenge.getQuestionList()) {
-            questionNames.add(question.getName());
-        }
-
-        ArrayAdapter<String> challengeQuestionsAdapter = new ArrayAdapter<String>(
-                this,
-                android.R.layout.simple_list_item_1,
-                questionNames);
-
-        questionList.setAdapter(challengeQuestionsAdapter);
-
     }
 
     @Override
@@ -125,7 +139,6 @@ public class NewChallenge extends Activity implements View.OnClickListener{
                         Toast.makeText(this, "Some error occurred while constructing the challenge file...", Toast.LENGTH_SHORT).show();
                         return;
                     }
-
                 }
                 break;
             case R.id.buttonDeleteChallenge:
@@ -133,8 +146,15 @@ public class NewChallenge extends Activity implements View.OnClickListener{
                 System.out.println("Delete Challenge Button clicked");
                 break;
             case R.id.buttonEditQuestion:
-                //TODO: still needs to be implemented...
-                System.out.println("Edit Question Button clicked");
+                if(selectedQuestionPos >= 0){
+                    Intent editQuestion = new Intent(getApplicationContext(), EditQuestion.class);
+                    editQuestion.putExtra("challenge", challenge);
+                    editQuestion.putExtra("questionPosition", selectedQuestionPos);
+                    editQuestion.putExtra("fromActivity", "newChallenge");
+                    startActivity(editQuestion);
+                }else{
+                    Toast.makeText(this, R.string.toast_select_a_question, Toast.LENGTH_SHORT).show();
+                }
                 break;
             case R.id.buttonAddQuestion:
                 Intent newQuestion = new Intent(getApplicationContext(), NewQuestion.class);

@@ -29,11 +29,15 @@ public class NewQuestionInstrumentedTest {
 
     private String challengeName = "Challenge Name";
     private String exampleQuestionName1 = "Question Name 1";
-    private String exampleQuestion1 = "Question Example1";
-    private String exampleAnswer1 = "Question Answer1";
+    private String exampleQuestion1 = "Question Example 1";
+    private String exampleAnswer1 = "Question Answer 1";
     private String exampleQuestionName2 = "Question Name 2";
-    private String exampleQuestion2 = "Question Example2";
-    private String exampleAnswer2 = "Question Answer2";
+    private String exampleQuestion2 = "Question Example 2";
+    private String exampleAnswer2 = "Question Answer 2";
+
+    private String newExampleQuestionName = "Question New";
+    private String newExampleQuestion = "Question Example New";
+    private String newExampleAnswer = "Question Answer New";
 
     @Rule
     public ActivityTestRule<NewQuestion> mActivityRule = new ActivityTestRule<>(NewQuestion.class, false, false);
@@ -76,7 +80,7 @@ public class NewQuestionInstrumentedTest {
 
         onView(withId(R.id.buttonContinueChallenge)).check(matches(isDisplayed()));
         onView(withId(R.id.buttonBrowseChallenges)).check(matches(isDisplayed()));
-        Thread.sleep(1500);
+        Thread.sleep(2000);
     }
 
     @Test
@@ -99,11 +103,11 @@ public class NewQuestionInstrumentedTest {
 
         onView(withId(R.id.buttonContinueChallenge)).check(matches(isDisplayed()));
         onView(withId(R.id.buttonBrowseChallenges)).check(matches(isDisplayed()));
-        Thread.sleep(1500);
+        Thread.sleep(2000);
     }
 
     @Test
-    public void testMissingIntent() throws Exception{
+    public void testMissingIntentExtra() throws Exception{
         mActivityRule.launchActivity(new Intent());
 
         onView(withText(R.string.toast_error_missing_data))
@@ -112,7 +116,7 @@ public class NewQuestionInstrumentedTest {
 
         onView(withId(R.id.buttonContinueChallenge)).check(matches(isDisplayed()));
         onView(withId(R.id.buttonBrowseChallenges)).check(matches(isDisplayed()));
-        Thread.sleep(1500);
+        Thread.sleep(2000);
     }
 
     @Test
@@ -125,65 +129,65 @@ public class NewQuestionInstrumentedTest {
         onView(withText(R.string.toast_empty_question_name))
                 .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
                 .check(matches(isDisplayed()));
-        Thread.sleep(1500);
+        Thread.sleep(2000);
     }
 
     @Test
     public void testToastEmptyChallengeQuestion() throws Exception{
         setupIntentData("newChallenge");
-        onView(withId(R.id.editTextQuestionName)).perform(typeText("Question Test Name"));
+        onView(withId(R.id.editTextQuestionName)).perform(typeText(newExampleQuestionName));
         onView(withId(R.id.editTextQuestion)).perform(typeText(" "));
         onView(withId(R.id.editTextAnswer)).perform(typeText(" "));
         onView(withId(R.id.buttonSaveQuestion)).perform(click());
         onView(withText(R.string.toast_empty_challenge_question))
                 .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
                 .check(matches(isDisplayed()));
-        Thread.sleep(1500);
+        Thread.sleep(2000);
     }
 
     @Test
     public void testToastEmptyChallengeAnswer() throws Exception{
         setupIntentData("newChallenge");
-        onView(withId(R.id.editTextQuestionName)).perform(typeText("Question Test Name"));
-        onView(withId(R.id.editTextQuestion)).perform(typeText("Question Example"));
+        onView(withId(R.id.editTextQuestionName)).perform(typeText(newExampleQuestionName));
+        onView(withId(R.id.editTextQuestion)).perform(typeText(newExampleQuestion));
         onView(withId(R.id.editTextAnswer)).perform(typeText(" "));
         onView(withId(R.id.buttonSaveQuestion)).perform(click());
         onView(withText(R.string.toast_empty_challenge_answer))
                 .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
                 .check(matches(isDisplayed()));
-        Thread.sleep(1500);
+        Thread.sleep(2000);
     }
 
     @Test
     public void testSaveNewQuestionNewChallenge() throws Exception{
         setupIntentData("newChallenge");
-        onView(withId(R.id.editTextQuestionName)).perform(typeText("New Question"));
-        onView(withId(R.id.editTextQuestion)).perform(typeText("New Question Example"));
-        onView(withId(R.id.editTextAnswer)).perform(typeText("New Answer Example"));
+        onView(withId(R.id.editTextQuestionName)).perform(typeText(newExampleQuestionName));
+        onView(withId(R.id.editTextQuestion)).perform(typeText(newExampleQuestion));
+        onView(withId(R.id.editTextAnswer)).perform(typeText(newExampleAnswer));
         onView(withId(R.id.buttonSaveQuestion)).perform(click());
 
         onData(anything()).inAdapterView(withId(R.id.listViewQuestions))
-                .atPosition(2).check(matches(withText("New Question")));
+                .atPosition(2).check(matches(withText(newExampleQuestionName)));
     }
 
     @Test
     public void testSaveNewQuestionEditChallenge() throws Exception{
         setupIntentData("editChallenge");
-        onView(withId(R.id.editTextQuestionName)).perform(typeText("New Question"));
-        onView(withId(R.id.editTextQuestion)).perform(typeText("New Question Example"));
-        onView(withId(R.id.editTextAnswer)).perform(typeText("New Answer Example"));
+        onView(withId(R.id.editTextQuestionName)).perform(typeText(newExampleQuestionName));
+        onView(withId(R.id.editTextQuestion)).perform(typeText(newExampleQuestion));
+        onView(withId(R.id.editTextAnswer)).perform(typeText(newExampleAnswer));
         onView(withId(R.id.buttonSaveQuestion)).perform(click());
 
         onData(anything()).inAdapterView(withId(R.id.listViewEditChallengeQuestions))
-                .atPosition(2).check(matches(withText("New Question")));
+                .atPosition(2).check(matches(withText(newExampleQuestionName)));
     }
 
     @Test(expected=Exception.class)
     public void testSaveNewQuestionInvalidFromActivity() throws Exception{
         setupIntentData("fromIllegalActivity");
-        onView(withId(R.id.editTextQuestionName)).perform(typeText("New Question"));
-        onView(withId(R.id.editTextQuestion)).perform(typeText("New Question Example"));
-        onView(withId(R.id.editTextAnswer)).perform(typeText("New Answer Example"));
+        onView(withId(R.id.editTextQuestionName)).perform(typeText(newExampleQuestionName));
+        onView(withId(R.id.editTextQuestion)).perform(typeText(newExampleQuestion));
+        onView(withId(R.id.editTextAnswer)).perform(typeText(newExampleAnswer));
         onView(withId(R.id.buttonSaveQuestion)).perform(click());
     }
 }
