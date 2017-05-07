@@ -11,6 +11,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +21,7 @@ public class BrowseChallenges extends Activity implements View.OnClickListener{
     public Button buttonSelectChallenge;
     public ListView challengeList;
 
-    private String selectedChallenge;
+    private Challenge selectedChallenge;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,16 +33,17 @@ public class BrowseChallenges extends Activity implements View.OnClickListener{
         buttonSelectChallenge = (Button) findViewById(R.id.buttonSelectChallenge);
         challengeList = (ListView) findViewById(R.id.listViewChallenges);
 
-        //TODO: Just for prototype, we should read the json file instead of this...
         File[] challengeFiles = StudyManager.getStorageDir().listFiles();
-        List<String> challengeNames = new ArrayList<String>();
+        List<String> challengeNames = new ArrayList<>();
         for (File file : challengeFiles) {
             if (file.isFile()) {
-                challengeNames.add(file.getName());
+                String fileName = file.getName();
+                fileName = fileName.substring(0, fileName.lastIndexOf("."));
+                challengeNames.add(fileName);
             }
         }
 
-        ArrayAdapter<String> challengeFilesAdapter = new ArrayAdapter<String>(
+        ArrayAdapter<String> challengeFilesAdapter = new ArrayAdapter<>(
                 this,
                 android.R.layout.simple_list_item_1,
                 challengeNames);
@@ -53,7 +55,11 @@ public class BrowseChallenges extends Activity implements View.OnClickListener{
         challengeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                selectedChallenge = challengeList.getItemAtPosition(position).toString();
+                try {
+                    selectedChallenge = StudyManager.getChallenge(challengeList.getItemAtPosition(position).toString());
+                } catch (IOException e) {
+                    selectedChallenge = null;
+                }
             }
         });
     }
@@ -75,7 +81,7 @@ public class BrowseChallenges extends Activity implements View.OnClickListener{
                     Toast.makeText(this, "Please select a challenge...", Toast.LENGTH_SHORT).show();
                 } else {
                     Intent setupChallenge = new Intent(getApplicationContext(), SetupChallenge.class);
-                    setupChallenge.putExtra("SELECTED_CHALLENGE", selectedChallenge);
+                    setupChallenge.putExtra("challenge", selectedChallenge);
                     startActivity(setupChallenge);
                 }
                 break;

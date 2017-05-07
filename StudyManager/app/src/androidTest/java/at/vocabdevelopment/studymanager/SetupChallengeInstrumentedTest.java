@@ -1,46 +1,100 @@
 package at.vocabdevelopment.studymanager;
 
-import android.content.Context;
 import android.content.Intent;
-import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
-import android.support.test.runner.AndroidJUnit4;
+
+import junit.framework.Assert;
 
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
+
+import java.util.ArrayList;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static org.junit.Assert.assertEquals;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
 
 public class SetupChallengeInstrumentedTest {
     @Rule
-    public ActivityTestRule<SetupChallenge> mActivityRule = new ActivityTestRule<SetupChallenge>(SetupChallenge.class)
-    {
-        @Override
-        protected Intent getActivityIntent() {
-            Context targetContext = InstrumentationRegistry.getInstrumentation()
-                    .getTargetContext();
-            Intent result = new Intent(targetContext, SetupChallenge.class);
-            result.putExtra("SELECTED_CHALLENGE", "InstrumentedTestName");
-            return result;
-        }
-    };
+    public ActivityTestRule<SetupChallenge> mActivityRule = new ActivityTestRule<>(SetupChallenge.class, false, false);
 
-    @Test
-    public void testButtons() {
-        onView(withId(R.id.buttonEdit)).perform(click());
-        onView(withId(R.id.buttonActiveDeck)).perform(click());
-        onView(withId(R.id.buttonTotalDeck)).perform(click());
-        onView(withId(R.id.buttonEasy)).perform(click());
-        onView(withId(R.id.buttonMedium)).perform(click());
-        onView(withId(R.id.buttonHard)).perform(click());
-        onView(withId(R.id.buttonStart)).perform(click());
+    private String challengeName = "Challenge Name";
+    private String exampleQuestionName1 = "Question Name 1";
+    private String exampleQuestion1 = "Question Example 1";
+    private String exampleAnswer1 = "Question Answer 1";
+    private String exampleQuestionName2 = "Question Name 2";
+    private String exampleQuestion2 = "Question Example 2";
+    private String exampleAnswer2 = "Question Answer 2";
+
+    public void setupIntentData() {
+        Intent data = new Intent();
+        Challenge challenge = new Challenge(challengeName, new ArrayList<Question>());
+        Question question1 = new Question(exampleQuestionName1, exampleQuestion1, exampleAnswer1);
+        Question question2 = new Question(exampleQuestionName2, exampleQuestion2, exampleAnswer2);
+        challenge.addQuestion(question1);
+        challenge.addQuestion(question2);
+        data.putExtra("challenge", challenge);
+        mActivityRule.launchActivity(data);
     }
 
+    @Test
+    public void testLoadChallengeData() throws Exception{
+        setupIntentData();
+        Assert.assertEquals(mActivityRule.getActivity().challenge.getClass(), Challenge.class);
+    }
+
+    @Test
+    public void testShowChallengeName() throws Exception{
+        setupIntentData();
+        onView(withId(R.id.textViewSetupChallengeChallengeName)).check(matches(withText(challengeName)));
+    }
+
+    @Test
+    public void testLoadChallengeDataMissing() throws Exception{
+        Intent data = new Intent();
+        Challenge challenge = new Challenge(challengeName, new ArrayList<Question>());
+        data.putExtra("challenge_wrong", challenge);
+        mActivityRule.launchActivity(data);
+
+        onView(withText(R.string.toast_error_missing_data))
+                .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
+                .check(matches(isDisplayed()));
+
+        onView(withId(R.id.buttonContinueChallenge)).check(matches(isDisplayed()));
+        onView(withId(R.id.buttonBrowseChallenges)).check(matches(isDisplayed()));
+        Thread.sleep(2000);
+    }
+
+    @Test
+    public void testMissingIntentExtra() throws Exception{
+        mActivityRule.launchActivity(new Intent());
+
+        onView(withText(R.string.toast_error_missing_data))
+                .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
+                .check(matches(isDisplayed()));
+
+        onView(withId(R.id.buttonContinueChallenge)).check(matches(isDisplayed()));
+        onView(withId(R.id.buttonBrowseChallenges)).check(matches(isDisplayed()));
+        Thread.sleep(2000);
+    }
+
+    @Test
+    public void testEditChallenge(){
+        setupIntentData();
+        onView(withId(R.id.buttonSetupChallengeEditChallenge)).perform(click());
+
+        onView(withId(R.id.editTextEditChallengeChallengeName)).check(matches(isDisplayed()));
+        onView(withId(R.id.buttonEditChallengeDeleteChallenge)).check(matches(isDisplayed()));
+        onView(withId(R.id.listViewEditChallengeQuestions)).check(matches(isDisplayed()));
+        onView(withId(R.id.buttonEditChallengeSaveChallenge)).check(matches(isDisplayed()));
+        onView(withId(R.id.buttonEditChallengeAddQuestion)).check(matches(isDisplayed()));
+        onView(withId(R.id.buttonEditChallengeDeleteQuestion)).check(matches(isDisplayed()));
+        onView(withId(R.id.buttonEditChallengeEditQuestion)).check(matches(isDisplayed()));
+    }
 }

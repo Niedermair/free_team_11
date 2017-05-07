@@ -8,6 +8,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import static android.support.test.espresso.Espresso.onData;
@@ -183,25 +184,268 @@ public class EditChallengeInstrumentedTest {
         onView(withId(R.id.buttonSaveQuestion)).check(matches(isDisplayed()));
     }
 
-    //TODO: still to implement....
-
     @Test
-    public void testSaveChallenge() throws Exception{
+    public void testDeleteQuestionApprove() throws Exception{
         setupIntentData();
-        onView(withId(R.id.buttonEditChallengeSaveChallenge)).perform(click());
-    }
 
-    @Test
-    public void testDeleteChallenge() throws Exception{
-        setupIntentData();
-        onView(withId(R.id.buttonEditChallengeDeleteChallenge)).perform(click());
-    }
+        onData(anything()).inAdapterView(withId(R.id.listViewEditChallengeQuestions))
+                .atPosition(1).perform(click());
 
-    @Test
-    public void testDeleteQuestion() throws Exception{
-        setupIntentData();
+        assertNotNull(mActivityRule.getActivity().selectedQuestionPos);
+        assertEquals(mActivityRule.getActivity().selectedQuestionPos, 1);
+
         onView(withId(R.id.buttonEditChallengeDeleteQuestion)).perform(click());
+
+        onView(withText(R.string.dialog_delete_question)).check(matches(isDisplayed()));
+
+        onView(withText(R.string.dialog_yes)).perform(click());
+
+        assertEquals(mActivityRule.getActivity().selectedQuestionPos, -1);
+        assertEquals(mActivityRule.getActivity().challenge.getQuestionList().size(), 1);
+        assertEquals(mActivityRule.getActivity().challenge.getQuestionList().get(0).getName(), exampleQuestionName1);
     }
+
+    @Test
+    public void testDeleteQuestionDeny() throws Exception{
+        setupIntentData();
+
+        onData(anything()).inAdapterView(withId(R.id.listViewEditChallengeQuestions))
+                .atPosition(1).perform(click());
+
+        assertNotNull(mActivityRule.getActivity().selectedQuestionPos);
+        assertEquals(mActivityRule.getActivity().selectedQuestionPos, 1);
+
+        onView(withId(R.id.buttonEditChallengeDeleteQuestion)).perform(click());
+
+        onView(withText(R.string.dialog_delete_question)).check(matches(isDisplayed()));
+
+        onView(withText(R.string.dialog_no)).perform(click());
+
+        assertEquals(mActivityRule.getActivity().selectedQuestionPos, -1);
+        assertEquals(mActivityRule.getActivity().challenge.getQuestionList().size(), 2);
+        assertEquals(mActivityRule.getActivity().challenge.getQuestionList().get(0).getName(), exampleQuestionName1);
+        assertEquals(mActivityRule.getActivity().challenge.getQuestionList().get(1).getName(), exampleQuestionName2);
+    }
+
+    @Test
+    public void testDeleteQuestionError() throws Exception{
+        setupIntentData();
+
+        assertEquals(mActivityRule.getActivity().selectedQuestionPos, -1);
+
+        onView(withId(R.id.buttonEditChallengeDeleteQuestion)).perform(click());
+
+        onView(withText(R.string.toast_select_a_question))
+                .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
+                .check(matches(isDisplayed()));
+        Thread.sleep(2000);
+    }
+
+    @Test
+    public void testToastSaveEditChallengeWithoutName() throws Exception{
+        setupIntentData();
+        onView(withId(R.id.editTextEditChallengeChallengeName)).perform(clearText(), typeText(" "));
+        onView(withId(R.id.buttonEditChallengeSaveChallenge)).perform(click());
+        onView(withText(R.string.toast_empty_challenge_name))
+                .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
+                .check(matches(isDisplayed()));
+        Thread.sleep(2000);
+    }
+
+    @Test
+    public void testToastSaveEditChallengeWithoutQuestions() throws Exception{
+        setupIntentData();
+
+        onData(anything()).inAdapterView(withId(R.id.listViewEditChallengeQuestions)).atPosition(0).perform(click());
+        onView(withId(R.id.buttonEditChallengeDeleteQuestion)).perform(click());
+        onView(withText(R.string.dialog_delete_question)).check(matches(isDisplayed()));
+        onView(withText(R.string.dialog_yes)).perform(click());
+
+        onData(anything()).inAdapterView(withId(R.id.listViewEditChallengeQuestions)).atPosition(0).perform(click());
+        onView(withId(R.id.buttonEditChallengeDeleteQuestion)).perform(click());
+        onView(withText(R.string.dialog_delete_question)).check(matches(isDisplayed()));
+        onView(withText(R.string.dialog_yes)).perform(click());
+
+        onView(withId(R.id.buttonEditChallengeSaveChallenge)).perform(click());
+        onView(withText(R.string.toast_one_question))
+                .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
+                .check(matches(isDisplayed()));
+        Thread.sleep(2000);
+    }
+
+
+    @Test
+    public void testSaveEditChallengeSuccess() throws Exception{
+        setupIntentData();
+
+        File challengeFile = new File(StudyManager.getStorageDir() + File.separator + challengeName + ".json");
+        if(challengeFile.exists()){
+            challengeFile.delete();
+        }
+
+        Challenge challenge = new Challenge(challengeName, new ArrayList<Question>());
+        Question question1 = new Question(exampleQuestionName1, exampleQuestion1, exampleAnswer1);
+        Question question2 = new Question(exampleQuestionName2, exampleQuestion2, exampleAnswer2);
+        challenge.addQuestion(question1);
+        challenge.addQuestion(question2);
+
+        challenge.constructChallengeFile();
+
+        onView(withId(R.id.buttonEditChallengeSaveChallenge)).perform(click());
+
+        onView(withText(R.string.toast_success_challenge_saved))
+                .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
+                .check(matches(isDisplayed()));
+        Thread.sleep(2000);
+
+        onView(withId(R.id.textViewSetupChallengeChallengeName)).check(matches(withText(challengeName)));
+    }
+
+    @Test
+    public void testSaveEditChallengeSuccess2() throws Exception{
+        setupIntentData();
+
+        File challengeFile = new File(StudyManager.getStorageDir() + File.separator + challengeName + ".json");
+        if(challengeFile.exists()){
+            challengeFile.delete();
+        }
+
+        Challenge challenge = new Challenge(challengeName, new ArrayList<Question>());
+        Question question1 = new Question(exampleQuestionName1, exampleQuestion1, exampleAnswer1);
+        Question question2 = new Question(exampleQuestionName2, exampleQuestion2, exampleAnswer2);
+        challenge.addQuestion(question1);
+        challenge.addQuestion(question2);
+
+        challenge.constructChallengeFile();
+
+        onView(withId(R.id.editTextEditChallengeChallengeName)).perform(clearText(), typeText(newChallengeName));
+
+        onView(withId(R.id.buttonEditChallengeSaveChallenge)).perform(click());
+
+        onView(withText(R.string.toast_success_challenge_saved))
+                .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
+                .check(matches(isDisplayed()));
+        Thread.sleep(2000);
+
+        onView(withId(R.id.textViewSetupChallengeChallengeName)).check(matches(withText(newChallengeName)));
+    }
+
+    @Test
+    public void testSaveEditChallengeFail() throws Exception{
+        setupIntentData();
+
+        File challengeFile = new File(StudyManager.getStorageDir() + File.separator + challengeName + ".json");
+        if(challengeFile.exists()){
+            challengeFile.delete();
+        }
+
+        onView(withId(R.id.buttonEditChallengeSaveChallenge)).perform(click());
+
+        onView(withText(R.string.toast_error_save_data))
+                .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
+                .check(matches(isDisplayed()));
+
+        onView(withId(R.id.buttonContinueChallenge)).check(matches(isDisplayed()));
+        onView(withId(R.id.buttonBrowseChallenges)).check(matches(isDisplayed()));
+        Thread.sleep(2000);
+    }
+
+
+    @Test
+    public void testDeleteEditChallenge() throws Exception{
+        setupIntentData();
+
+        File challengeFile = new File(StudyManager.getStorageDir() + File.separator + challengeName + ".json");
+        if(challengeFile.exists()){
+            challengeFile.delete();
+        }
+
+        Challenge challenge = new Challenge(challengeName, new ArrayList<Question>());
+        Question question1 = new Question(exampleQuestionName1, exampleQuestion1, exampleAnswer1);
+        Question question2 = new Question(exampleQuestionName2, exampleQuestion2, exampleAnswer2);
+        challenge.addQuestion(question1);
+        challenge.addQuestion(question2);
+
+        challenge.constructChallengeFile();
+
+        onView(withId(R.id.buttonEditChallengeSaveChallenge)).perform(click());
+
+        onView(withText(R.string.toast_success_challenge_saved))
+                .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
+                .check(matches(isDisplayed()));
+        Thread.sleep(2000);
+
+        onView(withId(R.id.buttonSetupChallengeEditChallenge)).perform(click());
+        onView(withId(R.id.buttonEditChallengeDeleteChallenge)).perform(click());
+        onView(withText(R.string.dialog_delete_challenge)).check(matches(isDisplayed()));
+        onView(withText(R.string.dialog_yes)).perform(click());
+
+        onView(withText(R.string.toast_success_challenge_deleted))
+                .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
+                .check(matches(isDisplayed()));
+
+        onView(withId(R.id.searchViewChallenges)).check(matches(isDisplayed()));
+        onView(withId(R.id.listViewChallenges)).check(matches(isDisplayed()));
+        onView(withId(R.id.buttonAddChallenge)).check(matches(isDisplayed()));
+        onView(withId(R.id.buttonSelectChallenge)).check(matches(isDisplayed()));
+        Thread.sleep(2000);
+
+    }
+
+    @Test
+    public void testDeleteEditChallengeError() throws Exception{
+        setupIntentData();
+
+        File challengeFile = new File(StudyManager.getStorageDir() + File.separator + challengeName + ".json");
+        if(challengeFile.exists()){
+            challengeFile.delete();
+        }
+
+        Challenge challenge = new Challenge(challengeName, new ArrayList<Question>());
+        Question question1 = new Question(exampleQuestionName1, exampleQuestion1, exampleAnswer1);
+        Question question2 = new Question(exampleQuestionName2, exampleQuestion2, exampleAnswer2);
+        challenge.addQuestion(question1);
+        challenge.addQuestion(question2);
+
+        challenge.constructChallengeFile();
+        challenge.deleteChallengeFile();
+
+        onView(withId(R.id.buttonEditChallengeDeleteChallenge)).perform(click());
+        onView(withText(R.string.dialog_delete_challenge)).check(matches(isDisplayed()));
+        onView(withText(R.string.dialog_yes)).perform(click());
+
+        onView(withText(R.string.toast_error_challenge_delete))
+                .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
+                .check(matches(isDisplayed()));
+
+        onView(withId(R.id.searchViewChallenges)).check(matches(isDisplayed()));
+        onView(withId(R.id.listViewChallenges)).check(matches(isDisplayed()));
+        onView(withId(R.id.buttonAddChallenge)).check(matches(isDisplayed()));
+        onView(withId(R.id.buttonSelectChallenge)).check(matches(isDisplayed()));
+        Thread.sleep(2000);
+    }
+
+    @Test
+    public void testDeleteChallengeDeny() throws Exception{
+        setupIntentData();
+
+        onView(withId(R.id.buttonEditChallengeDeleteChallenge)).perform(click());
+
+        onView(withText(R.string.dialog_delete_challenge)).check(matches(isDisplayed()));
+
+        onView(withText(R.string.dialog_no)).perform(click());
+
+        onView(withId(R.id.editTextEditChallengeChallengeName)).check(matches(isDisplayed()));
+        onView(withId(R.id.buttonEditChallengeDeleteChallenge)).check(matches(isDisplayed()));
+        onView(withId(R.id.listViewEditChallengeQuestions)).check(matches(isDisplayed()));
+        onView(withId(R.id.buttonEditChallengeSaveChallenge)).check(matches(isDisplayed()));
+        onView(withId(R.id.buttonEditChallengeAddQuestion)).check(matches(isDisplayed()));
+        onView(withId(R.id.buttonEditChallengeDeleteQuestion)).check(matches(isDisplayed()));
+        onView(withId(R.id.buttonEditChallengeEditQuestion)).check(matches(isDisplayed()));
+
+    }
+
+    //TODO: still to implement....
 
     @Test
     public void testToggleStatus() throws Exception{

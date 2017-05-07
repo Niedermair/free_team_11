@@ -22,6 +22,10 @@
     <string name="toast_empty_challenge_question">You did not enter a challenge question"</string>
     <string name="toast_empty_challenge_answer">You did not enter a challenge answer</string>
     <string name="toast_select_a_question">Please select a question first…</string>
+    <string name="toast_success_challenge_saved">Challenge saved!</string>
+    <string name="toast_success_challenge_deleted">Challenge deleted!</string>
+    <string name="toast_error_challenge_delete">Ups! Error while deleting challenge…</string>
+    <string name="toast_error_challenge_exists_already">This challenge exists already…</string>
     <string name="permission_information">We need to access your External storage. Please grant the corresponding permissions.</string>
     <string name="edit_challenge">Edit</string>
     <string name="toast_select_challenge">"Please select a challenge…"</string>
@@ -32,6 +36,11 @@
     <string name="hard">Hard</string>
     <string name="card_deck">Card Deck:</string>
     <string name="difficulty">Difficulty:</string>
+    <string name="toast_error_save_data">Ups! Error while saving data occurred…</string>
     <string name="toast_error_missing_data">Ups! Error while loading data occurred…</string>
     <string name="toast_error_corrupt_data">Ups! Retrieved data seems to be invalid…</string>
+    <string name="dialog_delete_question">Delete this question?</string>
+    <string name="dialog_delete_challenge">Delete this challenge?</string>
+    <string name="dialog_yes">Yes</string>
+    <string name="dialog_no">No</string>
 </resources>
