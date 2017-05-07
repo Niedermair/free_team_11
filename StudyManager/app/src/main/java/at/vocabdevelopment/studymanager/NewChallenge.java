@@ -1,14 +1,14 @@
 package at.vocabdevelopment.studymanager;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.app.Activity;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.JsonWriter;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -16,9 +16,6 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +31,10 @@ public class NewChallenge extends Activity implements View.OnClickListener{
 
     public Challenge challenge;
     public int selectedQuestionPos = -1;
+    public ArrayAdapter<String> challengeQuestionsAdapter;
+    public DialogInterface.OnClickListener dialogDeleteQuestionClickListener;
+    public DialogInterface.OnClickListener dialogDeleteChallengeClickListener;
+    public List<String> questionNames;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +69,34 @@ public class NewChallenge extends Activity implements View.OnClickListener{
             }
         });
 
+        dialogDeleteQuestionClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int choice) {
+                if (choice == DialogInterface.BUTTON_POSITIVE){
+                    challenge.getQuestionList().remove(selectedQuestionPos);
+                    questionNames.remove(selectedQuestionPos);
+
+                    questionList.setAdapter(challengeQuestionsAdapter);
+                    challengeQuestionsAdapter.notifyDataSetChanged();
+                    selectedQuestionPos = -1;
+                }else{
+                    questionList.setAdapter(challengeQuestionsAdapter);
+                    challengeQuestionsAdapter.notifyDataSetChanged();
+                    selectedQuestionPos = -1;
+                }
+            }
+        };
+
+        dialogDeleteChallengeClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int choice) {
+                if (choice == DialogInterface.BUTTON_POSITIVE){
+                    Intent browseChallenges = new Intent(getApplicationContext(), BrowseChallenges.class);
+                    startActivity(browseChallenges);
+                }
+            }
+        };
+
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
 
@@ -78,12 +107,12 @@ public class NewChallenge extends Activity implements View.OnClickListener{
 
                 editTextChallengeName.setText(challenge.getName());
 
-                List<String> questionNames = new ArrayList<>();
+                questionNames = new ArrayList<>();
                 for (Question question : challenge.getQuestionList()) {
                     questionNames.add(question.getName());
                 }
 
-                ArrayAdapter<String> challengeQuestionsAdapter = new ArrayAdapter<>(
+                challengeQuestionsAdapter = new ArrayAdapter<>(
                         this,
                         android.R.layout.simple_list_item_1,
                         questionNames);
@@ -125,25 +154,27 @@ public class NewChallenge extends Activity implements View.OnClickListener{
                     return;
                 }else{
 
-                    Integer result = constructChallengeFile(challenge);
+                    int constructFileResult = challenge.constructChallengeFile();
 
-                    if(result == 0){
-                        Toast.makeText(this, "Challenge saved!", Toast.LENGTH_SHORT).show();
+                    if(constructFileResult == 0){
+                        Toast.makeText(this, R.string.toast_success_challenge_saved, Toast.LENGTH_SHORT).show();
                         Intent browseChallenges = new Intent(getApplicationContext(), BrowseChallenges.class);
                         startActivity(browseChallenges);
-                    } else if(result == -1){
-                        Toast.makeText(this, "This challenge already exists...", Toast.LENGTH_SHORT).show();
-                        return;
-                    } else if(result == -2){
-                        //TODO: think about what to do here...
-                        Toast.makeText(this, "Some error occurred while constructing the challenge file...", Toast.LENGTH_SHORT).show();
-                        return;
+                    } else if(constructFileResult == -1){
+                        Toast.makeText(this, R.string.toast_error_challenge_exists_already, Toast.LENGTH_SHORT).show();
+                    } else if(constructFileResult == -2){
+                        Toast.makeText(this, getApplicationContext().getString(R.string.toast_error_save_data), Toast.LENGTH_SHORT).show();
+                        Intent start = new Intent(getApplicationContext(), Start.class);
+                        startActivity(start);
                     }
                 }
                 break;
             case R.id.buttonDeleteChallenge:
-                //TODO: still needs to be implemented...
-                System.out.println("Delete Challenge Button clicked");
+                AlertDialog.Builder deleteChallengeBuilder = new AlertDialog.Builder(this);
+                deleteChallengeBuilder.setMessage(R.string.dialog_delete_challenge)
+                        .setPositiveButton(R.string.dialog_yes, dialogDeleteChallengeClickListener)
+                        .setNegativeButton(R.string.dialog_no, dialogDeleteChallengeClickListener)
+                        .setCancelable(false).show();
                 break;
             case R.id.buttonEditQuestion:
                 if(selectedQuestionPos >= 0){
@@ -163,62 +194,18 @@ public class NewChallenge extends Activity implements View.OnClickListener{
                 startActivity(newQuestion);
                 break;
             case R.id.buttonDeleteQuestion:
-                //TODO: still needs to be implemented...
-                System.out.println("Delete Question Button clicked");
+                if(selectedQuestionPos >= 0){
+                    AlertDialog.Builder deleteQuestionBuilder = new AlertDialog.Builder(this);
+                    deleteQuestionBuilder.setMessage(R.string.dialog_delete_question)
+                            .setPositiveButton(R.string.dialog_yes, dialogDeleteQuestionClickListener)
+                            .setNegativeButton(R.string.dialog_no, dialogDeleteQuestionClickListener)
+                            .setCancelable(false).show();
+                }else{
+                    Toast.makeText(this, R.string.toast_select_a_question, Toast.LENGTH_SHORT).show();
+                }
                 break;
             default:
                 throw new IllegalArgumentException("Action can not be handled.");
         }
-
-    }
-
-    public int constructChallengeFile(Challenge challenge){
-
-        JsonWriter challengeWriter = null;
-
-        File challengeFile = new File(StudyManager.getStorageDir() + File.separator + challenge.getName() + ".json");
-        if(!challengeFile.exists()){
-            try {
-
-                challengeWriter = new JsonWriter(new FileWriter(challengeFile));
-                challengeWriter.beginObject();
-
-                challengeWriter.name("challenge");
-                challengeWriter.beginArray();
-                challengeWriter.beginObject();
-                challengeWriter.name("name");
-                challengeWriter.value(challenge.getName());
-                challengeWriter.endObject();
-                challengeWriter.endArray();
-
-                challengeWriter.name("questions");
-                challengeWriter.beginArray();
-
-                for (Question question : challenge.getQuestionList()) {
-                    challengeWriter.beginObject();
-                    challengeWriter.name("name");
-                    challengeWriter.value(question.getName());
-                    challengeWriter.name("question");
-                    challengeWriter.value(question.getQuestion());
-                    challengeWriter.name("answer");
-                    challengeWriter.value(question.getAnswer());
-                    challengeWriter.endObject();
-                }
-
-                challengeWriter.endArray();
-                challengeWriter.endObject();
-
-                challengeWriter.close();
-
-            } catch (IOException e) {
-                Log.e("dir", "Challenge-File could not be created because " +
-                             "some error occured while constructing the file...");
-                return -2;
-            }
-        }else{
-            Log.e("dir", "This challenge already exists...");
-            return -1;
-        }
-        return 0;
     }
 }
