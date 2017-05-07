@@ -3,6 +3,8 @@ package at.vocabdevelopment.studymanager;
 import android.content.Intent;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.view.View;
+import android.widget.Button;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -80,7 +82,7 @@ public class NewQuestionInstrumentedTest {
 
         onView(withId(R.id.buttonContinueChallenge)).check(matches(isDisplayed()));
         onView(withId(R.id.buttonBrowseChallenges)).check(matches(isDisplayed()));
-        Thread.sleep(2000);
+        Thread.sleep(2500);
     }
 
     @Test
@@ -103,7 +105,7 @@ public class NewQuestionInstrumentedTest {
 
         onView(withId(R.id.buttonContinueChallenge)).check(matches(isDisplayed()));
         onView(withId(R.id.buttonBrowseChallenges)).check(matches(isDisplayed()));
-        Thread.sleep(2000);
+        Thread.sleep(2500);
     }
 
     @Test
@@ -116,7 +118,7 @@ public class NewQuestionInstrumentedTest {
 
         onView(withId(R.id.buttonContinueChallenge)).check(matches(isDisplayed()));
         onView(withId(R.id.buttonBrowseChallenges)).check(matches(isDisplayed()));
-        Thread.sleep(2000);
+        Thread.sleep(2500);
     }
 
     @Test
@@ -129,7 +131,7 @@ public class NewQuestionInstrumentedTest {
         onView(withText(R.string.toast_empty_question_name))
                 .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
                 .check(matches(isDisplayed()));
-        Thread.sleep(2000);
+        Thread.sleep(2500);
     }
 
     @Test
@@ -142,7 +144,7 @@ public class NewQuestionInstrumentedTest {
         onView(withText(R.string.toast_empty_challenge_question))
                 .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
                 .check(matches(isDisplayed()));
-        Thread.sleep(2000);
+        Thread.sleep(2500);
     }
 
     @Test
@@ -155,7 +157,7 @@ public class NewQuestionInstrumentedTest {
         onView(withText(R.string.toast_empty_challenge_answer))
                 .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
                 .check(matches(isDisplayed()));
-        Thread.sleep(2000);
+        Thread.sleep(2500);
     }
 
     @Test

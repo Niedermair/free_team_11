@@ -68,7 +68,7 @@ public class SetupChallengeInstrumentedTest {
 
         onView(withId(R.id.buttonContinueChallenge)).check(matches(isDisplayed()));
         onView(withId(R.id.buttonBrowseChallenges)).check(matches(isDisplayed()));
-        Thread.sleep(2000);
+        Thread.sleep(2500);
     }
 
     @Test
@@ -81,7 +81,7 @@ public class SetupChallengeInstrumentedTest {
 
         onView(withId(R.id.buttonContinueChallenge)).check(matches(isDisplayed()));
         onView(withId(R.id.buttonBrowseChallenges)).check(matches(isDisplayed()));
-        Thread.sleep(2000);
+        Thread.sleep(2500);
     }
 
     @Test

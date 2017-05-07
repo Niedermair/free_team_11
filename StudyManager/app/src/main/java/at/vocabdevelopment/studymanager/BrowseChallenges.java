@@ -20,6 +20,7 @@ public class BrowseChallenges extends Activity implements View.OnClickListener{
     public Button buttonAddChallenge;
     public Button buttonSelectChallenge;
     public ListView challengeList;
+    public ArrayAdapter<String> challengeFilesAdapter;
 
     private Challenge selectedChallenge;
 
@@ -43,7 +44,7 @@ public class BrowseChallenges extends Activity implements View.OnClickListener{
             }
         }
 
-        ArrayAdapter<String> challengeFilesAdapter = new ArrayAdapter<>(
+        challengeFilesAdapter = new ArrayAdapter<>(
                 this,
                 android.R.layout.simple_list_item_1,
                 challengeNames);

@@ -85,7 +85,7 @@ public class EditQuestionInstrumentedTest {
 
         onView(withId(R.id.buttonContinueChallenge)).check(matches(isDisplayed()));
         onView(withId(R.id.buttonBrowseChallenges)).check(matches(isDisplayed()));
-        Thread.sleep(2000);
+        Thread.sleep(2500);
     }
 
     @Test
@@ -98,7 +98,7 @@ public class EditQuestionInstrumentedTest {
 
         onView(withId(R.id.buttonContinueChallenge)).check(matches(isDisplayed()));
         onView(withId(R.id.buttonBrowseChallenges)).check(matches(isDisplayed()));
-        Thread.sleep(2000);
+        Thread.sleep(2500);
     }
 
     @Test
@@ -122,7 +122,7 @@ public class EditQuestionInstrumentedTest {
 
         onView(withId(R.id.buttonContinueChallenge)).check(matches(isDisplayed()));
         onView(withId(R.id.buttonBrowseChallenges)).check(matches(isDisplayed()));
-        Thread.sleep(2000);
+        Thread.sleep(2500);
     }
 
     @Test
@@ -146,7 +146,7 @@ public class EditQuestionInstrumentedTest {
 
         onView(withId(R.id.buttonContinueChallenge)).check(matches(isDisplayed()));
         onView(withId(R.id.buttonBrowseChallenges)).check(matches(isDisplayed()));
-        Thread.sleep(2000);
+        Thread.sleep(2500);
     }
 
     @Test
@@ -158,7 +158,7 @@ public class EditQuestionInstrumentedTest {
 
         onView(withId(R.id.buttonContinueChallenge)).check(matches(isDisplayed()));
         onView(withId(R.id.buttonBrowseChallenges)).check(matches(isDisplayed()));
-        Thread.sleep(2000);
+        Thread.sleep(2500);
     }
 
     @Test
@@ -176,7 +176,7 @@ public class EditQuestionInstrumentedTest {
 
         onView(withId(R.id.buttonContinueChallenge)).check(matches(isDisplayed()));
         onView(withId(R.id.buttonBrowseChallenges)).check(matches(isDisplayed()));
-        Thread.sleep(2000);
+        Thread.sleep(2500);
     }
 
     @Test
@@ -199,7 +199,7 @@ public class EditQuestionInstrumentedTest {
 
         onView(withId(R.id.buttonContinueChallenge)).check(matches(isDisplayed()));
         onView(withId(R.id.buttonBrowseChallenges)).check(matches(isDisplayed()));
-        Thread.sleep(2000);
+        Thread.sleep(2500);
     }
 
     @Test
@@ -221,7 +221,7 @@ public class EditQuestionInstrumentedTest {
 
         onView(withId(R.id.buttonContinueChallenge)).check(matches(isDisplayed()));
         onView(withId(R.id.buttonBrowseChallenges)).check(matches(isDisplayed()));
-        Thread.sleep(2000);
+        Thread.sleep(2500);
     }
 
     @Test
@@ -240,7 +240,7 @@ public class EditQuestionInstrumentedTest {
         onView(withText(R.string.toast_empty_question_name))
                 .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
                 .check(matches(isDisplayed()));
-        Thread.sleep(2000);
+        Thread.sleep(2500);
     }
 
     @Test
@@ -251,7 +251,7 @@ public class EditQuestionInstrumentedTest {
         onView(withText(R.string.toast_empty_challenge_question))
                 .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
                 .check(matches(isDisplayed()));
-        Thread.sleep(2000);
+        Thread.sleep(2500);
     }
 
     @Test
@@ -262,7 +262,7 @@ public class EditQuestionInstrumentedTest {
         onView(withText(R.string.toast_empty_challenge_answer))
                 .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
                 .check(matches(isDisplayed()));
-        Thread.sleep(2000);
+        Thread.sleep(2500);
     }
 
     @Test

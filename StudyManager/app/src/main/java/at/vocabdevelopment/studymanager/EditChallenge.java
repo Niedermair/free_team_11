@@ -31,6 +31,7 @@ public class EditChallenge extends Activity implements View.OnClickListener{
     public ListView questionList;
 
     public Challenge challenge;
+    public Challenge originalChallenge;
     public int selectedQuestionPos = -1;
     public DialogInterface.OnClickListener dialogDeleteQuestionClickListener;
     public DialogInterface.OnClickListener dialogDeleteChallengeClickListener;
@@ -115,6 +116,7 @@ public class EditChallenge extends Activity implements View.OnClickListener{
                 extras.remove("challenge");
 
                 editTextChallengeName.setText(challenge.getName());
+                originalChallenge = new Challenge(challenge.getName(), new ArrayList<Question>());
 
                 questionNames = new ArrayList<>();
                 for (Question question : challenge.getQuestionList()) {
@@ -163,7 +165,7 @@ public class EditChallenge extends Activity implements View.OnClickListener{
                     return;
                 }else{
 
-                    int deleteFileResult = challenge.deleteChallengeFile();
+                    int deleteFileResult = originalChallenge.deleteChallengeFile();
                     int constructFileResult = challenge.constructChallengeFile();
 
                     if(deleteFileResult == 0 && constructFileResult == 0){

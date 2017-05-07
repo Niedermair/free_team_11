@@ -88,8 +88,6 @@ public class NewQuestion extends Activity implements View.OnClickListener{
                             startActivity(editChallenge);
                             break;
                         default:
-                            Intent start = new Intent(getApplicationContext(), Start.class);
-                            startActivity(start);
                             throw new IllegalArgumentException("Action can not be handled.");
                     }
                 }

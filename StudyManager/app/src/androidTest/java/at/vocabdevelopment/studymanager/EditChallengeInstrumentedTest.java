@@ -85,7 +85,7 @@ public class EditChallengeInstrumentedTest {
 
         onView(withId(R.id.buttonContinueChallenge)).check(matches(isDisplayed()));
         onView(withId(R.id.buttonBrowseChallenges)).check(matches(isDisplayed()));
-        Thread.sleep(2000);
+        Thread.sleep(2500);
     }
 
     @Test
@@ -98,7 +98,7 @@ public class EditChallengeInstrumentedTest {
 
         onView(withId(R.id.buttonContinueChallenge)).check(matches(isDisplayed()));
         onView(withId(R.id.buttonBrowseChallenges)).check(matches(isDisplayed()));
-        Thread.sleep(2000);
+        Thread.sleep(2500);
     }
 
     @Test
@@ -148,7 +148,7 @@ public class EditChallengeInstrumentedTest {
         onView(withText(R.string.toast_select_a_question))
                 .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
                 .check(matches(isDisplayed()));
-        Thread.sleep(2000);
+        Thread.sleep(2500);
     }
 
     @Test
@@ -238,7 +238,7 @@ public class EditChallengeInstrumentedTest {
         onView(withText(R.string.toast_select_a_question))
                 .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
                 .check(matches(isDisplayed()));
-        Thread.sleep(2000);
+        Thread.sleep(2500);
     }
 
     @Test
@@ -249,7 +249,7 @@ public class EditChallengeInstrumentedTest {
         onView(withText(R.string.toast_empty_challenge_name))
                 .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
                 .check(matches(isDisplayed()));
-        Thread.sleep(2000);
+        Thread.sleep(2500);
     }
 
     @Test
@@ -270,7 +270,7 @@ public class EditChallengeInstrumentedTest {
         onView(withText(R.string.toast_one_question))
                 .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
                 .check(matches(isDisplayed()));
-        Thread.sleep(2000);
+        Thread.sleep(2500);
     }
 
 
@@ -296,9 +296,13 @@ public class EditChallengeInstrumentedTest {
         onView(withText(R.string.toast_success_challenge_saved))
                 .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
                 .check(matches(isDisplayed()));
-        Thread.sleep(2000);
+        Thread.sleep(2500);
 
         onView(withId(R.id.textViewSetupChallengeChallengeName)).check(matches(withText(challengeName)));
+
+        if(challengeFile.exists()){
+            challengeFile.delete();
+        }
     }
 
     @Test
@@ -306,6 +310,10 @@ public class EditChallengeInstrumentedTest {
         setupIntentData();
 
         File challengeFile = new File(StudyManager.getStorageDir() + File.separator + challengeName + ".json");
+        File newChallengeFile = new File(StudyManager.getStorageDir() + File.separator + newChallengeName + ".json");
+        if(newChallengeFile.exists()){
+            newChallengeFile.delete();
+        }
         if(challengeFile.exists()){
             challengeFile.delete();
         }
@@ -325,9 +333,13 @@ public class EditChallengeInstrumentedTest {
         onView(withText(R.string.toast_success_challenge_saved))
                 .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
                 .check(matches(isDisplayed()));
-        Thread.sleep(2000);
+        Thread.sleep(2500);
 
         onView(withId(R.id.textViewSetupChallengeChallengeName)).check(matches(withText(newChallengeName)));
+
+        if(newChallengeFile.exists()){
+            newChallengeFile.delete();
+        }
     }
 
     @Test
@@ -347,7 +359,7 @@ public class EditChallengeInstrumentedTest {
 
         onView(withId(R.id.buttonContinueChallenge)).check(matches(isDisplayed()));
         onView(withId(R.id.buttonBrowseChallenges)).check(matches(isDisplayed()));
-        Thread.sleep(2000);
+        Thread.sleep(2500);
     }
 
 
@@ -373,7 +385,7 @@ public class EditChallengeInstrumentedTest {
         onView(withText(R.string.toast_success_challenge_saved))
                 .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
                 .check(matches(isDisplayed()));
-        Thread.sleep(2000);
+        Thread.sleep(2500);
 
         onView(withId(R.id.buttonSetupChallengeEditChallenge)).perform(click());
         onView(withId(R.id.buttonEditChallengeDeleteChallenge)).perform(click());
@@ -388,7 +400,7 @@ public class EditChallengeInstrumentedTest {
         onView(withId(R.id.listViewChallenges)).check(matches(isDisplayed()));
         onView(withId(R.id.buttonAddChallenge)).check(matches(isDisplayed()));
         onView(withId(R.id.buttonSelectChallenge)).check(matches(isDisplayed()));
-        Thread.sleep(2000);
+        Thread.sleep(2500);
 
     }
 
@@ -422,7 +434,7 @@ public class EditChallengeInstrumentedTest {
         onView(withId(R.id.listViewChallenges)).check(matches(isDisplayed()));
         onView(withId(R.id.buttonAddChallenge)).check(matches(isDisplayed()));
         onView(withId(R.id.buttonSelectChallenge)).check(matches(isDisplayed()));
-        Thread.sleep(2000);
+        Thread.sleep(2500);
     }
 
     @Test

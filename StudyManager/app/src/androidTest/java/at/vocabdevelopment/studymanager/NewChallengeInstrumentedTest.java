@@ -92,7 +92,7 @@ public class NewChallengeInstrumentedTest {
 
         onView(withId(R.id.buttonContinueChallenge)).check(matches(isDisplayed()));
         onView(withId(R.id.buttonBrowseChallenges)).check(matches(isDisplayed()));
-        Thread.sleep(2000);
+        Thread.sleep(2500);
     }
 
     @Test
@@ -105,7 +105,7 @@ public class NewChallengeInstrumentedTest {
 
         onView(withId(R.id.buttonContinueChallenge)).check(matches(isDisplayed()));
         onView(withId(R.id.buttonBrowseChallenges)).check(matches(isDisplayed()));
-        Thread.sleep(2000);
+        Thread.sleep(2500);
     }
 
     @Test
@@ -127,7 +127,7 @@ public class NewChallengeInstrumentedTest {
         onView(withText(R.string.toast_empty_challenge_name))
                 .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
                 .check(matches(isDisplayed()));
-        Thread.sleep(2000);
+        Thread.sleep(2500);
     }
 
     @Test
@@ -138,7 +138,7 @@ public class NewChallengeInstrumentedTest {
         onView(withText(R.string.toast_empty_challenge_name))
                 .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
                 .check(matches(isDisplayed()));
-        Thread.sleep(2000);
+        Thread.sleep(2500);
     }
 
     @Test
@@ -149,7 +149,7 @@ public class NewChallengeInstrumentedTest {
         onView(withText(R.string.toast_one_question))
                 .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
                 .check(matches(isDisplayed()));
-        Thread.sleep(2000);
+        Thread.sleep(2500);
     }
 
     @Test
@@ -170,7 +170,7 @@ public class NewChallengeInstrumentedTest {
         onView(withText(R.string.toast_one_question))
                 .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
                 .check(matches(isDisplayed()));
-        Thread.sleep(2000);
+        Thread.sleep(2500);
     }
 
     @Test
@@ -187,7 +187,7 @@ public class NewChallengeInstrumentedTest {
         onView(withText(R.string.toast_success_challenge_saved))
                 .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
                 .check(matches(isDisplayed()));
-        Thread.sleep(2000);
+        Thread.sleep(2500);
     }
 
     @Test
@@ -214,7 +214,7 @@ public class NewChallengeInstrumentedTest {
         onView(withText(R.string.toast_success_challenge_saved))
                 .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
                 .check(matches(isDisplayed()));
-        Thread.sleep(2000);
+        Thread.sleep(2500);
     }
 
     @Test
@@ -247,7 +247,7 @@ public class NewChallengeInstrumentedTest {
         onView(withText(R.string.toast_error_challenge_exists_already))
                 .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
                 .check(matches(isDisplayed()));
-        Thread.sleep(2000);
+        Thread.sleep(2500);
 
         onView(withId(R.id.editTextChallengeName)).perform(clearText(), typeText(newChallengeName));
         onView(withId(R.id.buttonSaveChallenge)).perform(click());
@@ -255,7 +255,14 @@ public class NewChallengeInstrumentedTest {
         onView(withText(R.string.toast_success_challenge_saved))
                 .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
                 .check(matches(isDisplayed()));
-        Thread.sleep(2000);
+        Thread.sleep(2500);
+
+        if(challengeFile.exists()){
+            challengeFile.delete();
+        }
+        if(challengeFile2.exists()){
+            challengeFile2.delete();
+        }
     }
 
 
@@ -285,7 +292,7 @@ public class NewChallengeInstrumentedTest {
         onView(withText(R.string.toast_error_challenge_exists_already))
                 .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
                 .check(matches(isDisplayed()));
-        Thread.sleep(2000);
+        Thread.sleep(2500);
     }
 
     @Test
@@ -335,7 +342,7 @@ public class NewChallengeInstrumentedTest {
         onView(withText(R.string.toast_select_a_question))
                 .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
                 .check(matches(isDisplayed()));
-        Thread.sleep(2000);
+        Thread.sleep(2500);
     }
 
     @Test
@@ -414,7 +421,7 @@ public class NewChallengeInstrumentedTest {
         onView(withText(R.string.toast_select_a_question))
                 .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
                 .check(matches(isDisplayed()));
-        Thread.sleep(2000);
+        Thread.sleep(2500);
     }
 
     @Test
@@ -430,7 +437,7 @@ public class NewChallengeInstrumentedTest {
         onView(withText(R.string.toast_success_challenge_deleted))
                 .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
                 .check(matches(isDisplayed()));
-        Thread.sleep(2000);
+        Thread.sleep(2500);
 
         onView(withId(R.id.searchViewChallenges)).check(matches(isDisplayed()));
         onView(withId(R.id.listViewChallenges)).check(matches(isDisplayed()));

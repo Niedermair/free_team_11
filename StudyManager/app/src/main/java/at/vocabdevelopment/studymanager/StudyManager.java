@@ -35,6 +35,8 @@ class StudyManager {
                         String name = reader.nextName();
                         if(name.equals("name")){
                             challenge.setName(reader.nextString());
+                        } else {
+                            reader.skipValue();
                         }
                     }
                     reader.endObject();
@@ -52,6 +54,8 @@ class StudyManager {
                                 question.setQuestion(reader.nextString());
                             } else if (name.equals("answer")) {
                                 question.setAnswer(reader.nextString());
+                            } else {
+                               reader.skipValue();
                             }
                         }
                         challenge.addQuestion(question);
