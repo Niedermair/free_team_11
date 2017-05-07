@@ -1,5 +1,7 @@
 package at.vocabdevelopment.studymanager;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.app.Activity;
@@ -30,6 +32,10 @@ public class EditChallenge extends Activity implements View.OnClickListener{
 
     public Challenge challenge;
     public int selectedQuestionPos = -1;
+    public DialogInterface.OnClickListener dialogDeleteQuestionClickListener;
+    public DialogInterface.OnClickListener dialogDeleteChallengeClickListener;
+    public List<String> questionNames;
+    public ArrayAdapter<String> challengeQuestionsAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +70,42 @@ public class EditChallenge extends Activity implements View.OnClickListener{
             }
         });
 
+        dialogDeleteQuestionClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int choice) {
+                if (choice == DialogInterface.BUTTON_POSITIVE){
+                    challenge.getQuestionList().remove(selectedQuestionPos);
+                    questionNames.remove(selectedQuestionPos);
+
+                    questionList.setAdapter(challengeQuestionsAdapter);
+                    challengeQuestionsAdapter.notifyDataSetChanged();
+                    selectedQuestionPos = -1;
+                }else{
+                    questionList.setAdapter(challengeQuestionsAdapter);
+                    challengeQuestionsAdapter.notifyDataSetChanged();
+                    selectedQuestionPos = -1;
+                }
+            }
+        };
+
+        dialogDeleteChallengeClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int choice) {
+                if (choice == DialogInterface.BUTTON_POSITIVE){
+                    int result = challenge.deleteChallengeFile();
+                    if(result == 0){
+                        Toast.makeText(getApplicationContext(), getApplicationContext().getString(R.string.toast_success_challenge_deleted), Toast.LENGTH_SHORT).show();
+                        Intent browseChallenges = new Intent(getApplicationContext(), BrowseChallenges.class);
+                        startActivity(browseChallenges);
+                    }else{
+                        Toast.makeText(getApplicationContext(), getApplicationContext().getString(R.string.toast_error_challenge_delete), Toast.LENGTH_SHORT).show();
+                        Intent browseChallenges = new Intent(getApplicationContext(), BrowseChallenges.class);
+                        startActivity(browseChallenges);
+                    }
+                }
+            }
+        };
+
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
 
@@ -74,12 +116,12 @@ public class EditChallenge extends Activity implements View.OnClickListener{
 
                 editTextChallengeName.setText(challenge.getName());
 
-                List<String> questionNames = new ArrayList<>();
+                questionNames = new ArrayList<>();
                 for (Question question : challenge.getQuestionList()) {
                     questionNames.add(question.getName());
                 }
 
-                ArrayAdapter<String> challengeQuestionsAdapter = new ArrayAdapter<>(
+                challengeQuestionsAdapter = new ArrayAdapter<>(
                         this,
                         android.R.layout.simple_list_item_1,
                         questionNames);
@@ -90,7 +132,6 @@ public class EditChallenge extends Activity implements View.OnClickListener{
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         selectedQuestionPos = position;
-                        Log.e("app", "Item position: "+ position);
                     }
                 });
 
@@ -114,12 +155,35 @@ public class EditChallenge extends Activity implements View.OnClickListener{
         switch(clickedButton.getId())
         {
             case R.id.buttonEditChallengeSaveChallenge:
-                //TODO: still needs to be implemented...
-                System.out.println("Save Challenge Button clicked");
+                if(challenge.getName().trim().matches("")){
+                    Toast.makeText(this, getApplicationContext().getString(R.string.toast_empty_challenge_name), Toast.LENGTH_SHORT).show();
+                    return;
+                }else if(challenge.getQuestionList().size() <= 0){
+                    Toast.makeText(this, getApplicationContext().getString(R.string.toast_one_question), Toast.LENGTH_SHORT).show();
+                    return;
+                }else{
+
+                    int deleteFileResult = challenge.deleteChallengeFile();
+                    int constructFileResult = challenge.constructChallengeFile();
+
+                    if(deleteFileResult == 0 && constructFileResult == 0){
+                        Toast.makeText(this, R.string.toast_success_challenge_saved, Toast.LENGTH_SHORT).show();
+                        Intent setupChallenge = new Intent(getApplicationContext(), SetupChallenge.class);
+                        setupChallenge.putExtra("challenge", challenge);
+                        startActivity(setupChallenge);
+                    } else {
+                        Toast.makeText(this, getApplicationContext().getString(R.string.toast_error_save_data), Toast.LENGTH_SHORT).show();
+                        Intent start = new Intent(getApplicationContext(), Start.class);
+                        startActivity(start);
+                    }
+                }
                 break;
             case R.id.buttonEditChallengeDeleteChallenge:
-                //TODO: still needs to be implemented...
-                System.out.println("Delete Challenge Button clicked");
+                AlertDialog.Builder deleteChallengeBuilder = new AlertDialog.Builder(this);
+                deleteChallengeBuilder.setMessage(R.string.dialog_delete_challenge)
+                        .setPositiveButton(R.string.dialog_yes, dialogDeleteChallengeClickListener)
+                        .setNegativeButton(R.string.dialog_no, dialogDeleteChallengeClickListener)
+                        .setCancelable(false).show();
                 break;
             case R.id.buttonEditChallengeEditQuestion:
                 if(selectedQuestionPos >= 0){
@@ -139,12 +203,18 @@ public class EditChallenge extends Activity implements View.OnClickListener{
                 startActivity(newQuestion);
                 break;
             case R.id.buttonEditChallengeDeleteQuestion:
-                //TODO: still needs to be implemented...
-                System.out.println("Delete Question Button clicked");
+                if(selectedQuestionPos >= 0){
+                    AlertDialog.Builder deleteQuestionBuilder = new AlertDialog.Builder(this);
+                    deleteQuestionBuilder.setMessage(R.string.dialog_delete_question)
+                            .setPositiveButton(R.string.dialog_yes, dialogDeleteQuestionClickListener)
+                            .setNegativeButton(R.string.dialog_no, dialogDeleteQuestionClickListener)
+                            .setCancelable(false).show();
+                }else{
+                    Toast.makeText(this, R.string.toast_select_a_question, Toast.LENGTH_SHORT).show();
+                }
                 break;
             default:
                 throw new IllegalArgumentException("Action can not be handled.");
         }
-
     }
 }

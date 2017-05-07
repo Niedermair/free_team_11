@@ -88,4 +88,41 @@ public class ChallengeUnitTest {
         assertTrue(challengeFile.exists());
         assertEquals(challenge.constructChallengeFile(), -1);
     }
+
+    @Test
+    public void testDeleteChallengeFileSuccess(){
+        Challenge challenge = new Challenge(exampleChallengeName, new ArrayList<Question>());
+        Question question1 = new Question(exampleQuestionName1, exampleQuestion1, exampleAnswer1);
+        Question question2 = new Question(exampleQuestionName2, exampleQuestion2, exampleAnswer2);
+        challenge.addQuestion(question1);
+        challenge.addQuestion(question2);
+
+        File challengeFile = new File(StudyManager.getStorageDir() + File.separator + exampleChallengeName + ".json");
+        if(challengeFile.exists()){
+            challengeFile.delete();
+        }
+
+        assertEquals(challenge.constructChallengeFile(), 0);
+        assertTrue(challengeFile.exists());
+        assertEquals(challenge.deleteChallengeFile(), 0);
+    }
+
+    @Test
+    public void testDeleteChallengeFileError(){
+        Challenge challenge = new Challenge(exampleChallengeName, new ArrayList<Question>());
+        Question question1 = new Question(exampleQuestionName1, exampleQuestion1, exampleAnswer1);
+        Question question2 = new Question(exampleQuestionName2, exampleQuestion2, exampleAnswer2);
+        challenge.addQuestion(question1);
+        challenge.addQuestion(question2);
+
+        File challengeFile = new File(StudyManager.getStorageDir() + File.separator + exampleChallengeName + ".json");
+        if(challengeFile.exists()){
+            challengeFile.delete();
+        }
+
+        assertEquals(challenge.constructChallengeFile(), 0);
+        assertTrue(challengeFile.exists());
+        assertEquals(challenge.deleteChallengeFile(), 0);
+        assertEquals(challenge.deleteChallengeFile(), -1);
+    }
 }

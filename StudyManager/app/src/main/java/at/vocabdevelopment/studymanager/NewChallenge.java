@@ -91,6 +91,7 @@ public class NewChallenge extends Activity implements View.OnClickListener{
             @Override
             public void onClick(DialogInterface dialog, int choice) {
                 if (choice == DialogInterface.BUTTON_POSITIVE){
+                    Toast.makeText(getApplicationContext(), getApplicationContext().getString(R.string.toast_success_challenge_deleted), Toast.LENGTH_SHORT).show();
                     Intent browseChallenges = new Intent(getApplicationContext(), BrowseChallenges.class);
                     startActivity(browseChallenges);
                 }
@@ -123,7 +124,6 @@ public class NewChallenge extends Activity implements View.OnClickListener{
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         selectedQuestionPos = position;
-                        Log.e("app", "Item position: "+ position);
                     }
                 });
             }else{

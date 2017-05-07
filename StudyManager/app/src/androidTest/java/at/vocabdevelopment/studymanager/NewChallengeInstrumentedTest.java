@@ -427,6 +427,11 @@ public class NewChallengeInstrumentedTest {
 
         onView(withText(R.string.dialog_yes)).perform(click());
 
+        onView(withText(R.string.toast_success_challenge_deleted))
+                .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
+                .check(matches(isDisplayed()));
+        Thread.sleep(2000);
+
         onView(withId(R.id.searchViewChallenges)).check(matches(isDisplayed()));
         onView(withId(R.id.listViewChallenges)).check(matches(isDisplayed()));
         onView(withId(R.id.buttonAddChallenge)).check(matches(isDisplayed()));

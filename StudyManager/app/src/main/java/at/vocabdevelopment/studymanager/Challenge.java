@@ -39,6 +39,16 @@ public class Challenge implements Serializable {
         this.questionList.add(question);
     }
 
+    public int deleteChallengeFile(){
+        File challengeFile = new File(StudyManager.getStorageDir() + File.separator + this.getName() + ".json");
+        if(challengeFile.exists()){
+            challengeFile.delete();
+            return 0;
+        }else{
+            return -1;
+        }
+    }
+
     public int constructChallengeFile(){
 
         File challengeFile = new File(StudyManager.getStorageDir() + File.separator + this.getName() + ".json");
