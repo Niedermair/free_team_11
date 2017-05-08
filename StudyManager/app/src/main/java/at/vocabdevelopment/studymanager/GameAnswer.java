@@ -61,12 +61,14 @@ public class GameAnswer extends Activity implements View.OnClickListener
                 if(game.hasNextQuestion())
                 {
                     game.nextQuestion();
+                    game.incrementWrongCounter();
                     Intent wrongStartQuestion = new Intent(getApplicationContext(), GameQuestion.class);
                     wrongStartQuestion.putExtra("game", game);
                     startActivity(wrongStartQuestion);
                     break;
                 }
                 Intent wrongStartQuestion = new Intent(getApplicationContext(), Result.class);
+                game.incrementWrongCounter();
                 wrongStartQuestion.putExtra("game", game);
                 startActivity(wrongStartQuestion);
                 break;

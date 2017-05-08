@@ -8,11 +8,13 @@ public class Game implements Serializable {
 
     private Challenge challenge;
     private int currentQuestion;
+    private int wrongCounter;
 
     public Game(Challenge challenge)
     {
         this.challenge = challenge;
         currentQuestion = 0;
+        wrongCounter = 0;
     }
 
     public boolean hasNextQuestion()
@@ -39,4 +41,13 @@ public class Game implements Serializable {
     public Challenge getChallenge() {
         return challenge;
     }
+
+    public int getWrongCounter() {
+        return wrongCounter;
+    }
+
+    public void incrementWrongCounter() {
+        this.wrongCounter++;
+    }
+
 }

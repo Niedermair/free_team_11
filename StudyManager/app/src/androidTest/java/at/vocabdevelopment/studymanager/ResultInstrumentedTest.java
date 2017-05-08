@@ -32,15 +32,17 @@ public class ResultInstrumentedTest
         Question question1 = new Question(exampleQuestionName, exampleQuestion, exampleAnswer);
         challenge.addQuestion(question1);
         Game game = new Game(challenge);
+        game.incrementWrongCounter();
+        game.incrementWrongCounter();
         test.putExtra("game", game);
         mActivityRule.launchActivity(test);
     }
 
     @Test
-    public void testTextView() throws Exception
+    public void testFeedback() throws Exception
     {
         setupIntentData();
-        onView(withId(R.id.ResultTxtView)).check(matches(isDisplayed()));
+        onView(withId(R.id.ResultTxtView)).check(matches(withText("Number of wrong answered questions: 2")));
     }
 
     @Test

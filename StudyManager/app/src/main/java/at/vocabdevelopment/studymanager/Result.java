@@ -28,6 +28,8 @@ public class Result extends Activity implements View.OnClickListener
         returnToBrowse = (Button) findViewById(R.id.returnToBrowse);
 
         returnToBrowse.setOnClickListener(this);
+
+        resultTxtView.setText("Number of wrong answered questions: " + game.getWrongCounter());
     }
 
     @Override
