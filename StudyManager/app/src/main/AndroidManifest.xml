@@ -39,6 +39,12 @@
         <activity
             android:name=".SetupChallenge">
         </activity>
+        <activity
+            android:name=".GameQuestion">
+        </activity>
+        <activity
+            android:name=".GameAnswer">
+        </activity>
     </application>
 
 </manifest>
