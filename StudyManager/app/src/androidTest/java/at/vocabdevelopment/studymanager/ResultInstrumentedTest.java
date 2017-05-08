@@ -15,10 +15,10 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
-public class GameAnswerInstrumentedTest
+public class ResultInstrumentedTest
 {
     @Rule
-    public ActivityTestRule<GameAnswer> mActivityRule = new ActivityTestRule<>(GameAnswer.class, false, false);
+    public ActivityTestRule<Result> mActivityRule = new ActivityTestRule(Result.class, false, false);
 
     private String challengeName = "C-Name";
     private String exampleQuestionName = "Q-Name";
@@ -37,24 +37,16 @@ public class GameAnswerInstrumentedTest
     }
 
     @Test
-    public void testCorrectButton() throws Exception
+    public void testTextView() throws Exception
     {
         setupIntentData();
-        onView(withId(R.id.correctBtn)).perform(click());
+        onView(withId(R.id.ResultTxtView)).check(matches(isDisplayed()));
     }
 
     @Test
-    public void testWrongButton() throws Exception
+    public void testButtons() throws Exception
     {
         setupIntentData();
-        onView(withId(R.id.wrongBtn)).perform(click());
-    }
-
-    @Test
-    public void testTxtView() throws Exception
-    {
-        setupIntentData();
-        onView(withId(R.id.questionAnswerTxtView)).check(matches(withText("Q-Question")));
-        onView(withId(R.id.answerAnswerTxtView)).check(matches(withText("Q-Answer")));
+        onView(withId(R.id.returnToBrowse)).perform(click());
     }
 }

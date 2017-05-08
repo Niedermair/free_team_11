@@ -13,6 +13,7 @@ public class SetupChallenge extends Activity implements View.OnClickListener{
 
     public TextView textViewChallengeName;
     public Button buttonEditChallenge;
+    public Button buttonStartGame;
     public Challenge challenge;
 
     @Override
@@ -22,8 +23,10 @@ public class SetupChallenge extends Activity implements View.OnClickListener{
 
         textViewChallengeName = (TextView) findViewById(R.id.textViewSetupChallengeChallengeName);
         buttonEditChallenge = (Button) findViewById(R.id.buttonSetupChallengeEditChallenge);
+        buttonStartGame = (Button) findViewById(R.id.buttonStart);
 
         buttonEditChallenge.setOnClickListener(this);
+        buttonStartGame.setOnClickListener(this);
 
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
@@ -47,8 +50,8 @@ public class SetupChallenge extends Activity implements View.OnClickListener{
     }
 
     @Override
-    public void onClick(View v) {
-
+    public void onClick(View v)
+    {
         Button clickedButton = (Button) v;
 
         switch(clickedButton.getId())
@@ -57,6 +60,12 @@ public class SetupChallenge extends Activity implements View.OnClickListener{
                 Intent editChallenge = new Intent(getApplicationContext(), EditChallenge.class);
                 editChallenge.putExtra("challenge", challenge);
                 startActivity(editChallenge);
+                break;
+            case R.id.buttonStart:
+                Game game = new Game(challenge);
+                Intent startGame = new Intent(getApplicationContext(), GameQuestion.class);
+                startGame.putExtra("game", game);
+                startActivity(startGame);
                 break;
             default:
                 throw new IllegalArgumentException("Action can not be handled.");
