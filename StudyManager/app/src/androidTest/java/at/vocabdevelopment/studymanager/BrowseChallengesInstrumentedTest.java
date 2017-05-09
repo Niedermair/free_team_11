@@ -94,5 +94,14 @@ public class BrowseChallengesInstrumentedTest {
                 .check(matches(isDisplayed()));
         Thread.sleep(2500);
     }
+
+    @Test
+    public void testSearchView() throws Exception {
+        onView(withId(R.id.searchViewChallenges)).perform(click());
+        Thread.sleep(5000);
+        onView(withId(R.id.searchViewChallenges)).perform(typeText("something"));
+
+        //onView(withText("something")).check(matches(isDisplayed()));
+    }
 }
 

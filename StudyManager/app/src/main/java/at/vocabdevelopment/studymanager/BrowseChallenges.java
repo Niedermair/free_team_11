@@ -8,6 +8,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import java.io.File;
@@ -15,11 +16,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BrowseChallenges extends Activity implements View.OnClickListener{
+public class BrowseChallenges extends Activity implements View.OnClickListener, SearchView.OnQueryTextListener{
 
     public Button buttonAddChallenge;
     public Button buttonSelectChallenge;
     public ListView challengeList;
+    public SearchView searchField;
     public ArrayAdapter<String> challengeFilesAdapter;
 
     private Challenge selectedChallenge;
@@ -33,6 +35,9 @@ public class BrowseChallenges extends Activity implements View.OnClickListener{
         buttonAddChallenge = (Button) findViewById(R.id.buttonAddChallenge);
         buttonSelectChallenge = (Button) findViewById(R.id.buttonSelectChallenge);
         challengeList = (ListView) findViewById(R.id.listViewChallenges);
+        searchField = (SearchView) findViewById((R.id.searchViewChallenges));
+        searchField.setOnQueryTextListener(this);
+
 
         File[] challengeFiles = StudyManager.getStorageDir().listFiles();
         List<String> challengeNames = new ArrayList<>();
@@ -89,5 +94,21 @@ public class BrowseChallenges extends Activity implements View.OnClickListener{
             default:
                 throw new IllegalArgumentException("Action can not be handled.");
         }
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        challengeFilesAdapter.getFilter().filter(newText);
+
+        if(selectedChallenge != null) {
+            challengeList.setAdapter(challengeFilesAdapter);
+            challengeFilesAdapter.notifyDataSetChanged();
+        }
+        return true;
     }
 }
