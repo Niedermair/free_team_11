@@ -3,6 +3,7 @@
     package="at.vocabdevelopment.studymanager">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -26,10 +27,27 @@
         <activity
             android:name=".NewChallenge">
         </activity>
-
-
-
-
+        <activity
+            android:name=".EditChallenge">
+        </activity>
+        <activity
+            android:name=".NewQuestion">
+        </activity>
+        <activity
+            android:name=".EditQuestion">
+        </activity>
+        <activity
+            android:name=".SetupChallenge">
+        </activity>
+        <activity
+            android:name=".GameQuestion">
+        </activity>
+        <activity
+            android:name=".GameAnswer">
+        </activity>
+        <activity
+            android:name=".Result">
+        </activity>
     </application>
 
 </manifest>

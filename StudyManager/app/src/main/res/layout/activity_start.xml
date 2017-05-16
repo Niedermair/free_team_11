@@ -64,4 +64,17 @@
         app:layout_constraintLeft_toLeftOf="parent"
         android:contentDescription="@string/logo_of_studymanager" />
 
+    <TextView
+        android:id="@+id/textViewPermissions"
+        android:layout_width="295dp"
+        android:layout_height="51dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/permission_information"
+        android:textAlignment="center"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonBrowseChallenges" />
+
 </android.support.constraint.ConstraintLayout>
