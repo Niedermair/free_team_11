@@ -8,11 +8,19 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 
 public class Challenge implements Serializable {
 
     private String name;
     private ArrayList<Question> questionList;
+
+    public ArrayList<Question> getShuffledQuestionList() {
+        return shuffledQuestionList;
+    }
+
+    private ArrayList<Question> shuffledQuestionList;
 
     public Challenge(String name, ArrayList<Question> questionList){
         this.name = name;
@@ -33,6 +41,12 @@ public class Challenge implements Serializable {
 
     public void setQuestionList(ArrayList<Question> questionList){
         this.questionList = questionList;
+    }
+
+    public void shuffle()
+    {
+        shuffledQuestionList = questionList;
+        Collections.shuffle(shuffledQuestionList);
     }
 
     public void addQuestion(Question question){

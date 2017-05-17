@@ -12,6 +12,8 @@ public class GameUnitTest
     private Challenge challenge = new Challenge("C-Name", new ArrayList<Question>());
     private Question question1 = new Question("Q-Name1", "Q-Question1", "Q-Answer1");
     private Question question2 = new Question("Q-Name2", "Q-Question2", "Q-Answer2");
+    private Question question3 = new Question("Q-Name3", "Q-Question3", "Q-Answer3");
+    private Question question4 = new Question("Q-Name4", "Q-Question4", "Q-Answer4");
     private Game game;
 
     public void setupEnviorment()
@@ -24,7 +26,11 @@ public class GameUnitTest
     @Test public void testQuestionName()
     {
         setupEnviorment();
-        assertEquals(game.getCurrentQuestion().getName(), question1.getName());
+        for(int i = 0; i < challenge.getQuestionList().size(); i++)
+        {
+            assertEquals(game.getCurrentQuestion().getName(), challenge.getShuffledQuestionList().get(i).getName());
+            game.nextQuestion();
+        }
     }
 
     @Test public void newGame()
@@ -36,20 +42,30 @@ public class GameUnitTest
     @Test public void testQuestionQuestion()
     {
         setupEnviorment();
-        assertEquals(game.getCurrentQuestion().getQuestion(), question1.getQuestion());
+        for(int i = 0; i < challenge.getQuestionList().size(); i++)
+        {
+            assertEquals(game.getCurrentQuestion().getQuestion(), challenge.getShuffledQuestionList().get(i).getQuestion());
+            game.nextQuestion();
+        }
     }
 
     @Test public void testQuestionAnswer()
     {
         setupEnviorment();
-        assertEquals(game.getCurrentQuestion().getAnswer(), question1.getAnswer());
+        for(int i = 0; i < challenge.getQuestionList().size(); i++)
+        {
+            assertEquals(game.getCurrentQuestion().getAnswer(), challenge.getShuffledQuestionList().get(i).getAnswer());
+            game.nextQuestion();
+        }
     }
 
     @Test public void testNextQuestion()
     {
         setupEnviorment();
-        assertEquals(game.hasNextQuestion(), true);
-        game.nextQuestion();
-        assertEquals(game.hasNextQuestion(), false);
+        for(int i = 0; i < challenge.getQuestionList().size(); i++)
+        {
+            assertEquals(game.getCurrentQuestion(), challenge.getShuffledQuestionList().get(i));
+            game.nextQuestion();
+        }
     }
 }

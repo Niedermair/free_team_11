@@ -18,6 +18,12 @@ public class ChallengeUnitTest {
     public String exampleQuestionName2 = "Question Name 2";
     public String exampleQuestion2 = "Question Example 2";
     public String exampleAnswer2 = "Answer Example 2";
+    public String exampleQuestionName3 = "Question Name 3";
+    public String exampleQuestion3 = "Question Example 3";
+    public String exampleAnswer3 = "Answer Example 3";
+    public String exampleQuestionName4 = "Question Name 4";
+    public String exampleQuestion4 = "Question Example 4";
+    public String exampleAnswer4 = "Answer Example 4";
 
     @Test
     public void testNewChallenge(){
@@ -124,5 +130,28 @@ public class ChallengeUnitTest {
         assertTrue(challengeFile.exists());
         assertEquals(challenge.deleteChallengeFile(), 0);
         assertEquals(challenge.deleteChallengeFile(), -1);
+    }
+
+    @Test
+    public void testShuffle()
+    {
+        Challenge challenge = new Challenge(exampleChallengeName, new ArrayList<Question>());
+        Question question1 = new Question(exampleQuestionName1, exampleQuestion1, exampleAnswer1);
+        Question question2 = new Question(exampleQuestionName2, exampleQuestion2, exampleAnswer2);
+        Question question3 = new Question(exampleQuestionName3, exampleQuestion3, exampleAnswer3);
+        Question question4 = new Question(exampleQuestionName4, exampleQuestion4, exampleAnswer4);
+        challenge.addQuestion(question1);
+        challenge.addQuestion(question2);
+        challenge.addQuestion(question3);
+        challenge.addQuestion(question4);
+        challenge.shuffle();
+        for (Question q:challenge.getQuestionList())
+        {
+            assertTrue(challenge.getShuffledQuestionList().contains(q));
+        }
+        assertTrue(challenge.getShuffledQuestionList().get(0) != question1 ||
+                challenge.getShuffledQuestionList().get(1) != question2 ||
+                challenge.getShuffledQuestionList().get(2) != question3 ||
+                challenge.getShuffledQuestionList().get(4) != question4);
     }
 }

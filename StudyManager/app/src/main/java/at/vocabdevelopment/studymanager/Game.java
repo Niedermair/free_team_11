@@ -13,6 +13,7 @@ public class Game implements Serializable {
     public Game(Challenge challenge)
     {
         this.challenge = challenge;
+        challenge.shuffle();
         currentQuestion = 0;
         wrongCounter = 0;
     }
@@ -20,7 +21,7 @@ public class Game implements Serializable {
     public boolean hasNextQuestion()
     {
         int i = currentQuestion+1;
-        if(i < challenge.getQuestionList().size()) {return true;}
+        if(i < challenge.getShuffledQuestionList().size()) {return true;}
         return false;
     }
 
@@ -31,9 +32,9 @@ public class Game implements Serializable {
 
     public Question getCurrentQuestion()
     {
-        if(currentQuestion < challenge.getQuestionList().size())
+        if(currentQuestion < challenge.getShuffledQuestionList().size())
         {
-            return challenge.getQuestionList().get(currentQuestion);
+            return challenge.getShuffledQuestionList().get(currentQuestion);
         }
         return null;
     }
