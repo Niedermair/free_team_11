@@ -18,6 +18,7 @@ public class EditQuestion extends Activity implements View.OnClickListener{
     public Challenge challenge;
     public String fromActivity;
     public int questionPosition;
+    public Boolean activeStatus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +49,7 @@ public class EditQuestion extends Activity implements View.OnClickListener{
                     questionPosition = position;
 
                     Question currentQuestion = challenge.getQuestionList().get(questionPosition);
+                    activeStatus = currentQuestion.getActiveStatus();
                     editTextQuestionNameEdit.setText(currentQuestion.getName());
                     editTextAnswerEdit.setText(currentQuestion.getAnswer());
                     editTextQuestionEdit.setText(currentQuestion.getQuestion());
@@ -98,6 +100,7 @@ public class EditQuestion extends Activity implements View.OnClickListener{
                     return;
                 } else{
                     Question editedQuestion = new Question(challengeQuestionName, challengeQuestion, challengeAnswer);
+                    editedQuestion.setActiveStatus(activeStatus);
                     challenge.getQuestionList().set(questionPosition, editedQuestion);
 
                     switch (fromActivity) {

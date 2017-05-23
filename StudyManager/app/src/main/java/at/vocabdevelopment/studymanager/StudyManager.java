@@ -54,6 +54,13 @@ class StudyManager {
                                 question.setQuestion(reader.nextString());
                             } else if (name.equals("answer")) {
                                 question.setAnswer(reader.nextString());
+                            } else if (name.equals("activeStatus")) {
+                                String status = reader.nextString();
+                                if (status.equals("true")){
+                                    question.setActiveStatus(true);
+                                } else if (status.equals("false")){
+                                    question.setActiveStatus(false);
+                                }
                             } else {
                                reader.skipValue();
                             }

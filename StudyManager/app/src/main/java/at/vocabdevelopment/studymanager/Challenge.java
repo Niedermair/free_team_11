@@ -91,6 +91,8 @@ public class Challenge implements Serializable {
                     challengeWriter.value(question.getQuestion());
                     challengeWriter.name("answer");
                     challengeWriter.value(question.getAnswer());
+                    challengeWriter.name("activeStatus");
+                    challengeWriter.value(question.getActiveStatus().toString());
                     challengeWriter.endObject();
                 }
 

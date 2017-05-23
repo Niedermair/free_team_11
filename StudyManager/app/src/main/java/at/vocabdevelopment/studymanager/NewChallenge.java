@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -15,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +28,7 @@ public class NewChallenge extends Activity implements View.OnClickListener{
     public Button buttonDeleteQuestion;
     public EditText editTextChallengeName;
     public ListView questionList;
+    public ToggleButton toggleButtonQuestionStatus;
 
     public Challenge challenge;
     public int selectedQuestionPos = -1;
@@ -50,11 +51,22 @@ public class NewChallenge extends Activity implements View.OnClickListener{
         editTextChallengeName = (EditText) findViewById(R.id.editTextChallengeName);
         questionList = (ListView) findViewById(R.id.listViewQuestions);
 
+        toggleButtonQuestionStatus = (ToggleButton) findViewById(R.id.toggleButtonQuestionStatus);
+        toggleButtonQuestionStatus.setEnabled(false);
+
         buttonSaveChallenge.setOnClickListener(this);
         buttonDeleteChallenge.setOnClickListener(this);
         buttonEditQuestion.setOnClickListener(this);
         buttonAddQuestion.setOnClickListener(this);
         buttonDeleteQuestion.setOnClickListener(this);
+
+        toggleButtonQuestionStatus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Question currentQuestion = challenge.getQuestionList().get(selectedQuestionPos);
+                currentQuestion.setActiveStatus(!currentQuestion.getActiveStatus());
+            }
+        });
 
         editTextChallengeName.addTextChangedListener(new TextWatcher() {
             @Override
@@ -78,10 +90,12 @@ public class NewChallenge extends Activity implements View.OnClickListener{
 
                     questionList.setAdapter(challengeQuestionsAdapter);
                     challengeQuestionsAdapter.notifyDataSetChanged();
+                    toggleButtonQuestionStatus.setEnabled(false);
                     selectedQuestionPos = -1;
                 }else{
                     questionList.setAdapter(challengeQuestionsAdapter);
                     challengeQuestionsAdapter.notifyDataSetChanged();
+                    toggleButtonQuestionStatus.setEnabled(false);
                     selectedQuestionPos = -1;
                 }
             }
@@ -124,6 +138,14 @@ public class NewChallenge extends Activity implements View.OnClickListener{
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         selectedQuestionPos = position;
+                        toggleButtonQuestionStatus.setEnabled(true);
+
+                        Question currentChallenge = challenge.getQuestionList().get(selectedQuestionPos);
+                        if (currentChallenge.getActiveStatus()){
+                            toggleButtonQuestionStatus.setChecked(true);
+                        }else{
+                            toggleButtonQuestionStatus.setChecked(false);
+                        }
                     }
                 });
             }else{
