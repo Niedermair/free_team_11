@@ -1,40 +1,76 @@
 package at.vocabdevelopment.studymanager;
 
-import android.util.Log;
-
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
 
 public class Game implements Serializable {
 
-    private Challenge challenge;
-    private int currentQuestion;
-    private int wrongCounter;
+    public static final int EASY = 2;
+    public static final int MEDIUM = 1;
+    public static final int HARD = 0;
 
-    public Game(Challenge challenge)
+    private Challenge challenge;
+    private ArrayList<Question> deck;
+    private int difficulty;
+    private int currentQuestionIndex;
+    private int wrongCounter;
+    private ArrayList<ArrayList<Question>> attemptsList;
+    private int attempts;
+
+    public Game(Challenge challenge, int difficulty)
     {
         this.challenge = challenge;
-        challenge.shuffle();
-        currentQuestion = 0;
-        wrongCounter = 0;
+        this.difficulty = difficulty;
+        this.deck = challenge.getQuestionList();
+        this.attemptsList = new ArrayList<>();
+        Collections.shuffle(this.deck);
+        this.currentQuestionIndex = 0;
+        this.wrongCounter = 0;
+        this.attempts = 0;
     }
 
     public boolean hasNextQuestion()
     {
-        int i = currentQuestion+1;
-        if(i < challenge.getShuffledQuestionList().size()) {return true;}
+        if (currentQuestionIndex < deck.size()-1) {
+            currentQuestionIndex++;
+            return true;
+        }
+        else if (attempts < difficulty && !attemptsList.isEmpty() && !attemptsList.get(attempts).isEmpty()) {
+            deck.clear();
+            deck = attemptsList.get(attempts);
+            Collections.shuffle(deck);
+            attempts++;
+            currentQuestionIndex = 0;
+            return true;
+        }
         return false;
     }
 
-    public void nextQuestion()
+    public void storeQuestion()
     {
-        if(hasNextQuestion()) {currentQuestion++;}
+        if (attempts == difficulty)
+            wrongCounter++;
+
+        if (attemptsList.isEmpty()) {
+            ArrayList<Question> sideDeck = new ArrayList<Question>();
+            sideDeck.add(deck.get(currentQuestionIndex));
+            attemptsList.add(sideDeck);
+        }
+        else if (attemptsList.size() <= attempts) {
+            ArrayList<Question> sideDeck = new ArrayList<Question>();
+            sideDeck.add(deck.get(currentQuestionIndex));
+            attemptsList.add(sideDeck);
+        }
+        else {
+            attemptsList.get(attempts).add(deck.get(currentQuestionIndex));
+        }
     }
 
-    public Question getCurrentQuestion()
+    public Question getCurrentQuestionIndex()
     {
-        if(currentQuestion < challenge.getShuffledQuestionList().size())
-        {
-            return challenge.getShuffledQuestionList().get(currentQuestion);
+        if (currentQuestionIndex < deck.size()) {
+            return deck.get(currentQuestionIndex);
         }
         return null;
     }
@@ -51,4 +87,7 @@ public class Game implements Serializable {
         this.wrongCounter++;
     }
 
+    public ArrayList<Question> getDeck() {
+        return deck;
+    }
 }

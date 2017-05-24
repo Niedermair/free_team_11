@@ -33,7 +33,7 @@ public class ResultInstrumentedTest
         Challenge challenge = new Challenge(challengeName, new ArrayList<Question>());
         Question question1 = new Question(exampleQuestionName, exampleQuestion, exampleAnswer);
         challenge.addQuestion(question1);
-        Game game = new Game(challenge);
+        Game game = new Game(challenge, Game.EASY);
         game.incrementWrongCounter();
         game.incrementWrongCounter();
         test.putExtra("game", game);

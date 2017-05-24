@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -17,7 +16,6 @@ public class GameQuestion extends Activity implements View.OnClickListener
     public Button showAnswerBtn;
     public Button quitBtn;
     public Game game;
-    public Challenge challenge;
 
     public DialogInterface.OnClickListener dialogExitChallengeClickListener;
 
@@ -37,7 +35,6 @@ public class GameQuestion extends Activity implements View.OnClickListener
         quitBtn = (Button) findViewById(R.id.quitGameBtn);
         Log.d("StudyManager", "test");
         questionTxtView.setText(game.getCurrentQuestion().getQuestion());
-
         showAnswerBtn.setOnClickListener(this);
         quitBtn.setOnClickListener(this);
 

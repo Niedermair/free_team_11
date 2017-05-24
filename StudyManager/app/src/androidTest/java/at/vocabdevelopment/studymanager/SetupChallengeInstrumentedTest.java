@@ -58,7 +58,7 @@ public class SetupChallengeInstrumentedTest {
     }
 
     @Test
-    public void testLoadChallengeDataMissing() throws Exception{
+    public void testLoadChallengeDataMissing() {
         Intent data = new Intent();
         Challenge challenge = new Challenge(challengeName, new ArrayList<Question>());
         data.putExtra("challenge_wrong", challenge);
@@ -70,11 +70,10 @@ public class SetupChallengeInstrumentedTest {
 
         onView(withId(R.id.buttonContinueChallenge)).check(matches(isDisplayed()));
         onView(withId(R.id.buttonBrowseChallenges)).check(matches(isDisplayed()));
-        Thread.sleep(2500);
     }
 
     @Test
-    public void testMissingIntentExtra() throws Exception{
+    public void testMissingIntentExtra() {
         mActivityRule.launchActivity(new Intent());
 
         onView(withText(R.string.toast_error_missing_data))
@@ -83,7 +82,6 @@ public class SetupChallengeInstrumentedTest {
 
         onView(withId(R.id.buttonContinueChallenge)).check(matches(isDisplayed()));
         onView(withId(R.id.buttonBrowseChallenges)).check(matches(isDisplayed()));
-        Thread.sleep(2500);
     }
 
     @Test
@@ -109,5 +107,56 @@ public class SetupChallengeInstrumentedTest {
         onView(withId(R.id.listViewChallenges)).check(matches(isDisplayed()));
         onView(withId(R.id.buttonAddChallenge)).check(matches(isDisplayed()));
         onView(withId(R.id.buttonSelectChallenge)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testButtons() {
+        setupIntentData();
+        onView(withId(R.id.buttonSetupChallengeEditChallenge)).check(matches(isDisplayed()));
+        onView(withId(R.id.buttonActiveDeck)).perform(click());
+        onView(withId(R.id.buttonTotalDeck)).perform(click());
+        onView(withId(R.id.buttonEasy)).perform(click());
+        onView(withId(R.id.buttonMedium)).perform(click());
+        onView(withId(R.id.buttonHard)).perform(click());
+        onView(withId(R.id.buttonStart)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testNoDifficultySelected() throws Exception {
+        setupIntentData();
+        onView(withId(R.id.buttonStart)).perform(click());
+        onView(withText(R.string.toast_error_difficulty))
+                .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
+                .check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testEasyDifficulty() {
+        setupIntentData();
+        onView(withId(R.id.buttonEasy)).perform(click());
+        onView(withId(R.id.buttonStart)).perform(click());
+        onView(withId(R.id.questionTxtView)).check(matches(isDisplayed()));
+        onView(withId(R.id.showAnswerBtn)).check(matches(isDisplayed()));
+        onView(withId(R.id.quitGameBtn)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testMediumDifficulty() {
+        setupIntentData();
+        onView(withId(R.id.buttonMedium)).perform(click());
+        onView(withId(R.id.buttonStart)).perform(click());
+        onView(withId(R.id.questionTxtView)).check(matches(isDisplayed()));
+        onView(withId(R.id.showAnswerBtn)).check(matches(isDisplayed()));
+        onView(withId(R.id.quitGameBtn)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testHardDifficulty() {
+        setupIntentData();
+        onView(withId(R.id.buttonHard)).perform(click());
+        onView(withId(R.id.buttonStart)).perform(click());
+        onView(withId(R.id.questionTxtView)).check(matches(isDisplayed()));
+        onView(withId(R.id.showAnswerBtn)).check(matches(isDisplayed()));
+        onView(withId(R.id.quitGameBtn)).check(matches(isDisplayed()));
     }
 }

@@ -36,6 +36,7 @@
     <string name="hard">Hard</string>
     <string name="card_deck">Card Deck:</string>
     <string name="difficulty">Difficulty:</string>
+    <string name="toast_error_difficulty">Please select a difficulty…</string>
     <string name="toast_error_save_data">Ups! Error while saving data occurred…</string>
     <string name="toast_error_missing_data">Ups! Error while loading data occurred…</string>
     <string name="toast_error_corrupt_data">Ups! Retrieved data seems to be invalid…</string>
