@@ -15,12 +15,14 @@ import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.clearText;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.pressBack;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
 import static android.support.test.espresso.matcher.ViewMatchers.isChecked;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.isEnabled;
+import static android.support.test.espresso.matcher.ViewMatchers.isRoot;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static junit.framework.Assert.assertEquals;
@@ -564,5 +566,29 @@ public class NewChallengeInstrumentedTest {
         onView(withId(R.id.toggleButtonQuestionStatus)).check(matches(isChecked()));
 
         assertTrue(mActivityRule.getActivity().challenge.getQuestionList().get(1).getActiveStatus());
+    }
+
+    @Test
+    public void testBackButton() throws Exception{
+        setupIntentDataChallengeFull();
+
+        onView(isRoot()).perform(pressBack());
+
+        onView(withId(R.id.searchViewChallenges)).check(matches(isDisplayed()));
+        onView(withId(R.id.listViewChallenges)).check(matches(isDisplayed()));
+        onView(withId(R.id.buttonAddChallenge)).check(matches(isDisplayed()));
+        onView(withId(R.id.buttonSelectChallenge)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testBackButton2() throws Exception{
+        setupIntentDataEmptyChallenge();
+
+        onView(isRoot()).perform(pressBack());
+
+        onView(withId(R.id.searchViewChallenges)).check(matches(isDisplayed()));
+        onView(withId(R.id.listViewChallenges)).check(matches(isDisplayed()));
+        onView(withId(R.id.buttonAddChallenge)).check(matches(isDisplayed()));
+        onView(withId(R.id.buttonSelectChallenge)).check(matches(isDisplayed()));
     }
 }

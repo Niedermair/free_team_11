@@ -12,8 +12,10 @@ import java.util.ArrayList;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.pressBack;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.isRoot;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
@@ -56,6 +58,60 @@ public class GameQuestionInstrumentedTest
 
     {
         setupIntentData();
-        onView(withId(R.id.questionTxtView)).check(matches(withText("Q-Question")));
+        onView(withId(R.id.questionTxtView)).check(matches(withText(exampleQuestion)));
+    }
+
+    @Test
+    public void testQuitGameApprove() throws Exception{
+        setupIntentData();
+
+        onView(withId(R.id.quitGameBtn)).perform(click());
+
+        onView(withText(R.string.dialog_exit_challenge)).check(matches(isDisplayed()));
+        onView(withText(R.string.dialog_yes)).perform(click());
+
+        onView(withId(R.id.searchViewChallenges)).check(matches(isDisplayed()));
+        onView(withId(R.id.listViewChallenges)).check(matches(isDisplayed()));
+        onView(withId(R.id.buttonAddChallenge)).check(matches(isDisplayed()));
+        onView(withId(R.id.buttonSelectChallenge)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testQuitGameDeny() throws Exception{
+        setupIntentData();
+
+        onView(withId(R.id.quitGameBtn)).perform(click());
+
+        onView(withText(R.string.dialog_exit_challenge)).check(matches(isDisplayed()));
+        onView(withText(R.string.dialog_no)).perform(click());
+
+        onView(withId(R.id.questionTxtView)).check(matches(withText(exampleQuestion)));
+    }
+
+    @Test
+    public void testBackButtonApprove() throws Exception{
+        setupIntentData();
+
+        onView(isRoot()).perform(pressBack());
+
+        onView(withText(R.string.dialog_exit_challenge)).check(matches(isDisplayed()));
+        onView(withText(R.string.dialog_yes)).perform(click());
+
+        onView(withId(R.id.searchViewChallenges)).check(matches(isDisplayed()));
+        onView(withId(R.id.listViewChallenges)).check(matches(isDisplayed()));
+        onView(withId(R.id.buttonAddChallenge)).check(matches(isDisplayed()));
+        onView(withId(R.id.buttonSelectChallenge)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testBackButtonDeny() throws Exception{
+        setupIntentData();
+
+        onView(isRoot()).perform(pressBack());
+
+        onView(withText(R.string.dialog_exit_challenge)).check(matches(isDisplayed()));
+        onView(withText(R.string.dialog_no)).perform(click());
+
+        onView(withId(R.id.questionTxtView)).check(matches(withText(exampleQuestion)));
     }
 }

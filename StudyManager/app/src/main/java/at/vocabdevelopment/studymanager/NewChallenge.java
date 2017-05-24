@@ -108,6 +108,7 @@ public class NewChallenge extends Activity implements View.OnClickListener{
                     Toast.makeText(getApplicationContext(), getApplicationContext().getString(R.string.toast_success_challenge_deleted), Toast.LENGTH_SHORT).show();
                     Intent browseChallenges = new Intent(getApplicationContext(), BrowseChallenges.class);
                     startActivity(browseChallenges);
+                    finish();
                 }
             }
         };
@@ -152,12 +153,21 @@ public class NewChallenge extends Activity implements View.OnClickListener{
                 Toast.makeText(this, getApplicationContext().getString(R.string.toast_error_missing_data), Toast.LENGTH_SHORT).show();
                 Intent start = new Intent(getApplicationContext(), Start.class);
                 startActivity(start);
+                finish();
             }
         }else{
             Toast.makeText(this, getApplicationContext().getString(R.string.toast_error_missing_data), Toast.LENGTH_SHORT).show();
             Intent start = new Intent(getApplicationContext(), Start.class);
             startActivity(start);
+            finish();
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent browseChallenges = new Intent(getApplicationContext(), BrowseChallenges.class);
+        startActivity(browseChallenges);
+        finish();
     }
 
     @Override
@@ -182,12 +192,14 @@ public class NewChallenge extends Activity implements View.OnClickListener{
                         Toast.makeText(this, R.string.toast_success_challenge_saved, Toast.LENGTH_SHORT).show();
                         Intent browseChallenges = new Intent(getApplicationContext(), BrowseChallenges.class);
                         startActivity(browseChallenges);
+                        finish();
                     } else if(constructFileResult == -1){
                         Toast.makeText(this, R.string.toast_error_challenge_exists_already, Toast.LENGTH_SHORT).show();
                     } else if(constructFileResult == -2){
                         Toast.makeText(this, getApplicationContext().getString(R.string.toast_error_save_data), Toast.LENGTH_SHORT).show();
                         Intent start = new Intent(getApplicationContext(), Start.class);
                         startActivity(start);
+                        finish();
                     }
                 }
                 break;
@@ -205,6 +217,7 @@ public class NewChallenge extends Activity implements View.OnClickListener{
                     editQuestion.putExtra("questionPosition", selectedQuestionPos);
                     editQuestion.putExtra("fromActivity", "newChallenge");
                     startActivity(editQuestion);
+                    finish();
                 }else{
                     Toast.makeText(this, R.string.toast_select_a_question, Toast.LENGTH_SHORT).show();
                 }
@@ -214,6 +227,7 @@ public class NewChallenge extends Activity implements View.OnClickListener{
                 newQuestion.putExtra("challenge", challenge);
                 newQuestion.putExtra("fromActivity", "newChallenge");
                 startActivity(newQuestion);
+                finish();
                 break;
             case R.id.buttonDeleteQuestion:
                 if(selectedQuestionPos >= 0){
@@ -226,8 +240,6 @@ public class NewChallenge extends Activity implements View.OnClickListener{
                     Toast.makeText(this, R.string.toast_select_a_question, Toast.LENGTH_SHORT).show();
                 }
                 break;
-            default:
-                throw new IllegalArgumentException("Action can not be handled.");
         }
     }
 }

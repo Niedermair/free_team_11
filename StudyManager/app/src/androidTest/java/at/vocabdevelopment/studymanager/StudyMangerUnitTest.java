@@ -178,6 +178,8 @@ public class StudyMangerUnitTest extends StudyManager {
         challengeWriter.beginObject();
         challengeWriter.name("invalid");
         challengeWriter.value("something");
+        challengeWriter.name("activeStatus");
+        challengeWriter.value("something");
         challengeWriter.endObject();
         challengeWriter.endArray();
         challengeWriter.endObject();

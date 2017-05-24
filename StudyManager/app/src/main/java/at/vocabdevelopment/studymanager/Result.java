@@ -2,6 +2,8 @@ package at.vocabdevelopment.studymanager;
 
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -13,6 +15,8 @@ public class Result extends Activity implements View.OnClickListener
     public TextView resultTxtView;
     public Button returnToBrowse;
     private Game game;
+
+    public DialogInterface.OnClickListener dialogExitChallengeClickListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -30,6 +34,26 @@ public class Result extends Activity implements View.OnClickListener
         returnToBrowse.setOnClickListener(this);
 
         resultTxtView.setText("Number of wrong answered questions: " + game.getWrongCounter());
+
+        dialogExitChallengeClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int choice) {
+                if (choice == DialogInterface.BUTTON_POSITIVE){
+                    Intent browseChallenges = new Intent(getApplicationContext(), BrowseChallenges.class);
+                    startActivity(browseChallenges);
+                    finish();
+                }
+            }
+        };
+    }
+
+    @Override
+    public void onBackPressed() {
+        AlertDialog.Builder deleteChallengeBuilder = new AlertDialog.Builder(this);
+        deleteChallengeBuilder.setMessage(R.string.dialog_exit_challenge)
+                .setPositiveButton(R.string.dialog_yes, dialogExitChallengeClickListener)
+                .setNegativeButton(R.string.dialog_no, dialogExitChallengeClickListener)
+                .setCancelable(false).show();
     }
 
     @Override
@@ -42,9 +66,8 @@ public class Result extends Activity implements View.OnClickListener
             case R.id.returnToBrowse:
                 Intent browseChallenges = new Intent(getApplicationContext(), BrowseChallenges.class);
                 startActivity(browseChallenges);
+                finish();
                 break;
-            default:
-                throw new IllegalArgumentException("Action can not be handled.");
         }
     }
 }

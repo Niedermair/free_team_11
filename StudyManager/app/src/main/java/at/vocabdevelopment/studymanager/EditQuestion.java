@@ -16,6 +16,7 @@ public class EditQuestion extends Activity implements View.OnClickListener{
     public EditText editTextQuestionNameEdit;
 
     public Challenge challenge;
+    public Challenge originalChallenge;
     public String fromActivity;
     public int questionPosition;
     public Boolean activeStatus;
@@ -58,6 +59,7 @@ public class EditQuestion extends Activity implements View.OnClickListener{
                     Toast.makeText(this, getApplicationContext().getString(R.string.toast_error_corrupt_data), Toast.LENGTH_SHORT).show();
                     Intent start = new Intent(getApplicationContext(), Start.class);
                     startActivity(start);
+                    finish();
                 }
 
                 extras.remove("fromActivity");
@@ -68,11 +70,40 @@ public class EditQuestion extends Activity implements View.OnClickListener{
                 Toast.makeText(this, getApplicationContext().getString(R.string.toast_error_missing_data), Toast.LENGTH_SHORT).show();
                 Intent start = new Intent(getApplicationContext(), Start.class);
                 startActivity(start);
+                finish();
+            }
+            if(extras.containsKey("originalChallenge")){
+                originalChallenge = (Challenge) extras.getSerializable("originalChallenge");
+                extras.remove("originalChallenge");
+            }else{
+                originalChallenge = null;
             }
         } else {
             Toast.makeText(this, getApplicationContext().getString(R.string.toast_error_missing_data), Toast.LENGTH_SHORT).show();
             Intent start = new Intent(getApplicationContext(), Start.class);
             startActivity(start);
+            finish();
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (fromActivity.equals("newChallenge")) {
+            Intent newChallenge = new Intent(getApplicationContext(), NewChallenge.class);
+            newChallenge.putExtra("challenge", challenge);
+            startActivity(newChallenge);
+            finish();
+        } else if(fromActivity.equals("editChallenge")) {
+            Intent editChallenge = new Intent(getApplicationContext(), EditChallenge.class);
+            editChallenge.putExtra("challenge", challenge);
+            editChallenge.putExtra("originalChallenge", originalChallenge);
+            startActivity(editChallenge);
+            finish();
+        } else {
+            Toast.makeText(this, getApplicationContext().getString(R.string.toast_error_missing_data), Toast.LENGTH_SHORT).show();
+            Intent start = new Intent(getApplicationContext(), Start.class);
+            startActivity(start);
+            finish();
         }
     }
 
@@ -103,27 +134,26 @@ public class EditQuestion extends Activity implements View.OnClickListener{
                     editedQuestion.setActiveStatus(activeStatus);
                     challenge.getQuestionList().set(questionPosition, editedQuestion);
 
-                    switch (fromActivity) {
-                        case "newChallenge":
-                            Intent newChallenge = new Intent(getApplicationContext(), NewChallenge.class);
-                            newChallenge.putExtra("challenge", challenge);
-                            startActivity(newChallenge);
-                            break;
-                        case "editChallenge":
-                            Intent editChallenge = new Intent(getApplicationContext(), EditChallenge.class);
-                            editChallenge.putExtra("challenge", challenge);
-                            startActivity(editChallenge);
-                            break;
-                        default:
-                            Intent start = new Intent(getApplicationContext(), Start.class);
-                            startActivity(start);
-                            throw new IllegalArgumentException("Action can not be handled.");
+                    if (fromActivity.equals("newChallenge")) {
+                        Intent newChallenge = new Intent(getApplicationContext(), NewChallenge.class);
+                        newChallenge.putExtra("challenge", challenge);
+                        startActivity(newChallenge);
+                        finish();
+                    } else if(fromActivity.equals("editChallenge")) {
+                        Intent editChallenge = new Intent(getApplicationContext(), EditChallenge.class);
+                        editChallenge.putExtra("challenge", challenge);
+                        editChallenge.putExtra("originalChallenge", originalChallenge);
+                        startActivity(editChallenge);
+                        finish();
+                    } else {
+                        Toast.makeText(this, getApplicationContext().getString(R.string.toast_error_missing_data), Toast.LENGTH_SHORT).show();
+                        Intent start = new Intent(getApplicationContext(), Start.class);
+                        startActivity(start);
+                        finish();
                     }
                 }
 
                 break;
-            default:
-                throw new IllegalArgumentException("Action can not be handled.");
         }
     }
 

@@ -41,12 +41,21 @@ public class SetupChallenge extends Activity implements View.OnClickListener{
                 Toast.makeText(this, getApplicationContext().getString(R.string.toast_error_missing_data), Toast.LENGTH_SHORT).show();
                 Intent start = new Intent(getApplicationContext(), Start.class);
                 startActivity(start);
+                finish();
             }
         } else {
             Toast.makeText(this, getApplicationContext().getString(R.string.toast_error_missing_data), Toast.LENGTH_SHORT).show();
             Intent start = new Intent(getApplicationContext(), Start.class);
             startActivity(start);
+            finish();
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent browseChallenges = new Intent(getApplicationContext(), BrowseChallenges.class);
+        startActivity(browseChallenges);
+        finish();
     }
 
     @Override
@@ -59,16 +68,17 @@ public class SetupChallenge extends Activity implements View.OnClickListener{
             case R.id.buttonSetupChallengeEditChallenge:
                 Intent editChallenge = new Intent(getApplicationContext(), EditChallenge.class);
                 editChallenge.putExtra("challenge", challenge);
+                editChallenge.putExtra("originalChallenge", challenge);
                 startActivity(editChallenge);
+                finish();
                 break;
             case R.id.buttonStart:
                 Game game = new Game(challenge);
                 Intent startGame = new Intent(getApplicationContext(), GameQuestion.class);
                 startGame.putExtra("game", game);
                 startActivity(startGame);
+                finish();
                 break;
-            default:
-                throw new IllegalArgumentException("Action can not be handled.");
         }
     }
 }

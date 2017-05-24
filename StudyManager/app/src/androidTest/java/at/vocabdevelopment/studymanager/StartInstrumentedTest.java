@@ -1,6 +1,7 @@
 package at.vocabdevelopment.studymanager;
 
 import android.os.Build;
+import android.support.test.espresso.NoActivityResumedException;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.UiDevice;
@@ -18,9 +19,11 @@ import org.junit.runner.RunWith;
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.pressBack;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.isEnabled;
+import static android.support.test.espresso.matcher.ViewMatchers.isRoot;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static org.hamcrest.Matchers.not;
 
@@ -82,6 +85,21 @@ public class StartInstrumentedTest {
         allowPermissionsIfNeeded();
         onView(withId(R.id.textViewPermissions)).check(matches(not(isDisplayed())));
     }
+
+    @Test(expected= NoActivityResumedException.class)
+    public void testBackButton() throws Exception{
+        allowPermissionsIfNeeded();
+        onView(isRoot()).perform(pressBack());
+        mActivityRule.getActivity();
+    }
+
+    @Test(expected= NoActivityResumedException.class)
+    public void testBackButton2() throws Exception{
+        denyPermissionsIfNeeded();
+        onView(isRoot()).perform(pressBack());
+        mActivityRule.getActivity();
+    }
+
 
     private void allowPermissionsIfNeeded(){
         if (Build.VERSION.SDK_INT >= 23) {

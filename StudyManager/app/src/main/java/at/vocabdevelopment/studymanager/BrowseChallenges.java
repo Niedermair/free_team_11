@@ -15,6 +15,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.transform.sax.SAXTransformerFactory;
+
 public class BrowseChallenges extends Activity implements View.OnClickListener{
 
     public Button buttonAddChallenge;
@@ -22,7 +24,7 @@ public class BrowseChallenges extends Activity implements View.OnClickListener{
     public ListView challengeList;
     public ArrayAdapter<String> challengeFilesAdapter;
 
-    private Challenge selectedChallenge;
+    public Challenge selectedChallenge;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,11 +39,9 @@ public class BrowseChallenges extends Activity implements View.OnClickListener{
         File[] challengeFiles = StudyManager.getStorageDir().listFiles();
         List<String> challengeNames = new ArrayList<>();
         for (File file : challengeFiles) {
-            if (file.isFile()) {
-                String fileName = file.getName();
-                fileName = fileName.substring(0, fileName.lastIndexOf("."));
-                challengeNames.add(fileName);
-            }
+            String fileName = file.getName();
+            fileName = fileName.substring(0, fileName.lastIndexOf("."));
+            challengeNames.add(fileName);
         }
 
         challengeFilesAdapter = new ArrayAdapter<>(
@@ -66,6 +66,13 @@ public class BrowseChallenges extends Activity implements View.OnClickListener{
     }
 
     @Override
+    public void onBackPressed() {
+        Intent start = new Intent(getApplicationContext(), Start.class);
+        startActivity(start);
+        finish();
+    }
+
+    @Override
     public void onClick(View v) {
 
         Button clickedButton = (Button) v;
@@ -76,6 +83,7 @@ public class BrowseChallenges extends Activity implements View.OnClickListener{
                 Challenge challenge = new Challenge("", new ArrayList<Question>());
                 newChallenge.putExtra("challenge", challenge);
                 startActivity(newChallenge);
+                finish();
                 break;
             case R.id.buttonSelectChallenge:
                 if (selectedChallenge == null) {
@@ -84,10 +92,9 @@ public class BrowseChallenges extends Activity implements View.OnClickListener{
                     Intent setupChallenge = new Intent(getApplicationContext(), SetupChallenge.class);
                     setupChallenge.putExtra("challenge", selectedChallenge);
                     startActivity(setupChallenge);
+                    finish();
                 }
                 break;
-            default:
-                throw new IllegalArgumentException("Action can not be handled.");
         }
     }
 }

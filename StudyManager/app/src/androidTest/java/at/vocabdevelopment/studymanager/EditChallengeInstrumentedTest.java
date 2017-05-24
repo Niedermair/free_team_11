@@ -15,12 +15,14 @@ import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.clearText;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.pressBack;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
 import static android.support.test.espresso.matcher.ViewMatchers.isChecked;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.isEnabled;
+import static android.support.test.espresso.matcher.ViewMatchers.isRoot;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static junit.framework.Assert.assertEquals;
@@ -57,6 +59,20 @@ public class EditChallengeInstrumentedTest {
         challenge.addQuestion(question1);
         challenge.addQuestion(question2);
         data.putExtra("challenge", challenge);
+        data.putExtra("originalChallenge", challenge);
+        mActivityRule.launchActivity(data);
+    }
+
+    public void setupIntentData2() {
+        Intent data = new Intent();
+        Challenge challenge = new Challenge(challengeName, new ArrayList<Question>());
+        Question question1 = new Question(exampleQuestionName1, exampleQuestion1, exampleAnswer1);
+        Question question2 = new Question(exampleQuestionName2, exampleQuestion2, exampleAnswer2);
+        question2.setActiveStatus(false);
+        challenge.addQuestion(question1);
+        challenge.addQuestion(question2);
+        data.putExtra("challenge", challenge);
+        data.putExtra("originalChallenge", challenge);
         mActivityRule.launchActivity(data);
     }
 
@@ -549,5 +565,42 @@ public class EditChallengeInstrumentedTest {
         onView(withId(R.id.toggleButtonEditChallengeQuestionStatus)).check(matches(isChecked()));
 
         assertTrue(mActivityRule.getActivity().challenge.getQuestionList().get(1).getActiveStatus());
+    }
+
+    @Test
+    public void testLoadOldChallengeIfNotSaved() throws Exception{
+        setupIntentData2();
+
+        onView(withId(R.id.editTextEditChallengeChallengeName)).perform(clearText(), typeText(newChallengeName));
+        onData(anything()).inAdapterView(withId(R.id.listViewEditChallengeQuestions))
+                .atPosition(1).perform(click());
+
+        onView(withId(R.id.buttonEditChallengeEditQuestion)).perform(click());
+        onView(withId(R.id.buttonSaveQuestionEdit)).perform(click());
+
+        onView(withId(R.id.editTextEditChallengeChallengeName)).check(matches(withText(newChallengeName)));
+
+        onView(isRoot()).perform(pressBack());
+        onView(isRoot()).perform(pressBack());
+
+        onView(withId(R.id.textViewSetupChallengeChallengeName)).check(matches(withText(challengeName)));
+    }
+
+    @Test
+    public void testBackButton() throws Exception{
+        setupIntentData();
+
+        onView(isRoot()).perform(pressBack());
+        onView(withId(R.id.textViewSetupChallengeChallengeName)).check(matches(withText(challengeName)));
+    }
+
+    @Test
+    public void testBackButton2() throws Exception{
+        setupIntentData();
+
+        onView(withId(R.id.editTextEditChallengeChallengeName)).perform(clearText(), typeText(newChallengeName));
+        onView(isRoot()).perform(pressBack());
+        onView(isRoot()).perform(pressBack());
+        onView(withId(R.id.textViewSetupChallengeChallengeName)).check(matches(withText(challengeName)));
     }
 }
