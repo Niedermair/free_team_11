@@ -12,9 +12,11 @@ import java.util.ArrayList;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.pressBack;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.isRoot;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.is;
@@ -96,5 +98,16 @@ public class SetupChallengeInstrumentedTest {
         onView(withId(R.id.buttonEditChallengeAddQuestion)).check(matches(isDisplayed()));
         onView(withId(R.id.buttonEditChallengeDeleteQuestion)).check(matches(isDisplayed()));
         onView(withId(R.id.buttonEditChallengeEditQuestion)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testBackButton() throws Exception{
+        setupIntentData();
+        onView(isRoot()).perform(pressBack());
+
+        onView(withId(R.id.searchViewChallenges)).check(matches(isDisplayed()));
+        onView(withId(R.id.listViewChallenges)).check(matches(isDisplayed()));
+        onView(withId(R.id.buttonAddChallenge)).check(matches(isDisplayed()));
+        onView(withId(R.id.buttonSelectChallenge)).check(matches(isDisplayed()));
     }
 }

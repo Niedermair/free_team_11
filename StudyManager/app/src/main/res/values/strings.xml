@@ -41,6 +41,7 @@
     <string name="toast_error_corrupt_data">Ups! Retrieved data seems to be invalid…</string>
     <string name="dialog_delete_question">Delete this question?</string>
     <string name="dialog_delete_challenge">Delete this challenge?</string>
+    <string name="dialog_exit_challenge">Exit challenge?</string>
     <string name="dialog_yes">Yes</string>
     <string name="dialog_no">No</string>
 </resources>

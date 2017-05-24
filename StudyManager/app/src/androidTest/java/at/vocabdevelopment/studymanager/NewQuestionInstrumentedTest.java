@@ -15,10 +15,12 @@ import java.util.ArrayList;
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.pressBack;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.isRoot;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static junit.framework.Assert.assertEquals;
@@ -184,12 +186,70 @@ public class NewQuestionInstrumentedTest {
                 .atPosition(2).check(matches(withText(newExampleQuestionName)));
     }
 
-    @Test(expected=Exception.class)
+    @Test
     public void testSaveNewQuestionInvalidFromActivity() throws Exception{
         setupIntentData("fromIllegalActivity");
         onView(withId(R.id.editTextQuestionName)).perform(typeText(newExampleQuestionName));
         onView(withId(R.id.editTextQuestion)).perform(typeText(newExampleQuestion));
         onView(withId(R.id.editTextAnswer)).perform(typeText(newExampleAnswer));
         onView(withId(R.id.buttonSaveQuestion)).perform(click());
+
+        onView(withText(R.string.toast_error_missing_data))
+                .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
+                .check(matches(isDisplayed()));
+
+        onView(withId(R.id.buttonContinueChallenge)).check(matches(isDisplayed()));
+        onView(withId(R.id.buttonBrowseChallenges)).check(matches(isDisplayed()));
+
+        Thread.sleep(2500);
+    }
+
+    @Test
+    public void testBackButtonEditChallenge() throws Exception{
+        setupIntentData("editChallenge");
+
+        onView(isRoot()).perform(pressBack());
+        onView(isRoot()).perform(pressBack());
+
+        onView(withId(R.id.editTextEditChallengeChallengeName)).check(matches(isDisplayed()));
+        onView(withId(R.id.buttonEditChallengeDeleteChallenge)).check(matches(isDisplayed()));
+        onView(withId(R.id.listViewEditChallengeQuestions)).check(matches(isDisplayed()));
+        onView(withId(R.id.buttonEditChallengeSaveChallenge)).check(matches(isDisplayed()));
+        onView(withId(R.id.buttonEditChallengeAddQuestion)).check(matches(isDisplayed()));
+        onView(withId(R.id.buttonEditChallengeDeleteQuestion)).check(matches(isDisplayed()));
+        onView(withId(R.id.buttonEditChallengeEditQuestion)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testBackButtonNewChallenge() throws Exception{
+        setupIntentData("newChallenge");
+
+        onView(isRoot()).perform(pressBack());
+        onView(isRoot()).perform(pressBack());
+
+        onView(withId(R.id.editTextChallengeName)).check(matches(isDisplayed()));
+        onView(withId(R.id.buttonDeleteChallenge)).check(matches(isDisplayed()));
+        onView(withId(R.id.listViewQuestions)).check(matches(isDisplayed()));
+        onView(withId(R.id.buttonSaveChallenge)).check(matches(isDisplayed()));
+        onView(withId(R.id.buttonAddQuestion)).check(matches(isDisplayed()));
+        onView(withId(R.id.buttonDeleteQuestion)).check(matches(isDisplayed()));
+        onView(withId(R.id.buttonEditQuestion)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testBackButtonInvalidFrom() throws Exception{
+        setupIntentData("fromIllegalActivity");
+
+        onView(isRoot()).perform(pressBack());
+        onView(isRoot()).perform(pressBack());
+
+        onView(withText(R.string.toast_error_missing_data))
+                .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
+                .check(matches(isDisplayed()));
+
+        onView(withId(R.id.buttonContinueChallenge)).check(matches(isDisplayed()));
+        onView(withId(R.id.buttonBrowseChallenges)).check(matches(isDisplayed()));
+
+        Thread.sleep(2500);
     }
 }

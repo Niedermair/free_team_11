@@ -14,10 +14,12 @@ import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.clearText;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.pressBack;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.isRoot;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static junit.framework.Assert.assertEquals;
@@ -343,19 +345,72 @@ public class EditQuestionInstrumentedTest {
                 .atPosition(1).check(matches(withText(exampleQuestionNameChanged)));
     }
 
-    @Test(expected=Exception.class)
-    public void testSaveNewQuestionInvalidFromActivity() throws Exception{
+
+    @Test
+    public void testSaveEditQuestionInvalidFromActivity() throws Exception{
         setupIntentData("fromIllegalActivity", 0);
-        onView(withId(R.id.editTextQuestionName)).perform(typeText(exampleQuestionNameChanged));
-        onView(withId(R.id.editTextQuestion)).perform(typeText(exampleQuestionChanged));
-        onView(withId(R.id.editTextAnswer)).perform(typeText(exampleAnswerChanged));
-        onView(withId(R.id.buttonSaveQuestion)).perform(click());
+        onView(withId(R.id.editTextQuestionNameEdit)).perform(typeText(exampleQuestionNameChanged));
+        onView(withId(R.id.editTextQuestionEdit)).perform(typeText(exampleQuestionChanged));
+        onView(withId(R.id.editTextAnswerEdit)).perform(typeText(exampleAnswerChanged));
+        onView(withId(R.id.buttonSaveQuestionEdit)).perform(click());
+
+        onView(withText(R.string.toast_error_missing_data))
+                .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
+                .check(matches(isDisplayed()));
+
+        onView(withId(R.id.buttonContinueChallenge)).check(matches(isDisplayed()));
+        onView(withId(R.id.buttonBrowseChallenges)).check(matches(isDisplayed()));
+
+        Thread.sleep(2500);
     }
 
-    @Test(expected=Exception.class)
-    public void testSaveNewQuestionInvalidFromActivity2() throws Exception{
-        setupIntentData("fromIllegalActivity", 1);
-        onView(withId(R.id.buttonSaveQuestion)).perform(click());
+    @Test
+    public void testBackButtonEditChallenge() throws Exception{
+        setupIntentData("editChallenge", 0);
+
+        onView(isRoot()).perform(pressBack());
+        onView(isRoot()).perform(pressBack());
+
+        onView(withId(R.id.editTextEditChallengeChallengeName)).check(matches(isDisplayed()));
+        onView(withId(R.id.buttonEditChallengeDeleteChallenge)).check(matches(isDisplayed()));
+        onView(withId(R.id.listViewEditChallengeQuestions)).check(matches(isDisplayed()));
+        onView(withId(R.id.buttonEditChallengeSaveChallenge)).check(matches(isDisplayed()));
+        onView(withId(R.id.buttonEditChallengeAddQuestion)).check(matches(isDisplayed()));
+        onView(withId(R.id.buttonEditChallengeDeleteQuestion)).check(matches(isDisplayed()));
+        onView(withId(R.id.buttonEditChallengeEditQuestion)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testBackButtonNewChallenge() throws Exception{
+        setupIntentData("newChallenge", 0);
+
+        onView(isRoot()).perform(pressBack());
+        onView(isRoot()).perform(pressBack());
+
+        onView(withId(R.id.editTextChallengeName)).check(matches(isDisplayed()));
+        onView(withId(R.id.buttonDeleteChallenge)).check(matches(isDisplayed()));
+        onView(withId(R.id.listViewQuestions)).check(matches(isDisplayed()));
+        onView(withId(R.id.buttonSaveChallenge)).check(matches(isDisplayed()));
+        onView(withId(R.id.buttonAddQuestion)).check(matches(isDisplayed()));
+        onView(withId(R.id.buttonDeleteQuestion)).check(matches(isDisplayed()));
+        onView(withId(R.id.buttonEditQuestion)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testBackButtonInvalidFrom() throws Exception{
+        setupIntentData("fromIllegalActivity", 0);
+
+        onView(isRoot()).perform(pressBack());
+        onView(isRoot()).perform(pressBack());
+
+        onView(withText(R.string.toast_error_missing_data))
+                .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
+                .check(matches(isDisplayed()));
+
+        onView(withId(R.id.buttonContinueChallenge)).check(matches(isDisplayed()));
+        onView(withId(R.id.buttonBrowseChallenges)).check(matches(isDisplayed()));
+
+        Thread.sleep(2500);
     }
 
 }

@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -15,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +28,7 @@ public class NewChallenge extends Activity implements View.OnClickListener{
     public Button buttonDeleteQuestion;
     public EditText editTextChallengeName;
     public ListView questionList;
+    public ToggleButton toggleButtonQuestionStatus;
 
     public Challenge challenge;
     public int selectedQuestionPos = -1;
@@ -50,11 +51,22 @@ public class NewChallenge extends Activity implements View.OnClickListener{
         editTextChallengeName = (EditText) findViewById(R.id.editTextChallengeName);
         questionList = (ListView) findViewById(R.id.listViewQuestions);
 
+        toggleButtonQuestionStatus = (ToggleButton) findViewById(R.id.toggleButtonQuestionStatus);
+        toggleButtonQuestionStatus.setEnabled(false);
+
         buttonSaveChallenge.setOnClickListener(this);
         buttonDeleteChallenge.setOnClickListener(this);
         buttonEditQuestion.setOnClickListener(this);
         buttonAddQuestion.setOnClickListener(this);
         buttonDeleteQuestion.setOnClickListener(this);
+
+        toggleButtonQuestionStatus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Question currentQuestion = challenge.getQuestionList().get(selectedQuestionPos);
+                currentQuestion.setActiveStatus(!currentQuestion.getActiveStatus());
+            }
+        });
 
         editTextChallengeName.addTextChangedListener(new TextWatcher() {
             @Override
@@ -78,10 +90,12 @@ public class NewChallenge extends Activity implements View.OnClickListener{
 
                     questionList.setAdapter(challengeQuestionsAdapter);
                     challengeQuestionsAdapter.notifyDataSetChanged();
+                    toggleButtonQuestionStatus.setEnabled(false);
                     selectedQuestionPos = -1;
                 }else{
                     questionList.setAdapter(challengeQuestionsAdapter);
                     challengeQuestionsAdapter.notifyDataSetChanged();
+                    toggleButtonQuestionStatus.setEnabled(false);
                     selectedQuestionPos = -1;
                 }
             }
@@ -94,6 +108,7 @@ public class NewChallenge extends Activity implements View.OnClickListener{
                     Toast.makeText(getApplicationContext(), getApplicationContext().getString(R.string.toast_success_challenge_deleted), Toast.LENGTH_SHORT).show();
                     Intent browseChallenges = new Intent(getApplicationContext(), BrowseChallenges.class);
                     startActivity(browseChallenges);
+                    finish();
                 }
             }
         };
@@ -124,18 +139,35 @@ public class NewChallenge extends Activity implements View.OnClickListener{
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         selectedQuestionPos = position;
+                        toggleButtonQuestionStatus.setEnabled(true);
+
+                        Question currentChallenge = challenge.getQuestionList().get(selectedQuestionPos);
+                        if (currentChallenge.getActiveStatus()){
+                            toggleButtonQuestionStatus.setChecked(true);
+                        }else{
+                            toggleButtonQuestionStatus.setChecked(false);
+                        }
                     }
                 });
             }else{
                 Toast.makeText(this, getApplicationContext().getString(R.string.toast_error_missing_data), Toast.LENGTH_SHORT).show();
                 Intent start = new Intent(getApplicationContext(), Start.class);
                 startActivity(start);
+                finish();
             }
         }else{
             Toast.makeText(this, getApplicationContext().getString(R.string.toast_error_missing_data), Toast.LENGTH_SHORT).show();
             Intent start = new Intent(getApplicationContext(), Start.class);
             startActivity(start);
+            finish();
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent browseChallenges = new Intent(getApplicationContext(), BrowseChallenges.class);
+        startActivity(browseChallenges);
+        finish();
     }
 
     @Override
@@ -160,12 +192,14 @@ public class NewChallenge extends Activity implements View.OnClickListener{
                         Toast.makeText(this, R.string.toast_success_challenge_saved, Toast.LENGTH_SHORT).show();
                         Intent browseChallenges = new Intent(getApplicationContext(), BrowseChallenges.class);
                         startActivity(browseChallenges);
+                        finish();
                     } else if(constructFileResult == -1){
                         Toast.makeText(this, R.string.toast_error_challenge_exists_already, Toast.LENGTH_SHORT).show();
                     } else if(constructFileResult == -2){
                         Toast.makeText(this, getApplicationContext().getString(R.string.toast_error_save_data), Toast.LENGTH_SHORT).show();
                         Intent start = new Intent(getApplicationContext(), Start.class);
                         startActivity(start);
+                        finish();
                     }
                 }
                 break;
@@ -183,6 +217,7 @@ public class NewChallenge extends Activity implements View.OnClickListener{
                     editQuestion.putExtra("questionPosition", selectedQuestionPos);
                     editQuestion.putExtra("fromActivity", "newChallenge");
                     startActivity(editQuestion);
+                    finish();
                 }else{
                     Toast.makeText(this, R.string.toast_select_a_question, Toast.LENGTH_SHORT).show();
                 }
@@ -192,6 +227,7 @@ public class NewChallenge extends Activity implements View.OnClickListener{
                 newQuestion.putExtra("challenge", challenge);
                 newQuestion.putExtra("fromActivity", "newChallenge");
                 startActivity(newQuestion);
+                finish();
                 break;
             case R.id.buttonDeleteQuestion:
                 if(selectedQuestionPos >= 0){
@@ -204,8 +240,6 @@ public class NewChallenge extends Activity implements View.OnClickListener{
                     Toast.makeText(this, R.string.toast_select_a_question, Toast.LENGTH_SHORT).show();
                 }
                 break;
-            default:
-                throw new IllegalArgumentException("Action can not be handled.");
         }
     }
 }

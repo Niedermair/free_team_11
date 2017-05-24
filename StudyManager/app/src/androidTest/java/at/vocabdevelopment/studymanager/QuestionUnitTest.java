@@ -33,6 +33,12 @@ public class QuestionUnitTest {
     }
 
     @Test
+    public void testGetActiveStatus(){
+        Question question = new Question(exampleQuestionName, exampleQuestion, exampleAnswer);
+        assertEquals(question.getActiveStatus(), true);
+    }
+
+    @Test
     public void testSetQuestionName(){
         Question question = new Question(exampleQuestionName, exampleQuestion, exampleAnswer);
         question.setName(exampleQuestionNameNew);
@@ -51,5 +57,12 @@ public class QuestionUnitTest {
         Question question = new Question(exampleQuestionName, exampleQuestion, exampleAnswer);
         question.setAnswer(exampleAnswerNew);
         assertEquals(question.getAnswer(), exampleAnswerNew);
+    }
+
+    @Test
+    public void testSetActiveStatus(){
+        Question question = new Question(exampleQuestionName, exampleQuestion, exampleAnswer);
+        question.setActiveStatus(false);
+        assertEquals(question.getActiveStatus(), false);
     }
 }

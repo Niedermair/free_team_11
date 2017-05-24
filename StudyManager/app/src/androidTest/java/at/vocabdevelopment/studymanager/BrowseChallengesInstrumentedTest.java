@@ -15,12 +15,15 @@ import java.util.ArrayList;
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.pressBack;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.isRoot;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static junit.framework.Assert.assertNull;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.Matchers.anything;
@@ -62,7 +65,8 @@ public class BrowseChallengesInstrumentedTest {
 
         mActivityRule.launchActivity(new Intent());
 
-        onData(anything()).inAdapterView(withId(R.id.listViewChallenges)).perform(click());
+        onData(anything()).inAdapterView(withId(R.id.listViewChallenges))
+                .atPosition(0).perform(click());
 
         onView(withId(R.id.buttonSelectChallenge)).perform(click());
 
@@ -71,6 +75,32 @@ public class BrowseChallengesInstrumentedTest {
         if(challengeFile.exists()){
             challengeFile.delete();
         }
+    }
+
+    @Test
+    public void testSelectChallengeInvalid() throws Exception {
+        File challengeFile = new File(StudyManager.getStorageDir() + File.separator + challengeName + ".json");
+        if(challengeFile.exists()){
+            challengeFile.delete();
+        }
+
+        Challenge challenge = new Challenge(challengeName, new ArrayList<Question>());
+        Question question1 = new Question(exampleQuestionName1, exampleQuestion1, exampleAnswer1);
+        Question question2 = new Question(exampleQuestionName2, exampleQuestion2, exampleAnswer2);
+        challenge.addQuestion(question1);
+        challenge.addQuestion(question2);
+        challenge.constructChallengeFile();
+
+        mActivityRule.launchActivity(new Intent());
+
+        if(challengeFile.exists()){
+            challengeFile.delete();
+        }
+
+        onData(anything()).inAdapterView(withId(R.id.listViewChallenges))
+                .atPosition(0).perform(click());
+
+        assertNull(mActivityRule.getActivity().selectedChallenge);
     }
 
     @Test
@@ -93,6 +123,13 @@ public class BrowseChallengesInstrumentedTest {
                 .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
                 .check(matches(isDisplayed()));
         Thread.sleep(2500);
+    }
+
+    @Test
+    public void testBackButton() throws Exception{
+        onView(isRoot()).perform(pressBack());
+        onView(withId(R.id.buttonContinueChallenge)).check(matches(isDisplayed()));
+        onView(withId(R.id.buttonBrowseChallenges)).check(matches(isDisplayed()));
     }
 }
 

@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +30,7 @@ public class EditChallenge extends Activity implements View.OnClickListener{
     public Button buttonDeleteQuestion;
     public EditText editTextChallengeName;
     public ListView questionList;
+    public ToggleButton toggleButtonQuestionStatus;
 
     public Challenge challenge;
     public Challenge originalChallenge;
@@ -52,11 +54,22 @@ public class EditChallenge extends Activity implements View.OnClickListener{
         editTextChallengeName = (EditText) findViewById(R.id.editTextEditChallengeChallengeName);
         questionList = (ListView) findViewById(R.id.listViewEditChallengeQuestions);
 
+        toggleButtonQuestionStatus = (ToggleButton) findViewById(R.id.toggleButtonEditChallengeQuestionStatus);
+        toggleButtonQuestionStatus.setEnabled(false);
+
         buttonSaveChallenge.setOnClickListener(this);
         buttonDeleteChallenge.setOnClickListener(this);
         buttonEditQuestion.setOnClickListener(this);
         buttonAddQuestion.setOnClickListener(this);
         buttonDeleteQuestion.setOnClickListener(this);
+
+        toggleButtonQuestionStatus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Question currentQuestion = challenge.getQuestionList().get(selectedQuestionPos);
+                currentQuestion.setActiveStatus(!currentQuestion.getActiveStatus());
+            }
+        });
 
         editTextChallengeName.addTextChangedListener(new TextWatcher() {
             @Override
@@ -80,10 +93,12 @@ public class EditChallenge extends Activity implements View.OnClickListener{
 
                     questionList.setAdapter(challengeQuestionsAdapter);
                     challengeQuestionsAdapter.notifyDataSetChanged();
+                    toggleButtonQuestionStatus.setEnabled(false);
                     selectedQuestionPos = -1;
                 }else{
                     questionList.setAdapter(challengeQuestionsAdapter);
                     challengeQuestionsAdapter.notifyDataSetChanged();
+                    toggleButtonQuestionStatus.setEnabled(false);
                     selectedQuestionPos = -1;
                 }
             }
@@ -98,10 +113,12 @@ public class EditChallenge extends Activity implements View.OnClickListener{
                         Toast.makeText(getApplicationContext(), getApplicationContext().getString(R.string.toast_success_challenge_deleted), Toast.LENGTH_SHORT).show();
                         Intent browseChallenges = new Intent(getApplicationContext(), BrowseChallenges.class);
                         startActivity(browseChallenges);
+                        finish();
                     }else{
                         Toast.makeText(getApplicationContext(), getApplicationContext().getString(R.string.toast_error_challenge_delete), Toast.LENGTH_SHORT).show();
                         Intent browseChallenges = new Intent(getApplicationContext(), BrowseChallenges.class);
                         startActivity(browseChallenges);
+                        finish();
                     }
                 }
             }
@@ -116,7 +133,6 @@ public class EditChallenge extends Activity implements View.OnClickListener{
                 extras.remove("challenge");
 
                 editTextChallengeName.setText(challenge.getName());
-                originalChallenge = new Challenge(challenge.getName(), new ArrayList<Question>());
 
                 questionNames = new ArrayList<>();
                 for (Question question : challenge.getQuestionList()) {
@@ -134,6 +150,15 @@ public class EditChallenge extends Activity implements View.OnClickListener{
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         selectedQuestionPos = position;
+
+                        toggleButtonQuestionStatus.setEnabled(true);
+
+                        Question currentChallenge = challenge.getQuestionList().get(selectedQuestionPos);
+                        if (currentChallenge.getActiveStatus()){
+                            toggleButtonQuestionStatus.setChecked(true);
+                        }else{
+                            toggleButtonQuestionStatus.setChecked(false);
+                        }
                     }
                 });
 
@@ -141,12 +166,28 @@ public class EditChallenge extends Activity implements View.OnClickListener{
                 Toast.makeText(this, getApplicationContext().getString(R.string.toast_error_missing_data), Toast.LENGTH_SHORT).show();
                 Intent start = new Intent(getApplicationContext(), Start.class);
                 startActivity(start);
+                finish();
+            }
+            if(extras.containsKey("originalChallenge")){
+                originalChallenge = (Challenge) extras.getSerializable("originalChallenge");
+                extras.remove("originalChallenge");
+            }else{
+                originalChallenge = null;
             }
         }else{
             Toast.makeText(this, getApplicationContext().getString(R.string.toast_error_missing_data), Toast.LENGTH_SHORT).show();
             Intent start = new Intent(getApplicationContext(), Start.class);
             startActivity(start);
+            finish();
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent setupChallenge = new Intent(getApplicationContext(), SetupChallenge.class);
+        setupChallenge.putExtra("challenge", originalChallenge);
+        startActivity(setupChallenge);
+        finish();
     }
 
     @Override
@@ -173,10 +214,12 @@ public class EditChallenge extends Activity implements View.OnClickListener{
                         Intent setupChallenge = new Intent(getApplicationContext(), SetupChallenge.class);
                         setupChallenge.putExtra("challenge", challenge);
                         startActivity(setupChallenge);
+                        finish();
                     } else {
                         Toast.makeText(this, getApplicationContext().getString(R.string.toast_error_save_data), Toast.LENGTH_SHORT).show();
                         Intent start = new Intent(getApplicationContext(), Start.class);
                         startActivity(start);
+                        finish();
                     }
                 }
                 break;
@@ -193,7 +236,9 @@ public class EditChallenge extends Activity implements View.OnClickListener{
                     editQuestion.putExtra("challenge", challenge);
                     editQuestion.putExtra("questionPosition", selectedQuestionPos);
                     editQuestion.putExtra("fromActivity", "editChallenge");
+                    editQuestion.putExtra("originalChallenge", originalChallenge);
                     startActivity(editQuestion);
+                    finish();
                 }else{
                     Toast.makeText(this, R.string.toast_select_a_question, Toast.LENGTH_SHORT).show();
                 }
@@ -202,7 +247,9 @@ public class EditChallenge extends Activity implements View.OnClickListener{
                 Intent newQuestion = new Intent(getApplicationContext(), NewQuestion.class);
                 newQuestion.putExtra("challenge", challenge);
                 newQuestion.putExtra("fromActivity", "editChallenge");
+                newQuestion.putExtra("originalChallenge", originalChallenge);
                 startActivity(newQuestion);
+                finish();
                 break;
             case R.id.buttonEditChallengeDeleteQuestion:
                 if(selectedQuestionPos >= 0){
@@ -215,8 +262,6 @@ public class EditChallenge extends Activity implements View.OnClickListener{
                     Toast.makeText(this, R.string.toast_select_a_question, Toast.LENGTH_SHORT).show();
                 }
                 break;
-            default:
-                throw new IllegalArgumentException("Action can not be handled.");
         }
     }
 }

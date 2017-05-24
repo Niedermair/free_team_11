@@ -15,14 +15,20 @@ import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.clearText;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.pressBack;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
+import static android.support.test.espresso.matcher.ViewMatchers.isChecked;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.isEnabled;
+import static android.support.test.espresso.matcher.ViewMatchers.isRoot;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertNotNull;
+import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.Matchers.anything;
@@ -49,6 +55,7 @@ public class NewChallengeInstrumentedTest {
         Challenge challenge = new Challenge(challengeName, new ArrayList<Question>());
         Question question1 = new Question(exampleQuestionName1, exampleQuestion1, exampleAnswer1);
         Question question2 = new Question(exampleQuestionName2, exampleQuestion2, exampleAnswer2);
+        question2.setActiveStatus(false);
         challenge.addQuestion(question1);
         challenge.addQuestion(question2);
         data.putExtra("challenge", challenge);
@@ -188,6 +195,10 @@ public class NewChallengeInstrumentedTest {
                 .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
                 .check(matches(isDisplayed()));
         Thread.sleep(2500);
+
+        if(challengeFile.exists()){
+            challengeFile.delete();
+        }
     }
 
     @Test
@@ -215,6 +226,10 @@ public class NewChallengeInstrumentedTest {
                 .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
                 .check(matches(isDisplayed()));
         Thread.sleep(2500);
+
+        if(challengeFile.exists()){
+            challengeFile.delete();
+        }
     }
 
     @Test
@@ -462,5 +477,118 @@ public class NewChallengeInstrumentedTest {
         onView(withId(R.id.buttonAddQuestion)).check(matches(isDisplayed()));
         onView(withId(R.id.buttonDeleteQuestion)).check(matches(isDisplayed()));
         onView(withId(R.id.buttonEditQuestion)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testQuestionStatusToggleButtonEnabled() throws Exception{
+        setupIntentDataChallengeFull();
+
+        onData(anything()).inAdapterView(withId(R.id.listViewQuestions))
+                .atPosition(1).perform(click());
+
+        assertNotNull(mActivityRule.getActivity().selectedQuestionPos);
+        assertEquals(mActivityRule.getActivity().selectedQuestionPos, 1);
+
+        onView(withId(R.id.toggleButtonQuestionStatus)).check(matches(isEnabled()));
+    }
+
+    @Test
+    public void testQuestionStatusToggleButtonDisabled() throws Exception{
+        setupIntentDataChallengeFull();
+
+        assertNotNull(mActivityRule.getActivity().selectedQuestionPos);
+        assertEquals(mActivityRule.getActivity().selectedQuestionPos, -1);
+
+        onView(withId(R.id.toggleButtonQuestionStatus)).check(matches(not(isEnabled())));
+    }
+
+    @Test
+    public void testQuestionStatusToggleButtonDisplayStatus() throws Exception{
+        setupIntentDataChallengeFull();
+
+        onData(anything()).inAdapterView(withId(R.id.listViewQuestions))
+                .atPosition(0).perform(click());
+
+        assertNotNull(mActivityRule.getActivity().selectedQuestionPos);
+        assertEquals(mActivityRule.getActivity().selectedQuestionPos, 0);
+
+        onView(withId(R.id.toggleButtonQuestionStatus)).check(matches(isEnabled()));
+        onView(withId(R.id.toggleButtonQuestionStatus)).check(matches(isChecked()));
+    }
+
+    @Test
+    public void testQuestionStatusToggleButtonDisplayStatus2() throws Exception{
+        setupIntentDataChallengeFull();
+
+        onData(anything()).inAdapterView(withId(R.id.listViewQuestions))
+                .atPosition(1).perform(click());
+
+        assertNotNull(mActivityRule.getActivity().selectedQuestionPos);
+        assertEquals(mActivityRule.getActivity().selectedQuestionPos, 1);
+
+        onView(withId(R.id.toggleButtonQuestionStatus)).check(matches(isEnabled()));
+        onView(withId(R.id.toggleButtonQuestionStatus)).check(matches(not(isChecked())));
+    }
+
+    @Test
+    public void testQuestionToggleStatus() throws Exception{
+        setupIntentDataChallengeFull();
+
+        onData(anything()).inAdapterView(withId(R.id.listViewQuestions))
+                .atPosition(0).perform(click());
+
+        assertNotNull(mActivityRule.getActivity().selectedQuestionPos);
+        assertEquals(mActivityRule.getActivity().selectedQuestionPos, 0);
+
+        onView(withId(R.id.toggleButtonQuestionStatus)).check(matches(isEnabled()));
+        onView(withId(R.id.toggleButtonQuestionStatus)).check(matches(isChecked()));
+        onView(withId(R.id.toggleButtonQuestionStatus)).perform(click());
+        onView(withId(R.id.toggleButtonQuestionStatus)).check(matches(isEnabled()));
+        onView(withId(R.id.toggleButtonQuestionStatus)).check(matches(not(isChecked())));
+
+        assertFalse(mActivityRule.getActivity().challenge.getQuestionList().get(0).getActiveStatus());
+    }
+
+    @Test
+    public void testQuestionToggleStatus2() throws Exception{
+        setupIntentDataChallengeFull();
+
+        onData(anything()).inAdapterView(withId(R.id.listViewQuestions))
+                .atPosition(1).perform(click());
+
+        assertNotNull(mActivityRule.getActivity().selectedQuestionPos);
+        assertEquals(mActivityRule.getActivity().selectedQuestionPos, 1);
+
+        onView(withId(R.id.toggleButtonQuestionStatus)).check(matches(isEnabled()));
+        onView(withId(R.id.toggleButtonQuestionStatus)).check(matches(not(isChecked())));
+        onView(withId(R.id.toggleButtonQuestionStatus)).perform(click());
+        onView(withId(R.id.toggleButtonQuestionStatus)).check(matches(isEnabled()));
+        onView(withId(R.id.toggleButtonQuestionStatus)).check(matches(isChecked()));
+
+        assertTrue(mActivityRule.getActivity().challenge.getQuestionList().get(1).getActiveStatus());
+    }
+
+    @Test
+    public void testBackButton() throws Exception{
+        setupIntentDataChallengeFull();
+
+        onView(isRoot()).perform(pressBack());
+
+        onView(withId(R.id.searchViewChallenges)).check(matches(isDisplayed()));
+        onView(withId(R.id.listViewChallenges)).check(matches(isDisplayed()));
+        onView(withId(R.id.buttonAddChallenge)).check(matches(isDisplayed()));
+        onView(withId(R.id.buttonSelectChallenge)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testBackButton2() throws Exception{
+        setupIntentDataEmptyChallenge();
+
+        onView(isRoot()).perform(pressBack());
+
+        onView(withId(R.id.searchViewChallenges)).check(matches(isDisplayed()));
+        onView(withId(R.id.listViewChallenges)).check(matches(isDisplayed()));
+        onView(withId(R.id.buttonAddChallenge)).check(matches(isDisplayed()));
+        onView(withId(R.id.buttonSelectChallenge)).check(matches(isDisplayed()));
     }
 }

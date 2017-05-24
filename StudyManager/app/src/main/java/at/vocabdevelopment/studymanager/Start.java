@@ -53,6 +53,11 @@ public class Start extends Activity implements View.OnClickListener{
     }
 
     @Override
+    public void onBackPressed() {
+        finish();
+    }
+
+    @Override
     public void onClick(View v) {
 
         Button clickedButton = (Button) v;
@@ -66,6 +71,7 @@ public class Start extends Activity implements View.OnClickListener{
             case R.id.buttonBrowseChallenges:
                 Intent browseChallenges = new Intent(getApplicationContext(), BrowseChallenges.class);
                 startActivity(browseChallenges);
+                finish();
                 break;
             default:
                 throw new IllegalArgumentException("Action can not be handled.");
