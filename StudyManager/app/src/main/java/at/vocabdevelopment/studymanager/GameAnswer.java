@@ -75,14 +75,11 @@ public class GameAnswer extends Activity implements View.OnClickListener
                     finish();
                     break;
                 }
-                Intent correctStartQuestion = new Intent(getApplicationContext(), Result.class);
-                correctStartQuestion.putExtra("game", game);
-                startActivity(correctStartQuestion);
-                finish();
                 else {
                     Intent correctStartQuestion = new Intent(getApplicationContext(), Result.class);
                     correctStartQuestion.putExtra("game", game);
                     startActivity(correctStartQuestion);
+                    finish();
                 }
                 break;
             case R.id.wrongBtn:
@@ -94,15 +91,12 @@ public class GameAnswer extends Activity implements View.OnClickListener
                     finish();
                     break;
                 }
-                Intent wrongStartQuestion = new Intent(getApplicationContext(), Result.class);
-                game.incrementWrongCounter();
-                wrongStartQuestion.putExtra("game", game);
-                startActivity(wrongStartQuestion);
-                finish();
                 else {
                     Intent wrongStartQuestion = new Intent(getApplicationContext(), Result.class);
+                    game.incrementWrongCounter();
                     wrongStartQuestion.putExtra("game", game);
                     startActivity(wrongStartQuestion);
+                    finish();
                 }
                 break;
         }

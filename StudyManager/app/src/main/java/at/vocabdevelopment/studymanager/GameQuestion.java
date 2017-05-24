@@ -33,8 +33,7 @@ public class GameQuestion extends Activity implements View.OnClickListener
         questionTxtView = (TextView) findViewById(R.id.questionTxtView);
         showAnswerBtn = (Button) findViewById(R.id.showAnswerBtn);
         quitBtn = (Button) findViewById(R.id.quitGameBtn);
-        Log.d("StudyManager", "test");
-        questionTxtView.setText(game.getCurrentQuestion().getQuestion());
+        questionTxtView.setText(game.getCurrentQuestionIndex().getQuestion());
         showAnswerBtn.setOnClickListener(this);
         quitBtn.setOnClickListener(this);
 

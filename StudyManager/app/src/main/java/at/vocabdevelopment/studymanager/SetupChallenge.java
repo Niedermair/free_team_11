@@ -22,6 +22,8 @@ public class SetupChallenge extends Activity implements View.OnClickListener {
     public Button buttonEasy;
     public Button buttonMedium;
     public Button buttonHard;
+    public Button buttonActiveDeck;
+    public Button buttonTotalDeck;
     public Drawable defaultBackground;
     private int difficulty;
 
@@ -36,6 +38,8 @@ public class SetupChallenge extends Activity implements View.OnClickListener {
         buttonEasy = (Button) findViewById(R.id.buttonEasy);
         buttonMedium = (Button) findViewById(R.id.buttonMedium);
         buttonHard = (Button) findViewById(R.id.buttonHard);
+        buttonActiveDeck = (Button) findViewById(R.id.buttonActiveDeck);
+        buttonTotalDeck = (Button) findViewById(R.id.buttonTotalDeck);
         defaultBackground = buttonEasy.getBackground();
         difficulty = NOT_SET;
 
@@ -44,6 +48,8 @@ public class SetupChallenge extends Activity implements View.OnClickListener {
         buttonEasy.setOnClickListener(this);
         buttonMedium.setOnClickListener(this);
         buttonHard.setOnClickListener(this);
+        buttonActiveDeck.setOnClickListener(this);
+        buttonTotalDeck.setOnClickListener(this);
 
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
@@ -118,6 +124,14 @@ public class SetupChallenge extends Activity implements View.OnClickListener {
                 buttonEasy.setBackground(defaultBackground);
                 buttonMedium.setBackground(defaultBackground);
                 difficulty = Game.HARD;
+                break;
+            case R.id.buttonActiveDeck:
+                buttonActiveDeck.setBackgroundColor(BLUE);
+                buttonTotalDeck.setBackground(defaultBackground);
+                break;
+            case R.id.buttonTotalDeck:
+                buttonTotalDeck.setBackgroundColor(BLUE);
+                buttonActiveDeck.setBackground(defaultBackground);
                 break;
         }
     }
