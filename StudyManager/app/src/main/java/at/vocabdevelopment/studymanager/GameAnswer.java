@@ -13,7 +13,6 @@ public class GameAnswer extends Activity implements View.OnClickListener
     public TextView answerTxtView;
     public Button correctBtn;
     public Button wrongBtn;
-    //public Challenge challenge;
     public Game game;
 
     @Override
@@ -31,8 +30,8 @@ public class GameAnswer extends Activity implements View.OnClickListener
         correctBtn = (Button)  findViewById(R.id.correctBtn);
         wrongBtn = (Button)  findViewById(R.id.wrongBtn);
 
-        questionTxtView.setText(game.getCurrentQuestion().getQuestion());
-        answerTxtView.setText(game.getCurrentQuestion().getAnswer());
+        questionTxtView.setText(game.getCurrentQuestionIndex().getQuestion());
+        answerTxtView.setText(game.getCurrentQuestionIndex().getAnswer());
         correctBtn.setOnClickListener(this);
         wrongBtn.setOnClickListener(this);
     }
@@ -45,32 +44,29 @@ public class GameAnswer extends Activity implements View.OnClickListener
         switch(clickedButton.getId())
         {
             case R.id.correctBtn:
-                if(game.hasNextQuestion())
-                {
-                    game.nextQuestion();
+                if (game.hasNextQuestion()) {
                     Intent correctStartQuestion = new Intent(getApplicationContext(), GameQuestion.class);
                     correctStartQuestion.putExtra("game", game);
                     startActivity(correctStartQuestion);
-                    break;
                 }
-                Intent correctStartQuestion = new Intent(getApplicationContext(), Result.class);
-                correctStartQuestion.putExtra("game", game);
-                startActivity(correctStartQuestion);
+                else {
+                    Intent correctStartQuestion = new Intent(getApplicationContext(), Result.class);
+                    correctStartQuestion.putExtra("game", game);
+                    startActivity(correctStartQuestion);
+                }
                 break;
             case R.id.wrongBtn:
-                if(game.hasNextQuestion())
-                {
-                    game.nextQuestion();
-                    game.incrementWrongCounter();
+                game.storeQuestion();
+                if (game.hasNextQuestion()) {
                     Intent wrongStartQuestion = new Intent(getApplicationContext(), GameQuestion.class);
                     wrongStartQuestion.putExtra("game", game);
                     startActivity(wrongStartQuestion);
-                    break;
                 }
-                Intent wrongStartQuestion = new Intent(getApplicationContext(), Result.class);
-                game.incrementWrongCounter();
-                wrongStartQuestion.putExtra("game", game);
-                startActivity(wrongStartQuestion);
+                else {
+                    Intent wrongStartQuestion = new Intent(getApplicationContext(), Result.class);
+                    wrongStartQuestion.putExtra("game", game);
+                    startActivity(wrongStartQuestion);
+                }
                 break;
             default:
                 throw new IllegalArgumentException("Action can not be handled.");

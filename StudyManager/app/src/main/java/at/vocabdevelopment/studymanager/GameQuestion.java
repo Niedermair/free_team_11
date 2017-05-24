@@ -3,7 +3,6 @@ package at.vocabdevelopment.studymanager;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -14,7 +13,6 @@ public class GameQuestion extends Activity implements View.OnClickListener
     public Button showAnswerBtn;
     public Button quitBtn;
     public Game game;
-    public Challenge challenge;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -30,8 +28,7 @@ public class GameQuestion extends Activity implements View.OnClickListener
         questionTxtView = (TextView) findViewById(R.id.questionTxtView);
         showAnswerBtn = (Button) findViewById(R.id.showAnswerBtn);
         quitBtn = (Button) findViewById(R.id.quitGameBtn);
-        Log.d("StudyManager", "test");
-        questionTxtView.setText(game.getCurrentQuestion().getQuestion());
+        questionTxtView.setText(game.getCurrentQuestionIndex().getQuestion());
         showAnswerBtn.setOnClickListener(this);
     }
     @Override
