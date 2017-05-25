@@ -3,6 +3,7 @@ package at.vocabdevelopment.studymanager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.app.Activity;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -16,7 +17,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BrowseChallenges extends Activity implements View.OnClickListener, SearchView.OnQueryTextListener{
+public class BrowseChallenges extends Activity implements View.OnClickListener, SearchView.OnQueryTextListener {
 
     public Button buttonAddChallenge;
     public Button buttonSelectChallenge;
@@ -24,6 +25,8 @@ public class BrowseChallenges extends Activity implements View.OnClickListener, 
     public SearchView searchField;
     public ArrayAdapter<String> challengeFilesAdapter;
 
+    List<String> challengeNames = new ArrayList<>();
+    List<String> challengeNamesToShow = new ArrayList<>();
     private Challenge selectedChallenge;
 
     @Override
@@ -40,35 +43,55 @@ public class BrowseChallenges extends Activity implements View.OnClickListener, 
 
 
         File[] challengeFiles = StudyManager.getStorageDir().listFiles();
-        List<String> challengeNames = new ArrayList<>();
+        //List<String> challengeNames = new ArrayList<>();
         for (File file : challengeFiles) {
             if (file.isFile()) {
                 String fileName = file.getName();
                 fileName = fileName.substring(0, fileName.lastIndexOf("."));
                 challengeNames.add(fileName);
+                challengeNamesToShow.add(fileName);
             }
         }
 
         challengeFilesAdapter = new ArrayAdapter<>(
                 this,
                 android.R.layout.simple_list_item_1,
-                challengeNames);
+                challengeNamesToShow);
 
         challengeList.setAdapter(challengeFilesAdapter);
+        challengeFilesAdapter.notifyDataSetChanged();
 
         buttonAddChallenge.setOnClickListener(this);
         buttonSelectChallenge.setOnClickListener(this);
+
         challengeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 try {
                     selectedChallenge = StudyManager.getChallenge(challengeList.getItemAtPosition(position).toString());
+                    challengeList.setSelection(position);
+                    challengeList.setItemChecked(position, true);
                 } catch (IOException e) {
                     selectedChallenge = null;
                 }
             }
+
         });
+
+        selectFirstItemByDefault();
+
     }
+
+    private void selectFirstItemByDefault() {
+        if(challengeNamesToShow.size() > 0) {
+            challengeList.setAdapter(challengeFilesAdapter);
+            challengeFilesAdapter.notifyDataSetChanged();
+            challengeList.performItemClick(null, 0, challengeList.getFirstVisiblePosition());
+        } else {
+            selectedChallenge = null;
+        }
+    }
+
 
     @Override
     public void onClick(View v) {
@@ -103,12 +126,30 @@ public class BrowseChallenges extends Activity implements View.OnClickListener, 
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        challengeFilesAdapter.getFilter().filter(newText);
+        //challengeFilesAdapter.getFilter().filter(newText);
 
-        if(selectedChallenge != null) {
-            challengeList.setAdapter(challengeFilesAdapter);
-            challengeFilesAdapter.notifyDataSetChanged();
+        challengeNamesToShow.clear();
+
+        int count = challengeNames.size();
+
+        String elementInList;
+
+        for (int i = 0; i < count; i++) {
+            elementInList = challengeNames.get(i);
+            if (elementInList.toLowerCase().contains(newText.toLowerCase())) {
+                challengeNamesToShow.add(elementInList);
+            }
         }
+
+        challengeList.setAdapter(challengeFilesAdapter);
+        challengeFilesAdapter.notifyDataSetChanged();
+
+        if(challengeNamesToShow.size() > 0) {
+            challengeList.performItemClick(challengeList, 0, challengeList.getFirstVisiblePosition());
+        } else {
+            selectedChallenge = null;
+        }
+
         return true;
     }
 }

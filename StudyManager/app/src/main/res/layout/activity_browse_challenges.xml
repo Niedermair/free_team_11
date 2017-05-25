@@ -57,6 +57,7 @@
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:choiceMode="singleChoice"
         android:listSelector="@android:color/holo_blue_dark"
         app:layout_constraintBottom_toTopOf="@+id/buttonSelectChallenge"
         app:layout_constraintLeft_toLeftOf="parent"
