@@ -1,10 +1,18 @@
 package at.vocabdevelopment.studymanager;
 
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.utils.ColorTemplate;
+
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertTrue;
 
 public class GameUnitTest
 {
@@ -19,7 +27,20 @@ public class GameUnitTest
     public void setupEnvironment() {
         challenge.addQuestion(question1);
         challenge.addQuestion(question2);
+        challenge.addQuestion(question3);
+        challenge.addQuestion(question4);
         game = new Game(challenge, Game.HARD);
+        game.incrementWrongCounter();
+    }
+
+    @Test public void testPieData()
+    {
+        setupEnvironment();
+        PieData pieData = game.generatePieData();
+        assertTrue(pieData.getDataSet().getEntryForIndex(0).getLabel().equals("wrong"));
+        assertTrue(pieData.getDataSet().getEntryForIndex(0).getValue() == 1);
+        assertTrue(pieData.getDataSet().getEntryForIndex(1).getLabel().equals("correct"));
+        assertTrue(pieData.getDataSet().getEntryForIndex(1).getValue() == 3);
     }
 
     @Test public void testQuestionName() {

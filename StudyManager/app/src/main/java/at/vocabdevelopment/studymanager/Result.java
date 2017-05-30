@@ -10,6 +10,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.utils.ColorTemplate;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class Result extends Activity implements View.OnClickListener
 {
     public TextView resultTxtView;
@@ -28,12 +37,15 @@ public class Result extends Activity implements View.OnClickListener
         Bundle extras = intent.getExtras();
         game = (Game) extras.getSerializable("game");
 
-        resultTxtView = (TextView) findViewById(R.id.ResultTxtView);
         returnToBrowse = (Button) findViewById(R.id.returnToBrowse);
+        PieChart pieChart = (PieChart) findViewById(R.id.ChartView);
+
+
+        pieChart.setData(game.generatePieData());
+        pieChart.invalidate();
 
         returnToBrowse.setOnClickListener(this);
 
-        resultTxtView.setText("Number of wrong answered questions: " + game.getWrongCounter());
 
         dialogExitChallengeClickListener = new DialogInterface.OnClickListener() {
             @Override

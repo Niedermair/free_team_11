@@ -1,8 +1,14 @@
 package at.vocabdevelopment.studymanager;
 
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.utils.ColorTemplate;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 public class Game implements Serializable {
 
@@ -73,6 +79,18 @@ public class Game implements Serializable {
             return deck.get(currentQuestionIndex);
         }
         return null;
+    }
+
+    public PieData generatePieData()
+    {
+        List<PieEntry> pieEntries = new ArrayList<>();
+        pieEntries.add(new PieEntry(wrongCounter, "wrong"));
+        pieEntries.add(new PieEntry(challenge.getQuestionList().size() - wrongCounter, "correct"));
+        PieDataSet pieDataSet = new PieDataSet(pieEntries, "Your Result");
+        PieData pieData = new PieData(pieDataSet);
+
+        pieDataSet.setColors(ColorTemplate.COLORFUL_COLORS);
+        return pieData;
     }
 
     public Challenge getChallenge() {
