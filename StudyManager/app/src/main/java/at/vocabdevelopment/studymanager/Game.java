@@ -23,12 +23,14 @@ public class Game implements Serializable {
     private int wrongCounter;
     private ArrayList<ArrayList<Question>> attemptsList;
     private int attempts;
+    private int numberOfQuestions;
 
     public Game(Challenge challenge, int difficulty)
     {
         this.challenge = challenge;
         this.difficulty = difficulty;
         this.deck = challenge.getQuestionList();
+        this.numberOfQuestions = deck.size();
         this.attemptsList = new ArrayList<>();
         Collections.shuffle(this.deck);
         this.currentQuestionIndex = 0;
@@ -85,7 +87,10 @@ public class Game implements Serializable {
     {
         List<PieEntry> pieEntries = new ArrayList<>();
         pieEntries.add(new PieEntry(wrongCounter, "wrong"));
-        pieEntries.add(new PieEntry(challenge.getQuestionList().size() - wrongCounter, "correct"));
+        pieEntries.add(new PieEntry(numberOfQuestions - wrongCounter, "correct"));
+
+        //pieEntries.add(new PieEntry(10, "correct"));
+
         PieDataSet pieDataSet = new PieDataSet(pieEntries, "Your Result");
         PieData pieData = new PieData(pieDataSet);
 
@@ -101,8 +106,9 @@ public class Game implements Serializable {
         return wrongCounter;
     }
 
-    public void incrementWrongCounter() {
-        this.wrongCounter++;
+    public void incrementWrongCounter()
+    {
+        wrongCounter++;
     }
 
     public ArrayList<Question> getDeck() {

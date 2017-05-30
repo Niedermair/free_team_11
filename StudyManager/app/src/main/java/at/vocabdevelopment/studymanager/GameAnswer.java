@@ -93,7 +93,6 @@ public class GameAnswer extends Activity implements View.OnClickListener
                 }
                 else {
                     Intent wrongStartQuestion = new Intent(getApplicationContext(), Result.class);
-                    game.incrementWrongCounter();
                     wrongStartQuestion.putExtra("game", game);
                     startActivity(wrongStartQuestion);
                     finish();

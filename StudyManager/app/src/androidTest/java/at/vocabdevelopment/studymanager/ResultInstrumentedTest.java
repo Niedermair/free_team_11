@@ -84,7 +84,5 @@ public class ResultInstrumentedTest
 
         onView(withText(R.string.dialog_exit_challenge)).check(matches(isDisplayed()));
         onView(withText(R.string.dialog_no)).perform(click());
-
-        onView(withId(R.id.ResultTxtView)).check(matches(withText("Number of wrong answered questions: 2")));
     }
 }
