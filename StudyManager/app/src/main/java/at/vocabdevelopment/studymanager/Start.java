@@ -10,12 +10,17 @@ import android.support.v4.app.ActivityCompat;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.io.IOException;
 
 public class Start extends Activity implements View.OnClickListener{
 
     public Button buttonContinueChallenge;
     public Button buttonSearchChallenge;
     public TextView textViewPermissions;
+
+    public Game continuedGame;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,8 +53,13 @@ public class Start extends Activity implements View.OnClickListener{
             buttonContinueChallenge.setEnabled(true);
             buttonSearchChallenge.setEnabled(true);
             textViewPermissions.setVisibility(View.GONE);
-            createExternalStorageFolder();
+            createExternalStorageFolders();
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
     }
 
     @Override
@@ -59,13 +69,21 @@ public class Start extends Activity implements View.OnClickListener{
 
         switch(clickedButton.getId()) {
             case R.id.buttonContinueChallenge:
-                //TODO: still needs to be implemented...
-                System.out.println("Continue Button clicked");
+                try {
+                    continuedGame = StudyManager.getGame();
+                    Intent continueGame = new Intent(getApplicationContext(), GameQuestion.class);
+                    continueGame.putExtra("game", continuedGame);
+                    startActivity(continueGame);
+                    finish();
+                } catch (IOException e) {
+                    Toast.makeText(this, getApplicationContext().getString(R.string.toast_error_no_saved_game), Toast.LENGTH_SHORT).show();
+                }
                 break;
 
             case R.id.buttonBrowseChallenges:
                 Intent browseChallenges = new Intent(getApplicationContext(), BrowseChallenges.class);
                 startActivity(browseChallenges);
+                finish();
                 break;
             default:
                 throw new IllegalArgumentException("Action can not be handled.");
@@ -84,7 +102,7 @@ public class Start extends Activity implements View.OnClickListener{
                     buttonContinueChallenge.setEnabled(true);
                     buttonSearchChallenge.setEnabled(true);
                     textViewPermissions.setVisibility(View.GONE);
-                    createExternalStorageFolder();
+                    createExternalStorageFolders();
 
                 } else {
                     buttonContinueChallenge.setEnabled(false);
@@ -95,9 +113,12 @@ public class Start extends Activity implements View.OnClickListener{
         }
     }
 
-    public void createExternalStorageFolder(){
+    public void createExternalStorageFolders(){
         if (!StudyManager.getStorageDir().exists()) {
             StudyManager.getStorageDir().mkdirs();
+        }
+        if (!StudyManager.getCurrentGameDir().exists()) {
+            StudyManager.getCurrentGameDir().mkdirs();
         }
     }
 }

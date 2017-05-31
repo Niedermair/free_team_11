@@ -14,45 +14,29 @@ public class Challenge implements Serializable {
     private String name;
     private ArrayList<Question> questionList;
 
-    public Challenge(String name, ArrayList<Question> questionList){
+    public Challenge(String name, ArrayList<Question> questionList) {
         this.name = name;
         this.questionList = questionList;
     }
 
-    public String getName(){
-        return name;
-    }
-
-    public ArrayList<Question> getQuestionList(){
-        return questionList;
-    }
-
-    public void setName(String name){
-        this.name = name;
-    }
-
-    public void setQuestionList(ArrayList<Question> questionList){
-        this.questionList = questionList;
-    }
-
-    public void addQuestion(Question question){
+    public void addQuestion(Question question) {
         this.questionList.add(question);
     }
 
-    public int deleteChallengeFile(){
+    public int deleteChallengeFile() {
         File challengeFile = new File(StudyManager.getStorageDir() + File.separator + this.getName() + ".json");
-        if(challengeFile.exists()){
+        if (challengeFile.exists()) {
             challengeFile.delete();
             return 0;
-        }else{
+        }
+        else {
             return -1;
         }
     }
 
-    public int constructChallengeFile(){
-
+    public int constructChallengeFile() {
         File challengeFile = new File(StudyManager.getStorageDir() + File.separator + this.getName() + ".json");
-        if(!challengeFile.exists()){
+        if (!challengeFile.exists()) {
             try {
 
                 JsonWriter challengeWriter = new JsonWriter(new FileWriter(challengeFile));
@@ -77,6 +61,8 @@ public class Challenge implements Serializable {
                     challengeWriter.value(question.getQuestion());
                     challengeWriter.name("answer");
                     challengeWriter.value(question.getAnswer());
+                    challengeWriter.name("activeStatus");
+                    challengeWriter.value(question.getActiveStatus().toString());
                     challengeWriter.endObject();
                 }
 
@@ -85,14 +71,32 @@ public class Challenge implements Serializable {
 
                 challengeWriter.close();
 
-            } catch (IOException e) {
+            }
+            catch (IOException e) {
                 Log.e("dir", "Challenge-File could not be created because " +
                         "some error occurred while constructing the file...");
                 return -2;
             }
-        }else{
+        }
+        else {
             return -1;
         }
         return 0;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public ArrayList<Question> getQuestionList() {
+        return questionList;
+    }
+
+    public void setName(String name){
+        this.name = name;
+    }
+
+    public void setQuestionList(ArrayList<Question> questionList) {
+        this.questionList = questionList;
     }
 }

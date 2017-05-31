@@ -1,12 +1,14 @@
 package at.vocabdevelopment.studymanager;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class GameQuestion extends Activity implements View.OnClickListener
 {
@@ -14,7 +16,8 @@ public class GameQuestion extends Activity implements View.OnClickListener
     public Button showAnswerBtn;
     public Button quitBtn;
     public Game game;
-    public Challenge challenge;
+
+    public DialogInterface.OnClickListener dialogExitChallengeClickListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -30,23 +33,59 @@ public class GameQuestion extends Activity implements View.OnClickListener
         questionTxtView = (TextView) findViewById(R.id.questionTxtView);
         showAnswerBtn = (Button) findViewById(R.id.showAnswerBtn);
         quitBtn = (Button) findViewById(R.id.quitGameBtn);
-        Log.d("StudyManager", "test");
-        questionTxtView.setText(game.getCurrentQuestion().getQuestion());
+        questionTxtView.setText(game.getCurrentQuestionIndex().getQuestion());
         showAnswerBtn.setOnClickListener(this);
+        quitBtn.setOnClickListener(this);
+
+        dialogExitChallengeClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int choice) {
+                if (choice == DialogInterface.BUTTON_POSITIVE){
+                    int constructFileResult = game.constructGameFile();
+
+                    if(constructFileResult == 0){
+                        Toast.makeText(getApplicationContext(), getApplicationContext().getString(R.string.toast_success_game_saved), Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getApplicationContext(), getApplicationContext().getString(R.string.toast_error_save_data), Toast.LENGTH_SHORT).show();
+                    }
+                    Intent start = new Intent(getApplicationContext(), Start.class);
+                    startActivity(start);
+                    finish();
+                }
+            }
+        };
     }
+
+
+    @Override
+    public void onBackPressed() {
+        AlertDialog.Builder deleteChallengeBuilder = new AlertDialog.Builder(this);
+        deleteChallengeBuilder.setMessage(R.string.dialog_exit_challenge)
+                .setPositiveButton(R.string.dialog_yes, dialogExitChallengeClickListener)
+                .setNegativeButton(R.string.dialog_no, dialogExitChallengeClickListener)
+                .setCancelable(false).show();
+    }
+
     @Override
     public void onClick(View v)
     {
         Button clickedButton = (Button) v;
+
         switch(clickedButton.getId())
         {
             case R.id.showAnswerBtn:
                 Intent startAnswer = new Intent(getApplicationContext(), GameAnswer.class);
                 startAnswer.putExtra("game", game);
                 startActivity(startAnswer);
+                finish();
                 break;
-            default:
-                throw new IllegalArgumentException("Action can not be handled.");
+            case R.id.quitGameBtn:
+                AlertDialog.Builder deleteChallengeBuilder = new AlertDialog.Builder(this);
+                deleteChallengeBuilder.setMessage(R.string.dialog_exit_challenge)
+                        .setPositiveButton(R.string.dialog_yes, dialogExitChallengeClickListener)
+                        .setNegativeButton(R.string.dialog_no, dialogExitChallengeClickListener)
+                        .setCancelable(false).show();
+                break;
         }
     }
 }

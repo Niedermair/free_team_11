@@ -7,7 +7,6 @@ import java.util.ArrayList;
 
 import static org.junit.Assert.*;
 
-
 public class ChallengeUnitTest {
 
     public String exampleChallengeName = "Challenge Name";

@@ -12,10 +12,15 @@ import java.util.ArrayList;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.pressBack;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.isRoot;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
 
 public class GameQuestionInstrumentedTest
 {
@@ -32,7 +37,7 @@ public class GameQuestionInstrumentedTest
         Challenge challenge = new Challenge(challengeName, new ArrayList<Question>());
         Question question1 = new Question(exampleQuestionName, exampleQuestion, exampleAnswer);
         challenge.addQuestion(question1);
-        Game game = new Game(challenge);
+        Game game = new Game(challenge, Game.HARD);
         test.putExtra("game", game);
         mActivityRule.launchActivity(test);
     }
@@ -56,6 +61,66 @@ public class GameQuestionInstrumentedTest
 
     {
         setupIntentData();
-        onView(withId(R.id.questionTxtView)).check(matches(withText("Q-Question")));
+        onView(withId(R.id.questionTxtView)).check(matches(withText(exampleQuestion)));
+    }
+
+    @Test
+    public void testQuitGameApprove() throws Exception{
+        setupIntentData();
+
+        onView(withId(R.id.quitGameBtn)).perform(click());
+
+        onView(withText(R.string.dialog_exit_challenge)).check(matches(isDisplayed()));
+        onView(withText(R.string.dialog_yes)).perform(click());
+
+        onView(withText(R.string.toast_success_game_saved))
+                .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
+                .check(matches(isDisplayed()));
+
+        onView(withId(R.id.buttonContinueChallenge)).check(matches(isDisplayed()));
+        onView(withId(R.id.buttonBrowseChallenges)).check(matches(isDisplayed()));
+        Thread.sleep(2500);
+    }
+
+    @Test
+    public void testQuitGameDeny() throws Exception{
+        setupIntentData();
+
+        onView(withId(R.id.quitGameBtn)).perform(click());
+
+        onView(withText(R.string.dialog_exit_challenge)).check(matches(isDisplayed()));
+        onView(withText(R.string.dialog_no)).perform(click());
+
+        onView(withId(R.id.questionTxtView)).check(matches(withText(exampleQuestion)));
+    }
+
+    @Test
+    public void testBackButtonApprove() throws Exception{
+        setupIntentData();
+
+        onView(isRoot()).perform(pressBack());
+
+        onView(withText(R.string.dialog_exit_challenge)).check(matches(isDisplayed()));
+        onView(withText(R.string.dialog_yes)).perform(click());
+
+        onView(withText(R.string.toast_success_game_saved))
+                .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
+                .check(matches(isDisplayed()));
+
+        onView(withId(R.id.buttonContinueChallenge)).check(matches(isDisplayed()));
+        onView(withId(R.id.buttonBrowseChallenges)).check(matches(isDisplayed()));
+        Thread.sleep(2500);
+    }
+
+    @Test
+    public void testBackButtonDeny() throws Exception{
+        setupIntentData();
+
+        onView(isRoot()).perform(pressBack());
+
+        onView(withText(R.string.dialog_exit_challenge)).check(matches(isDisplayed()));
+        onView(withText(R.string.dialog_no)).perform(click());
+
+        onView(withId(R.id.questionTxtView)).check(matches(withText(exampleQuestion)));
     }
 }
