@@ -1,6 +1,5 @@
 package at.vocabdevelopment.studymanager;
 
-import android.content.Intent;
 import android.os.Build;
 import android.support.test.espresso.NoActivityResumedException;
 import android.support.test.rule.ActivityTestRule;
@@ -19,7 +18,6 @@ import org.junit.runner.RunWith;
 
 
 import java.io.File;
-import java.util.ArrayList;
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;

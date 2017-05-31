@@ -208,10 +208,11 @@ public class StudyMangerUnitTest extends StudyManager {
     }
 
     @Test
-    public void testGetGame() throws Exception{
+    public void testGetGameValid() throws Exception{
 
         File gameFile = new File(StudyManager.getCurrentGameDir() + File.separator +
                 "currentGame.json");
+
         if(gameFile.exists()){
             gameFile.delete();
         }
