@@ -412,5 +412,4 @@ public class EditQuestionInstrumentedTest {
 
         Thread.sleep(2500);
     }
-
 }

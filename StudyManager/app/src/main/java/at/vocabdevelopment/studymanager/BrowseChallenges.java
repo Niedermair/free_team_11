@@ -43,10 +43,12 @@ public class BrowseChallenges extends Activity implements View.OnClickListener, 
         File[] challengeFiles = StudyManager.getStorageDir().listFiles();
         for (File file : challengeFiles)
         {
-            String fileName = file.getName();
-            fileName = fileName.substring(0, fileName.lastIndexOf("."));
-            challengeNames.add(fileName);
-            challengeNamesToShow.add(fileName);
+            if(file.isFile()) {
+                String fileName = file.getName();
+                fileName = fileName.substring(0, fileName.lastIndexOf("."));
+                challengeNames.add(fileName);
+                challengeNamesToShow.add(fileName);
+            }
         }
 
         challengeFilesAdapter = new ArrayAdapter<>(
@@ -75,8 +77,6 @@ public class BrowseChallenges extends Activity implements View.OnClickListener, 
         });
 
     }
-
-
 
     @Override
     public void onBackPressed() {

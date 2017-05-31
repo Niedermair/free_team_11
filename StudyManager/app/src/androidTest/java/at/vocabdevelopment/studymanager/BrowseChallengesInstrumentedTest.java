@@ -134,8 +134,6 @@ public class BrowseChallengesInstrumentedTest {
         onView(withText("something")).check(matches(isDisplayed()));
     }
 
-
-
     @Test
     public void testFilteredAndSelectedChallenge() throws Exception {
         File challengeFile = new File(StudyManager.getStorageDir() + File.separator + searchedChallengeName + ".json");
@@ -166,15 +164,11 @@ public class BrowseChallengesInstrumentedTest {
         }
     }
 
-//<<<<<<< HEAD
     @Test
     public void testBackButton() throws Exception{
         onView(isRoot()).perform(pressBack());
         onView(withId(R.id.buttonContinueChallenge)).check(matches(isDisplayed()));
         onView(withId(R.id.buttonBrowseChallenges)).check(matches(isDisplayed()));
     }
-//=======
-
-//>>>>>>> feature_searchLogic
 }
 
