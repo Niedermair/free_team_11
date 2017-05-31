@@ -3,7 +3,6 @@ package at.vocabdevelopment.studymanager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.app.Activity;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -17,27 +16,16 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-<<<<<<< HEAD
-import javax.xml.transform.sax.SAXTransformerFactory;
-
-public class BrowseChallenges extends Activity implements View.OnClickListener{
-=======
 public class BrowseChallenges extends Activity implements View.OnClickListener, SearchView.OnQueryTextListener {
->>>>>>> feature_searchLogic
 
     public Button buttonAddChallenge;
     public Button buttonSelectChallenge;
     public ListView challengeList;
     public SearchView searchField;
     public ArrayAdapter<String> challengeFilesAdapter;
-
-<<<<<<< HEAD
-    public Challenge selectedChallenge;
-=======
     List<String> challengeNames = new ArrayList<>();
     List<String> challengeNamesToShow = new ArrayList<>();
-    private Challenge selectedChallenge;
->>>>>>> feature_searchLogic
+    public Challenge selectedChallenge;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,19 +41,12 @@ public class BrowseChallenges extends Activity implements View.OnClickListener, 
 
 
         File[] challengeFiles = StudyManager.getStorageDir().listFiles();
-        for (File file : challengeFiles) {
-<<<<<<< HEAD
+        for (File file : challengeFiles)
+        {
             String fileName = file.getName();
             fileName = fileName.substring(0, fileName.lastIndexOf("."));
             challengeNames.add(fileName);
-=======
-            if (file.isFile()) {
-                String fileName = file.getName();
-                fileName = fileName.substring(0, fileName.lastIndexOf("."));
-                challengeNames.add(fileName);
-                challengeNamesToShow.add(fileName);
-            }
->>>>>>> feature_searchLogic
+            challengeNamesToShow.add(fileName);
         }
 
         challengeFilesAdapter = new ArrayAdapter<>(

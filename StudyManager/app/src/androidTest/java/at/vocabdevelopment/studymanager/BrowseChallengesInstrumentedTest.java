@@ -16,11 +16,11 @@ import java.util.ArrayList;
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
-<<<<<<< HEAD
+//<<<<<<< HEAD
 import static android.support.test.espresso.action.ViewActions.pressBack;
-=======
+//=======
 import static android.support.test.espresso.action.ViewActions.pressKey;
->>>>>>> feature_searchLogic
+//>>>>>>> feature_searchLogic
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
@@ -166,15 +166,15 @@ public class BrowseChallengesInstrumentedTest {
         }
     }
 
-<<<<<<< HEAD
+//<<<<<<< HEAD
     @Test
     public void testBackButton() throws Exception{
         onView(isRoot()).perform(pressBack());
         onView(withId(R.id.buttonContinueChallenge)).check(matches(isDisplayed()));
         onView(withId(R.id.buttonBrowseChallenges)).check(matches(isDisplayed()));
     }
-=======
+//=======
 
->>>>>>> feature_searchLogic
+//>>>>>>> feature_searchLogic
 }
 
