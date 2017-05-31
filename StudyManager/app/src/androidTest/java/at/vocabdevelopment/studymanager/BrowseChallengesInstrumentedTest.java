@@ -43,12 +43,6 @@ public class BrowseChallengesInstrumentedTest {
     private String exampleQuestion2 = "Question Example 2";
     private String exampleAnswer2 = "Question Answer 2";
 
-
-    @Before
-    public void setupChallenges(){
-
-    }
-
     @Test
     public void testToastSelectChallengeWithoutListItem() throws Exception {
         onView(withId(R.id.buttonSelectChallenge)).perform(click());
@@ -125,7 +119,7 @@ public class BrowseChallengesInstrumentedTest {
 
         mActivityRule.launchActivity(new Intent());
 
-        onView(withId(R.id.searchViewChallenges)).perform(typeText("Searched Challenge XYZ"), pressKey(KeyEvent.KEYCODE_ENTER));
+        onView(withId(R.id.searchViewChallenges)).perform(click(), pressKey(KeyEvent.KEYCODE_ENTER));
         onView(withId(R.id.searchViewChallenges)).perform(typeText("Searched Challenge XYZ"));
 
         onData(anything()).inAdapterView(withId(R.id.listViewChallenges)).perform(click());
