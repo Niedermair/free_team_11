@@ -43,7 +43,6 @@ public class BrowseChallenges extends Activity implements View.OnClickListener, 
 
 
         File[] challengeFiles = StudyManager.getStorageDir().listFiles();
-        //List<String> challengeNames = new ArrayList<>();
         for (File file : challengeFiles) {
             if (file.isFile()) {
                 String fileName = file.getName();
@@ -115,8 +114,6 @@ public class BrowseChallenges extends Activity implements View.OnClickListener, 
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        //challengeFilesAdapter.getFilter().filter(newText);
-
         challengeNamesToShow.clear();
 
         int count = challengeNames.size();
