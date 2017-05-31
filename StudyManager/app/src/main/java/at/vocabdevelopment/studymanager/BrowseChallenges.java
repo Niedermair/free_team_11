@@ -43,8 +43,8 @@ public class BrowseChallenges extends Activity implements View.OnClickListener, 
         File[] challengeFiles = StudyManager.getStorageDir().listFiles();
         for (File file : challengeFiles)
         {
-            if(file.isFile()) {
-                String fileName = file.getName();
+            String fileName = file.getName();
+            if(fileName.endsWith(".json")) {
                 fileName = fileName.substring(0, fileName.lastIndexOf("."));
                 challengeNames.add(fileName);
                 challengeNamesToShow.add(fileName);

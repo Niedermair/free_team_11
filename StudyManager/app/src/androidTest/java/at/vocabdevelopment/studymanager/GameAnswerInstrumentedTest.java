@@ -12,10 +12,13 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.pressBack;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.isRoot;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
 
 public class GameAnswerInstrumentedTest
 {
@@ -69,10 +72,13 @@ public class GameAnswerInstrumentedTest
         onView(withText(R.string.dialog_exit_challenge)).check(matches(isDisplayed()));
         onView(withText(R.string.dialog_yes)).perform(click());
 
-        onView(withId(R.id.searchViewChallenges)).check(matches(isDisplayed()));
-        onView(withId(R.id.listViewChallenges)).check(matches(isDisplayed()));
-        onView(withId(R.id.buttonAddChallenge)).check(matches(isDisplayed()));
-        onView(withId(R.id.buttonSelectChallenge)).check(matches(isDisplayed()));
+        onView(withText(R.string.toast_success_game_saved))
+                .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
+                .check(matches(isDisplayed()));
+
+        onView(withId(R.id.buttonContinueChallenge)).check(matches(isDisplayed()));
+        onView(withId(R.id.buttonBrowseChallenges)).check(matches(isDisplayed()));
+        Thread.sleep(2500);
     }
 
     @Test

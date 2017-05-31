@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.PieData;
@@ -51,8 +52,13 @@ public class Result extends Activity implements View.OnClickListener
             @Override
             public void onClick(DialogInterface dialog, int choice) {
                 if (choice == DialogInterface.BUTTON_POSITIVE){
-                    Intent browseChallenges = new Intent(getApplicationContext(), BrowseChallenges.class);
-                    startActivity(browseChallenges);
+                    int constructFileResult = game.deleteGameFile();
+                    if(constructFileResult != 0){
+                        Toast.makeText(getApplicationContext(), getApplicationContext().getString(R.string.toast_error_game_delete), Toast.LENGTH_SHORT).show();
+                    }
+
+                    Intent start = new Intent(getApplicationContext(), Start.class);
+                    startActivity(start);
                     finish();
                 }
             }
@@ -76,8 +82,13 @@ public class Result extends Activity implements View.OnClickListener
         switch (clickedButton.getId())
         {
             case R.id.returnToBrowse:
-                Intent browseChallenges = new Intent(getApplicationContext(), BrowseChallenges.class);
-                startActivity(browseChallenges);
+                int constructFileResult = game.deleteGameFile();
+                if(constructFileResult != 0){
+                    Toast.makeText(this, R.string.toast_error_game_delete, Toast.LENGTH_SHORT).show();
+                }
+
+                Intent start = new Intent(getApplicationContext(), Start.class);
+                startActivity(start);
                 finish();
                 break;
         }

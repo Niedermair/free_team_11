@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class GameAnswer extends Activity implements View.OnClickListener
 {
@@ -28,6 +29,7 @@ public class GameAnswer extends Activity implements View.OnClickListener
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
         game = (Game) extras.getSerializable("game");
+        extras.remove("game");
 
         questionTxtView = (TextView) findViewById(R.id.questionAnswerTxtView);
         answerTxtView = (TextView) findViewById(R.id.answerAnswerTxtView);
@@ -43,8 +45,15 @@ public class GameAnswer extends Activity implements View.OnClickListener
             @Override
             public void onClick(DialogInterface dialog, int choice) {
                 if (choice == DialogInterface.BUTTON_POSITIVE){
-                    Intent browseChallenges = new Intent(getApplicationContext(), BrowseChallenges.class);
-                    startActivity(browseChallenges);
+                    int constructFileResult = game.constructGameFile();
+
+                    if(constructFileResult == 0){
+                        Toast.makeText(getApplicationContext(), getApplicationContext().getString(R.string.toast_success_game_saved), Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getApplicationContext(), getApplicationContext().getString(R.string.toast_error_save_data), Toast.LENGTH_SHORT).show();
+                    }
+                    Intent start = new Intent(getApplicationContext(), Start.class);
+                    startActivity(start);
                     finish();
                 }
             }

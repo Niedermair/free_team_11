@@ -1,15 +1,11 @@
 package at.vocabdevelopment.studymanager;
 
 import com.github.mikephil.charting.data.PieData;
-import com.github.mikephil.charting.data.PieDataSet;
-import com.github.mikephil.charting.data.PieEntry;
-import com.github.mikephil.charting.utils.ColorTemplate;
-
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.File;
 import java.util.ArrayList;
-import java.util.List;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
@@ -80,4 +76,18 @@ public class GameUnitTest
             game.hasNextQuestion();
         }
     }
+
+    @Test public void testConstructGameFile(){
+        setupEnvironment();
+
+        File gameFile = new File(StudyManager.getCurrentGameDir() + File.separator +
+                "currentGame.json");
+        if(gameFile.exists()){
+            gameFile.delete();
+        }
+
+        Assert.assertEquals(game.constructGameFile(), 0);
+        assertTrue(gameFile.exists());
+    }
+
 }
