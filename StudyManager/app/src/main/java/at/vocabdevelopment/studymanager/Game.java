@@ -88,9 +88,6 @@ public class Game implements Serializable {
         List<PieEntry> pieEntries = new ArrayList<>();
         pieEntries.add(new PieEntry(wrongCounter, "wrong"));
         pieEntries.add(new PieEntry(numberOfQuestions - wrongCounter, "correct"));
-
-        //pieEntries.add(new PieEntry(10, "correct"));
-
         PieDataSet pieDataSet = new PieDataSet(pieEntries, "Your Result");
         PieData pieData = new PieData(pieDataSet);
 
