@@ -26,6 +26,9 @@
     <string name="toast_success_challenge_deleted">Challenge deleted!</string>
     <string name="toast_error_challenge_delete">Ups! Error while deleting challenge…</string>
     <string name="toast_error_challenge_exists_already">This challenge exists already…</string>
+    <string name="toast_error_no_saved_game">There is no challenge to continue!</string>
+    <string name="toast_success_game_saved">Game saved!</string>
+    <string name="toast_error_game_delete">Ups! Error while deleting game file…</string>
     <string name="permission_information">We need to access your External storage. Please grant the corresponding permissions.</string>
     <string name="edit_challenge">Edit</string>
     <string name="toast_select_challenge">"Please select a challenge…"</string>

@@ -6,16 +6,20 @@ import android.support.test.rule.ActivityTestRule;
 import org.junit.Rule;
 import org.junit.Test;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.pressBack;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.isRoot;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
 
 public class ResultInstrumentedTest
 {
@@ -63,10 +67,8 @@ public class ResultInstrumentedTest
         onView(withText(R.string.dialog_exit_challenge)).check(matches(isDisplayed()));
         onView(withText(R.string.dialog_yes)).perform(click());
 
-        onView(withId(R.id.searchViewChallenges)).check(matches(isDisplayed()));
-        onView(withId(R.id.listViewChallenges)).check(matches(isDisplayed()));
-        onView(withId(R.id.buttonAddChallenge)).check(matches(isDisplayed()));
-        onView(withId(R.id.buttonSelectChallenge)).check(matches(isDisplayed()));
+        onView(withId(R.id.buttonContinueChallenge)).check(matches(isDisplayed()));
+        onView(withId(R.id.buttonBrowseChallenges)).check(matches(isDisplayed()));
     }
 
     @Test
@@ -80,4 +82,58 @@ public class ResultInstrumentedTest
 
         onView(withId(R.id.ResultTxtView)).check(matches(withText("Number of wrong answered questions: 2")));
     }
+
+    @Test
+    public void testBackAndGameFileDeleteFailed() throws Exception{
+        setupIntentData();
+
+        File gameFile = new File(StudyManager.getCurrentGameDir() + File.separator +
+                "currentGame.json");
+        if(gameFile.exists()){
+            gameFile.delete();
+        }
+
+        onView(isRoot()).perform(pressBack());
+
+        onView(withText(R.string.dialog_exit_challenge)).check(matches(isDisplayed()));
+        onView(withText(R.string.dialog_yes)).perform(click());
+
+        onView(withText(R.string.toast_error_game_delete))
+                .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
+                .check(matches(isDisplayed()));
+
+        onView(withId(R.id.buttonContinueChallenge)).check(matches(isDisplayed()));
+        onView(withId(R.id.buttonBrowseChallenges)).check(matches(isDisplayed()));
+        Thread.sleep(2500);
+
+        if(gameFile.exists()){
+            gameFile.delete();
+        }
+    }
+
+    @Test
+    public void testReturnAndGameFileDeleteFailed() throws Exception{
+        setupIntentData();
+
+        File gameFile = new File(StudyManager.getCurrentGameDir() + File.separator +
+                "currentGame.json");
+        if(gameFile.exists()){
+            gameFile.delete();
+        }
+
+        onView(withId(R.id.returnToBrowse)).perform(click());
+
+        onView(withText(R.string.toast_error_game_delete))
+                .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
+                .check(matches(isDisplayed()));
+
+        onView(withId(R.id.buttonContinueChallenge)).check(matches(isDisplayed()));
+        onView(withId(R.id.buttonBrowseChallenges)).check(matches(isDisplayed()));
+        Thread.sleep(2500);
+
+        if(gameFile.exists()){
+            gameFile.delete();
+        }
+    }
+
 }

@@ -1,10 +1,13 @@
 package at.vocabdevelopment.studymanager;
 
+import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class GameUnitTest
 {
@@ -59,4 +62,18 @@ public class GameUnitTest
             game.hasNextQuestion();
         }
     }
+
+    @Test public void testConstructGameFile(){
+        setupEnvironment();
+
+        File gameFile = new File(StudyManager.getCurrentGameDir() + File.separator +
+                "currentGame.json");
+        if(gameFile.exists()){
+            gameFile.delete();
+        }
+
+        Assert.assertEquals(game.constructGameFile(), 0);
+        assertTrue(gameFile.exists());
+    }
+
 }

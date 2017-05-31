@@ -207,4 +207,145 @@ public class StudyMangerUnitTest extends StudyManager {
         Challenge challengeRead = StudyManager.getChallenge("MISSING_CHALLENGE_FILE");
     }
 
+    @Test
+    public void testGetGame() throws Exception{
+
+        File gameFile = new File(StudyManager.getCurrentGameDir() + File.separator +
+                "currentGame.json");
+        if(gameFile.exists()){
+            gameFile.delete();
+        }
+
+        Challenge challenge = new Challenge(challengeName, new ArrayList<Question>());
+        Question question1 = new Question(exampleQuestionName1, exampleQuestion1, exampleAnswer1);
+        Question question2 = new Question(exampleQuestionName2, exampleQuestion2, exampleAnswer2);
+        question1.setActiveStatus(true);
+        question2.setActiveStatus(false);
+        challenge.addQuestion(question1);
+        challenge.addQuestion(question2);
+
+        Game game = new Game(challenge, Game.EASY);
+        game.constructGameFile();
+
+        Game gameRead = StudyManager.getGame();
+        assertEquals(gameRead.getChallenge().getName(), challengeName);
+
+        assertEquals(gameRead.getChallenge().getQuestionList().size(), 2);
+
+        Question question1Read = gameRead.getChallenge().getQuestionList().get(0);
+        Question question2Read = gameRead.getChallenge().getQuestionList().get(1);
+
+
+        if (question1Read.getName() != exampleQuestionName1)
+        {
+            question1Read = gameRead.getChallenge().getQuestionList().get(1);
+            question2Read = gameRead.getChallenge().getQuestionList().get(0);
+        }
+
+        assertEquals(question1Read.getName(), exampleQuestionName1);
+        assertEquals(question1Read.getQuestion(), exampleQuestion1);
+        assertEquals(question1Read.getAnswer(), exampleAnswer1);
+        assertTrue(question1Read.getActiveStatus());
+
+        assertEquals(question2Read.getName(), exampleQuestionName2);
+        assertEquals(question2Read.getQuestion(), exampleQuestion2);
+        assertEquals(question2Read.getAnswer(), exampleAnswer2);
+        assertFalse(question2Read.getActiveStatus());
+
+
+        assertEquals(gameRead.getDeck().size(), 2);
+
+        question1Read = gameRead.getDeck().get(0);
+        question2Read = gameRead.getDeck().get(1);
+
+
+        if (question1Read.getName() != exampleQuestionName1)
+        {
+            question1Read = gameRead.getChallenge().getQuestionList().get(1);
+            question2Read = gameRead.getChallenge().getQuestionList().get(0);
+        }
+
+        assertEquals(question1Read.getName(), exampleQuestionName1);
+        assertEquals(question1Read.getQuestion(), exampleQuestion1);
+        assertEquals(question1Read.getAnswer(), exampleAnswer1);
+        assertTrue(question1Read.getActiveStatus());
+
+        assertEquals(question2Read.getName(), exampleQuestionName2);
+        assertEquals(question2Read.getQuestion(), exampleQuestion2);
+        assertEquals(question2Read.getAnswer(), exampleAnswer2);
+        assertFalse(question2Read.getActiveStatus());
+
+        assertEquals(game.getDifficulty(), Game.EASY);
+
+        if(gameFile.exists()){
+            gameFile.delete();
+        }
+    }
+
+    @Test
+    public void testGetGameInvalid() throws Exception {
+
+        File gameFile = new File(StudyManager.getCurrentGameDir() + File.separator +
+                "currentGame.json");
+        if(gameFile.exists()){
+            gameFile.delete();
+        }
+
+        JsonWriter gameWriter = new JsonWriter(new FileWriter(gameFile));
+        gameWriter.beginObject();
+
+        gameWriter.name("invalid");
+        gameWriter.beginArray();
+        gameWriter.beginObject();
+        gameWriter.name("invalid");
+        gameWriter.value("something");
+        gameWriter.endObject();
+        gameWriter.endArray();
+
+        gameWriter.name("invalid");
+        gameWriter.beginArray();
+        gameWriter.endArray();
+
+        gameWriter.name("invalid");
+        gameWriter.value(-1);
+        gameWriter.name("invalid");
+        gameWriter.value(-1);
+        gameWriter.name("invalid");
+        gameWriter.value(-1);
+        gameWriter.name("invalid");
+        gameWriter.value(-1);
+
+        gameWriter.name("invalid");
+        gameWriter.beginArray();
+        gameWriter.endArray();
+        gameWriter.endObject();
+
+        gameWriter.close();
+
+        Game gameRead = StudyManager.getGame();
+
+        assertEquals(gameRead.getChallenge().getName(), "");
+        assertEquals(gameRead.getChallenge().getQuestionList().size(), 0);
+        assertEquals(gameRead.getDeck().size(), 0);
+        assertEquals(gameRead.getCurrentQuestionIndex(), null);
+        assertEquals(gameRead.getWrongCounter(), 0);
+        assertEquals(gameRead.getAttemptsList().size(), 0);
+        assertEquals(gameRead.getAttempts(), 0);
+
+        if(gameFile.exists()){
+            gameFile.delete();
+        }
+    }
+
+    @Test(expected = FileNotFoundException.class)
+    public void testGetGameMissingFile() throws Exception {
+        File gameFile = new File(StudyManager.getCurrentGameDir() + File.separator +
+                "currentGame.json");
+        if(gameFile.exists()){
+            gameFile.delete();
+        }
+
+        Game gameRead = StudyManager.getGame();
+    }
+
 }

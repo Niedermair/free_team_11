@@ -40,8 +40,13 @@ public class BrowseChallenges extends Activity implements View.OnClickListener{
         List<String> challengeNames = new ArrayList<>();
         for (File file : challengeFiles) {
             String fileName = file.getName();
-            fileName = fileName.substring(0, fileName.lastIndexOf("."));
-            challengeNames.add(fileName);
+            if (fileName.endsWith(".json"))
+            {
+                fileName = fileName.substring(0, fileName.lastIndexOf("."));
+                challengeNames.add(fileName);
+            }
+
+
         }
 
         challengeFilesAdapter = new ArrayAdapter<>(
