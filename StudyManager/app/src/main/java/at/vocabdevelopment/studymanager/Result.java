@@ -12,18 +12,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.PieChart;
-import com.github.mikephil.charting.data.PieData;
-import com.github.mikephil.charting.data.PieDataSet;
-import com.github.mikephil.charting.data.PieEntry;
-import com.github.mikephil.charting.utils.ColorTemplate;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class Result extends Activity implements View.OnClickListener
 {
     public TextView resultTxtView;
-    public Button returnToBrowse;
+    public Button returnToStart;
     private Game game;
 
     public DialogInterface.OnClickListener dialogExitChallengeClickListener;
@@ -38,14 +31,14 @@ public class Result extends Activity implements View.OnClickListener
         Bundle extras = intent.getExtras();
         game = (Game) extras.getSerializable("game");
 
-        returnToBrowse = (Button) findViewById(R.id.returnToBrowse);
+        returnToStart = (Button) findViewById(R.id.returnToStart);
         PieChart pieChart = (PieChart) findViewById(R.id.ChartView);
 
 
         pieChart.setData(game.generatePieData());
         pieChart.invalidate();
 
-        returnToBrowse.setOnClickListener(this);
+        returnToStart.setOnClickListener(this);
 
 
         dialogExitChallengeClickListener = new DialogInterface.OnClickListener() {
@@ -81,7 +74,7 @@ public class Result extends Activity implements View.OnClickListener
 
         switch (clickedButton.getId())
         {
-            case R.id.returnToBrowse:
+            case R.id.returnToStart:
                 int constructFileResult = game.deleteGameFile();
                 if(constructFileResult != 0){
                     Toast.makeText(this, R.string.toast_error_game_delete, Toast.LENGTH_SHORT).show();

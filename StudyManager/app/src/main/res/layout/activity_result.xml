@@ -18,20 +18,20 @@
         android:layout_width="0dp"
         app:layout_constraintHorizontal_bias="0.0"
         android:layout_marginBottom="7dp"
-        app:layout_constraintBottom_toTopOf="@+id/returnToBrowse"
+        app:layout_constraintBottom_toTopOf="@+id/returnToStart"
         android:layout_marginTop="8dp"
         app:layout_constraintVertical_bias="0.0"
         app:layout_constraintTop_toTopOf="parent">
     </com.github.mikephil.charting.charts.PieChart>
 
     <Button
-        android:id="@+id/returnToBrowse"
+        android:id="@+id/returnToStart"
         android:layout_width="340dp"
         android:layout_height="60dp"
         android:layout_marginBottom="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:text="Return to Challenges"
+        android:text="Return to Start"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"

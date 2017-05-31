@@ -3,8 +3,6 @@ package at.vocabdevelopment.studymanager;
 import android.content.Intent;
 import android.support.test.rule.ActivityTestRule;
 
-import com.github.mikephil.charting.charts.PieChart;
-
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -62,7 +60,7 @@ public class ResultInstrumentedTest
     public void testButtons() throws Exception
     {
         setupIntentData();
-        onView(withId(R.id.returnToBrowse)).perform(click());
+        onView(withId(R.id.returnToStart)).perform(click());
     }
 
     @Test
@@ -126,7 +124,7 @@ public class ResultInstrumentedTest
             gameFile.delete();
         }
 
-        onView(withId(R.id.returnToBrowse)).perform(click());
+        onView(withId(R.id.returnToStart)).perform(click());
 
         onView(withText(R.string.toast_error_game_delete))
                 .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
