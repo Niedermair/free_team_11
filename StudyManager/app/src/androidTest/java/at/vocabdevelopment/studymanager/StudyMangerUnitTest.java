@@ -233,49 +233,24 @@ public class StudyMangerUnitTest extends StudyManager {
 
         assertEquals(gameRead.getChallenge().getQuestionList().size(), 2);
 
-        Question question1Read = gameRead.getChallenge().getQuestionList().get(0);
-        Question question2Read = gameRead.getChallenge().getQuestionList().get(1);
+        ArrayList<String> questionNames = new ArrayList<String>();
+        ArrayList<String> questionQuestions = new ArrayList<String>();
+        ArrayList<String> questionAnswer = new ArrayList<String>();
 
-
-        if (question1Read.getName() != exampleQuestionName1)
+        for (Question q: gameRead.getChallenge().getQuestionList())
         {
-            question1Read = gameRead.getChallenge().getQuestionList().get(1);
-            question2Read = gameRead.getChallenge().getQuestionList().get(0);
+            questionNames.add(q.getName());
+            questionQuestions.add(q.getQuestion());
+            questionAnswer.add(q.getAnswer());
         }
 
-        assertEquals(question1Read.getName(), exampleQuestionName1);
-        assertEquals(question1Read.getQuestion(), exampleQuestion1);
-        assertEquals(question1Read.getAnswer(), exampleAnswer1);
-        assertTrue(question1Read.getActiveStatus());
 
-        assertEquals(question2Read.getName(), exampleQuestionName2);
-        assertEquals(question2Read.getQuestion(), exampleQuestion2);
-        assertEquals(question2Read.getAnswer(), exampleAnswer2);
-        assertFalse(question2Read.getActiveStatus());
-
-
-        assertEquals(gameRead.getDeck().size(), 2);
-
-        question1Read = gameRead.getDeck().get(0);
-        question2Read = gameRead.getDeck().get(1);
-
-
-        if (question1Read.getName() != exampleQuestionName1)
-        {
-            question1Read = gameRead.getChallenge().getQuestionList().get(1);
-            question2Read = gameRead.getChallenge().getQuestionList().get(0);
-        }
-
-        assertEquals(question1Read.getName(), exampleQuestionName1);
-        assertEquals(question1Read.getQuestion(), exampleQuestion1);
-        assertEquals(question1Read.getAnswer(), exampleAnswer1);
-        assertTrue(question1Read.getActiveStatus());
-
-        assertEquals(question2Read.getName(), exampleQuestionName2);
-        assertEquals(question2Read.getQuestion(), exampleQuestion2);
-        assertEquals(question2Read.getAnswer(), exampleAnswer2);
-        assertFalse(question2Read.getActiveStatus());
-
+        assertTrue(questionNames.contains(question1.getName()));
+        assertTrue(questionNames.contains(question2.getName()));
+        assertTrue(questionQuestions.contains(question1.getQuestion()));
+        assertTrue(questionQuestions.contains(question2.getQuestion()));
+        assertTrue(questionAnswer.contains(question1.getAnswer()));
+        assertTrue(questionAnswer.contains(question2.getAnswer()));
         assertEquals(game.getDifficulty(), Game.EASY);
 
         if(gameFile.exists()){
