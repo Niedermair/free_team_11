@@ -78,19 +78,8 @@ public class BrowseChallenges extends Activity implements View.OnClickListener, 
 
         });
 
-        selectFirstItemByDefault();
-
     }
 
-    private void selectFirstItemByDefault() {
-        if(challengeNamesToShow.size() > 0) {
-            challengeList.setAdapter(challengeFilesAdapter);
-            challengeFilesAdapter.notifyDataSetChanged();
-            challengeList.performItemClick(null, 0, challengeList.getFirstVisiblePosition());
-        } else {
-            selectedChallenge = null;
-        }
-    }
 
 
     @Override
