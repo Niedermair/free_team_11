@@ -93,9 +93,10 @@ public class Game implements Serializable {
 
     public PieData generatePieData() {
         List<PieEntry> pieEntries = new ArrayList<>();
-        pieEntries.add(new PieEntry(wrongCounter, "wrong"));
-        pieEntries.add(new PieEntry(numberOfQuestions - wrongCounter, "correct"));
-        PieDataSet pieDataSet = new PieDataSet(pieEntries, "Your Result");
+        pieEntries.add(new PieEntry(wrongCounter, ""));
+        pieEntries.add(new PieEntry(numberOfQuestions - wrongCounter, ""));
+        PieDataSet pieDataSet = new PieDataSet(pieEntries, "");
+        pieDataSet.setLabel("");
         PieData pieData = new PieData(pieDataSet);
 
         pieDataSet.setColors(ColorTemplate.COLORFUL_COLORS);
