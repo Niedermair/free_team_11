@@ -13,7 +13,7 @@ import static junit.framework.Assert.assertTrue;
 public class GameUnitTest
 {
 
-    private Challenge challenge = new Challenge("C-Name", new ArrayList<Question>());
+    private Challenge challenge;
     private Question question1 = new Question("Q-Name1", "Q-Question1", "Q-Answer1");
     private Question question2 = new Question("Q-Name2", "Q-Question2", "Q-Answer2");
     private Question question3 = new Question("Q-Name3", "Q-Question3", "Q-Answer3");
@@ -21,12 +21,21 @@ public class GameUnitTest
     private Game game;
 
     public void setupEnvironment() {
+        challenge = new Challenge("C-Name", new ArrayList<Question>());
         challenge.addQuestion(question1);
         challenge.addQuestion(question2);
         challenge.addQuestion(question3);
         challenge.addQuestion(question4);
         game = new Game(challenge, Game.HARD);
         game.incrementWrongCounter();
+    }
+
+    public void setupEnviormentMedium()
+    {
+        challenge = new Challenge("C-Name", new ArrayList<Question>());
+        challenge.addQuestion(question1);
+        challenge.addQuestion(question2);
+        game = new Game(challenge, Game.MEDIUM);
     }
 
     @Test public void testPieData()
@@ -70,11 +79,14 @@ public class GameUnitTest
     }
 
     @Test public void testNextQuestion() {
-        setupEnvironment();
+        setupEnviormentMedium();
         for(int i = 0; i < challenge.getQuestionList().size(); i++) {
             assertEquals(game.getCurrentQuestionIndex(), game.getDeck().get(i));
+            game.storeQuestion();
             game.hasNextQuestion();
         }
+        game.hasNextQuestion();
+        game.storeQuestion();
     }
 
     @Test public void testConstructGameFile(){
@@ -89,5 +101,6 @@ public class GameUnitTest
         Assert.assertEquals(game.constructGameFile(), 0);
         assertTrue(gameFile.exists());
     }
+
 
 }
