@@ -41,6 +41,19 @@ public class GameAnswerInstrumentedTest
         mActivityRule.launchActivity(test);
     }
 
+    public void setupIntentDataMultipleQuestions()
+    {
+        Intent test = new Intent();
+        Challenge challenge = new Challenge(challengeName, new ArrayList<Question>());
+        Question question1 = new Question(exampleQuestionName, exampleQuestion, exampleAnswer);
+        Question question2 = new Question(exampleQuestionName, exampleQuestion, exampleAnswer);
+        challenge.addQuestion(question1);
+        challenge.addQuestion(question2);
+        Game game = new Game(challenge, Game.HARD);
+        test.putExtra("game", game);
+        mActivityRule.launchActivity(test);
+    }
+
     @Test
     public void testCorrectButton() throws Exception
     {
@@ -49,9 +62,23 @@ public class GameAnswerInstrumentedTest
     }
 
     @Test
+    public void testCorrectButtonMultipleQuestions() throws Exception
+    {
+        setupIntentDataMultipleQuestions();
+        onView(withId(R.id.correctBtn)).perform(click());
+    }
+
+    @Test
     public void testWrongButton() throws Exception
     {
         setupIntentData();
+        onView(withId(R.id.wrongBtn)).perform(click());
+    }
+
+    @Test
+    public void testWrongButtonMultipleQuestions() throws Exception
+    {
+        setupIntentDataMultipleQuestions();
         onView(withId(R.id.wrongBtn)).perform(click());
     }
 
