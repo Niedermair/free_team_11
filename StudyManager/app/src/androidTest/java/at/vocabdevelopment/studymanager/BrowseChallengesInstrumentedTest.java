@@ -135,7 +135,7 @@ public class BrowseChallengesInstrumentedTest {
     }
 
     @Test
-    public void testFilteredAndSelectedChallenge() throws Exception {
+    public void testOnQueryTextChange() throws Exception {
         File challengeFile = new File(StudyManager.getStorageDir() + File.separator + searchedChallengeName + ".json");
         if(challengeFile.exists()){
             challengeFile.delete();
@@ -153,16 +153,44 @@ public class BrowseChallengesInstrumentedTest {
         onView(withId(R.id.searchViewChallenges)).perform(click(), pressKey(KeyEvent.KEYCODE_ENTER));
         onView(withId(R.id.searchViewChallenges)).perform(typeText("Searched Challenge XYZ"));
 
-        onData(anything()).inAdapterView(withId(R.id.listViewChallenges)).perform(click());
-
         onView(withId(R.id.buttonSelectChallenge)).perform(click());
-
         onView(withId(R.id.textViewSetupChallengeChallengeName)).check(matches(withText("Searched Challenge XYZ")));
 
         if(challengeFile.exists()){
             challengeFile.delete();
         }
     }
+
+
+    @Test
+    public void testOnQueryTextSubmit() throws Exception {
+        File challengeFile = new File(StudyManager.getStorageDir() + File.separator + searchedChallengeName + ".json");
+        if(challengeFile.exists()){
+            challengeFile.delete();
+        }
+
+        Challenge challenge = new Challenge(searchedChallengeName, new ArrayList<Question>());
+        Question question1 = new Question(exampleQuestionName1, exampleQuestion1, exampleAnswer1);
+        Question question2 = new Question(exampleQuestionName2, exampleQuestion2, exampleAnswer2);
+        challenge.addQuestion(question1);
+        challenge.addQuestion(question2);
+        challenge.constructChallengeFile();
+
+        mActivityRule.launchActivity(new Intent());
+
+        onView(withId(R.id.searchViewChallenges)).perform(click(), pressKey(KeyEvent.KEYCODE_ENTER));
+        onView(withId(R.id.searchViewChallenges)).perform(typeText("Searched Challenge XYZ"));
+        onView(withId(R.id.searchViewChallenges)).perform(click(), pressKey(KeyEvent.KEYCODE_ENTER));
+
+
+        onView(withId(R.id.buttonSelectChallenge)).perform(click());
+        onView(withId(R.id.textViewSetupChallengeChallengeName)).check(matches(withText("Searched Challenge XYZ")));
+
+        if(challengeFile.exists()){
+            challengeFile.delete();
+        }
+    }
+
 
     @Test
     public void testBackButton() throws Exception{
