@@ -94,8 +94,7 @@ public class Start extends Activity implements View.OnClickListener{
                                            @NonNull int[] grantResults) {
         switch (requestCode) {
             case 401: {
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
                     buttonContinueChallenge.setEnabled(true);
                     buttonSearchChallenge.setEnabled(true);

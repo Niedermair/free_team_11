@@ -106,6 +106,27 @@ public class StartInstrumentedTest {
         mActivityRule.getActivity();
     }
 
+
+    @Test
+    public void permissionWriteDenied(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            getInstrumentation().getUiAutomation().executeShellCommand(
+                    "pm grant android.permission.WRITE_EXTERNAL_STORAGE");
+        }
+        allowPermissionsIfNeeded();
+        onView(withId(R.id.buttonBrowseChallenges)).check(matches(isEnabled()));
+    }
+
+    @Test
+    public void permissionReadDenied(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            getInstrumentation().getUiAutomation().executeShellCommand(
+                    "pm grant android.permission.READ_EXTERNAL_STORAGE");
+        }
+        allowPermissionsIfNeeded();
+        onView(withId(R.id.buttonBrowseChallenges)).check(matches(isEnabled()));
+    }
+
     @Test
     public void testNoSavedGame() throws Exception {
 
