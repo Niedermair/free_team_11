@@ -33,13 +33,9 @@ public class Result extends Activity implements View.OnClickListener
 
         returnToStart = (Button) findViewById(R.id.returnToStart);
         PieChart pieChart = (PieChart) findViewById(R.id.ChartView);
-
-
         pieChart.setData(game.generatePieData());
         pieChart.invalidate();
-
         returnToStart.setOnClickListener(this);
-
 
         dialogExitChallengeClickListener = new DialogInterface.OnClickListener() {
             @Override

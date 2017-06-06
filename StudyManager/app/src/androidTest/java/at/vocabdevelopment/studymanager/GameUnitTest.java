@@ -26,8 +26,21 @@ public class GameUnitTest
         challenge.addQuestion(question2);
         challenge.addQuestion(question3);
         challenge.addQuestion(question4);
-        game = new Game(challenge, Game.HARD);
+        game = new Game(challenge, Game.HARD, false);
         game.incrementWrongCounter();
+    }
+
+    public void setupEnviormentActiveDeck() {
+        challenge = new Challenge("C-Name", new ArrayList<Question>());
+        question1.setActiveStatus(true);
+        question2.setActiveStatus(true);
+        question3.setActiveStatus(false);
+        question4.setActiveStatus(false);
+        challenge.addQuestion(question1);
+        challenge.addQuestion(question2);
+        challenge.addQuestion(question3);
+        challenge.addQuestion(question4);
+        game = new Game(challenge, Game.HARD, true);
     }
 
     public void setupEnviormentMedium()
@@ -35,16 +48,14 @@ public class GameUnitTest
         challenge = new Challenge("C-Name", new ArrayList<Question>());
         challenge.addQuestion(question1);
         challenge.addQuestion(question2);
-        game = new Game(challenge, Game.MEDIUM);
+        game = new Game(challenge, Game.MEDIUM, false);
     }
 
     @Test public void testPieData()
     {
         setupEnvironment();
         PieData pieData = game.generatePieData();
-        assertTrue(pieData.getDataSet().getEntryForIndex(0).getLabel().equals("wrong"));
         assertTrue(pieData.getDataSet().getEntryForIndex(0).getValue() == 1);
-        assertTrue(pieData.getDataSet().getEntryForIndex(1).getLabel().equals("correct"));
         assertTrue(pieData.getDataSet().getEntryForIndex(1).getValue() == 3);
     }
 
@@ -89,6 +100,18 @@ public class GameUnitTest
         game.storeQuestion();
     }
 
+    @Test public void testNextActiveQuestion()
+    {
+        setupEnviormentActiveDeck();
+        ArrayList<String> questionNames = new ArrayList<String>();
+        while (game.hasNextQuestion())
+        {
+            assertTrue(game.getCurrentQuestionIndex().getName().equals(question1.getName()) ||
+                    game.getCurrentQuestionIndex().getName().equals(question2.getName()));
+        }
+
+    }
+
     @Test public void testConstructGameFile(){
         setupEnvironment();
 
@@ -101,6 +124,4 @@ public class GameUnitTest
         Assert.assertEquals(game.constructGameFile(), 0);
         assertTrue(gameFile.exists());
     }
-
-
 }

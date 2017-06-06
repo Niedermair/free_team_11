@@ -22,7 +22,7 @@ public class ResultUnitTest
     public void setupEnvironment() {
         challenge.addQuestion(question1);
         challenge.addQuestion(question2);
-        game = new Game(challenge, Game.HARD);
+        game = new Game(challenge, Game.HARD, false);
         game.constructGameFile();
     }
 

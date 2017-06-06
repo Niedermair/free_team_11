@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 class StudyManager {
+
     final static File storageDir =
             new File(Environment.getExternalStorageDirectory().getAbsolutePath(), "StudyManager");
 
@@ -93,7 +94,7 @@ class StudyManager {
     static Game getGame() throws IOException {
 
         Challenge challenge = new Challenge("", new ArrayList<Question>());
-        Game game = new Game(challenge, -1);
+        Game game = new Game(challenge, -1, false);
         ArrayList<ArrayList<Question>> attemptsList = new ArrayList<>();
 
         File gameFile = new File(StudyManager.getCurrentGameDir() + File.separator +
@@ -157,6 +158,8 @@ class StudyManager {
                     game.setWrongCounter(reader.nextInt());
                 } else if(objectName.equals("attempts")) {
                     game.setAttempts(reader.nextInt());
+                } else if(objectName.equals("active")){
+                    game.setActive(reader.nextBoolean());
                 } else if(objectName.equals("attemptsList")){
                     reader.beginArray();
                     while(reader.hasNext()) {
@@ -208,6 +211,8 @@ class StudyManager {
 
             reader.endObject();
             reader.close();
+
+            game.activeDeck(game.isActive());
 
             return game;
         }else{
