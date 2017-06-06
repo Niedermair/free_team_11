@@ -111,9 +111,10 @@ public class BrowseChallenges extends Activity implements View.OnClickListener, 
         }
     }
 
+
     @Override
     public boolean onQueryTextSubmit(String query) {
-        return false;
+        return onQueryTextChange(query);
     }
 
     @Override

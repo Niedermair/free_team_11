@@ -1,5 +1,6 @@
 package at.vocabdevelopment.studymanager;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.test.rule.ActivityTestRule;
 
@@ -129,6 +130,50 @@ public class ResultInstrumentedTest
         onView(withText(R.string.toast_error_game_delete))
                 .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
                 .check(matches(isDisplayed()));
+
+        onView(withId(R.id.buttonContinueChallenge)).check(matches(isDisplayed()));
+        onView(withId(R.id.buttonBrowseChallenges)).check(matches(isDisplayed()));
+        Thread.sleep(2500);
+
+        if(gameFile.exists()){
+            gameFile.delete();
+        }
+    }
+
+    @Test
+    public void testReturnToStart() throws Exception{
+        setupIntentData();
+
+        File gameFile = new File(StudyManager.getCurrentGameDir() + File.separator +
+                "currentGame.json");
+
+        mActivityRule.getActivity().game.constructGameFile();
+
+        onView(withId(R.id.returnToStart)).perform(click());
+
+        onView(withId(R.id.buttonContinueChallenge)).check(matches(isDisplayed()));
+        onView(withId(R.id.buttonBrowseChallenges)).check(matches(isDisplayed()));
+        Thread.sleep(2500);
+
+        if(gameFile.exists()){
+            gameFile.delete();
+        }
+    }
+
+
+    @Test
+    public void testExitChallengeSuccess() throws Exception{
+        setupIntentData();
+
+        File gameFile = new File(StudyManager.getCurrentGameDir() + File.separator +
+                "currentGame.json");
+
+        mActivityRule.getActivity().game.constructGameFile();
+
+        onView(isRoot()).perform(pressBack());
+
+        onView(withText(R.string.dialog_exit_challenge)).check(matches(isDisplayed()));
+        onView(withText(R.string.dialog_yes)).perform(click());
 
         onView(withId(R.id.buttonContinueChallenge)).check(matches(isDisplayed()));
         onView(withId(R.id.buttonBrowseChallenges)).check(matches(isDisplayed()));
