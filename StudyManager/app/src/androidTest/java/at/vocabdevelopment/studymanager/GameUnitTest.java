@@ -25,8 +25,21 @@ public class GameUnitTest
         challenge.addQuestion(question2);
         challenge.addQuestion(question3);
         challenge.addQuestion(question4);
-        game = new Game(challenge, Game.HARD);
+        game = new Game(challenge, Game.HARD, false);
         game.incrementWrongCounter();
+    }
+
+    public void setupEnviormentActiveDeck()
+    {
+        question1.setActiveStatus(true);
+        question2.setActiveStatus(true);
+        question3.setActiveStatus(false);
+        question4.setActiveStatus(false);
+        challenge.addQuestion(question1);
+        challenge.addQuestion(question2);
+        challenge.addQuestion(question3);
+        challenge.addQuestion(question4);
+        game = new Game(challenge, Game.HARD, true);
     }
 
     @Test public void testPieData()
@@ -75,6 +88,18 @@ public class GameUnitTest
             assertEquals(game.getCurrentQuestionIndex(), game.getDeck().get(i));
             game.hasNextQuestion();
         }
+    }
+
+    @Test public void testNextActiveQuestion()
+    {
+        setupEnviormentActiveDeck();
+        ArrayList<String> questionNames = new ArrayList<String>();
+        while (game.hasNextQuestion())
+        {
+            assertTrue(game.getCurrentQuestionIndex().getName().equals(question1.getName()) ||
+                    game.getCurrentQuestionIndex().getName().equals(question2.getName()));
+        }
+
     }
 
     @Test public void testConstructGameFile(){

@@ -225,7 +225,7 @@ public class StudyMangerUnitTest extends StudyManager {
         challenge.addQuestion(question1);
         challenge.addQuestion(question2);
 
-        Game game = new Game(challenge, Game.EASY);
+        Game game = new Game(challenge, Game.EASY, false);
         game.constructGameFile();
 
         Game gameRead = StudyManager.getGame();

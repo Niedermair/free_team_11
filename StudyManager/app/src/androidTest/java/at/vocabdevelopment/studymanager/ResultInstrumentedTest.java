@@ -42,7 +42,7 @@ public class ResultInstrumentedTest
         Question question2 = new Question(exampleQuestionName2, exampleQuestion2, exampleAnswer2);
         challenge.addQuestion(question1);
         challenge.addQuestion(question2);
-        Game game = new Game(challenge, Game.EASY);
+        Game game = new Game(challenge, Game.EASY, false);
         game.incrementWrongCounter();
         game.incrementWrongCounter();
         test.putExtra("game", game);

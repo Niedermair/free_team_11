@@ -36,7 +36,7 @@ public class GameAnswerInstrumentedTest
         Challenge challenge = new Challenge(challengeName, new ArrayList<Question>());
         Question question1 = new Question(exampleQuestionName, exampleQuestion, exampleAnswer);
         challenge.addQuestion(question1);
-        Game game = new Game(challenge, Game.HARD);
+        Game game = new Game(challenge, Game.HARD, false);
         test.putExtra("game", game);
         mActivityRule.launchActivity(test);
     }
