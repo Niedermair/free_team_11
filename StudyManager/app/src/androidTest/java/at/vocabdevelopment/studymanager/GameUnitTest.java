@@ -46,9 +46,7 @@ public class GameUnitTest
     {
         setupEnvironment();
         PieData pieData = game.generatePieData();
-        assertTrue(pieData.getDataSet().getEntryForIndex(0).getLabel().equals("wrong"));
         assertTrue(pieData.getDataSet().getEntryForIndex(0).getValue() == 1);
-        assertTrue(pieData.getDataSet().getEntryForIndex(1).getLabel().equals("correct"));
         assertTrue(pieData.getDataSet().getEntryForIndex(1).getValue() == 3);
     }
 

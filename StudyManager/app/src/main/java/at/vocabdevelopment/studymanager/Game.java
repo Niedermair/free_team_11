@@ -41,7 +41,6 @@ public class Game implements Serializable {
         this.difficulty = difficulty;
         this.active = active;
         activeDeck(active);
-        this.numberOfQuestions = deck.size();
         this.attemptsList = new ArrayList<>();
         Collections.shuffle(this.deck);
         this.currentQuestionIndex = 0;
@@ -219,6 +218,7 @@ public class Game implements Serializable {
         {
             this.deck = challenge.getQuestionList();
         }
+        numberOfQuestions = deck.size();
     }
 
     public Challenge getChallenge() {
