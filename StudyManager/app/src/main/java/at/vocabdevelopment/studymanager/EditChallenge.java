@@ -209,7 +209,7 @@ public class EditChallenge extends Activity implements View.OnClickListener{
                     int deleteFileResult = originalChallenge.deleteChallengeFile();
                     int constructFileResult = challenge.constructChallengeFile();
 
-                    if(deleteFileResult == 0 && constructFileResult == 0){
+                    if(deleteFileResult == 0){
                         Toast.makeText(this, R.string.toast_success_challenge_saved, Toast.LENGTH_SHORT).show();
                         Intent setupChallenge = new Intent(getApplicationContext(), SetupChallenge.class);
                         setupChallenge.putExtra("challenge", challenge);

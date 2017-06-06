@@ -193,13 +193,8 @@ public class NewChallenge extends Activity implements View.OnClickListener{
                         Intent browseChallenges = new Intent(getApplicationContext(), BrowseChallenges.class);
                         startActivity(browseChallenges);
                         finish();
-                    } else if(constructFileResult == -1){
+                    } else {
                         Toast.makeText(this, R.string.toast_error_challenge_exists_already, Toast.LENGTH_SHORT).show();
-                    } else if(constructFileResult == -2){
-                        Toast.makeText(this, getApplicationContext().getString(R.string.toast_error_save_data), Toast.LENGTH_SHORT).show();
-                        Intent start = new Intent(getApplicationContext(), Start.class);
-                        startActivity(start);
-                        finish();
                     }
                 }
                 break;
