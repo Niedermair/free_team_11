@@ -77,7 +77,6 @@ public class GameAnswer extends Activity implements View.OnClickListener
                     correctStartQuestion.putExtra("game", game);
                     startActivity(correctStartQuestion);
                     finish();
-                    break;
                 }
                 else {
                     Intent correctStartQuestion = new Intent(getApplicationContext(), Result.class);
@@ -93,7 +92,6 @@ public class GameAnswer extends Activity implements View.OnClickListener
                     wrongStartQuestion.putExtra("game", game);
                     startActivity(wrongStartQuestion);
                     finish();
-                    break;
                 }
                 else {
                     Intent wrongStartQuestion = new Intent(getApplicationContext(), Result.class);

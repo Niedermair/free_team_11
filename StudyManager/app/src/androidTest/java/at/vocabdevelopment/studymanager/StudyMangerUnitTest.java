@@ -313,6 +313,31 @@ public class StudyMangerUnitTest extends StudyManager {
         }
     }
 
+    @Test public void testGetValidGameWithSideDeck() throws Exception
+    {
+        File gameFile = new File(StudyManager.getCurrentGameDir() + File.separator +
+                "currentGame.json");
+
+        if(gameFile.exists()){
+            gameFile.delete();
+        }
+
+        Challenge challenge = new Challenge(challengeName, new ArrayList<Question>());
+        Question question1 = new Question(exampleQuestionName1, exampleQuestion1, exampleAnswer1);
+        Question question2 = new Question(exampleQuestionName2, exampleQuestion2, exampleAnswer2);
+        question1.setActiveStatus(true);
+        question2.setActiveStatus(false);
+        challenge.addQuestion(question1);
+        challenge.addQuestion(question2);
+
+        Game game = new Game(challenge, Game.EASY, false);
+        game.storeQuestion();
+        game.constructGameFile();
+        Game gameRead = StudyManager.getGame();
+
+        assertEquals(gameRead.getAttemptsList().size(), 1);
+    }
+
     @Test(expected = FileNotFoundException.class)
     public void testGetGameMissingFile() throws Exception {
         File gameFile = new File(StudyManager.getCurrentGameDir() + File.separator +

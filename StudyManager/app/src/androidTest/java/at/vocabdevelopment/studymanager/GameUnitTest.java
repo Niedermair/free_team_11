@@ -124,4 +124,19 @@ public class GameUnitTest
         Assert.assertEquals(game.constructGameFile(), 0);
         assertTrue(gameFile.exists());
     }
+
+    @Test public void testConstructGameFileWithSideDeck()
+    {
+        setupEnviormentMedium();
+        game.storeQuestion();
+
+        File gameFile = new File(StudyManager.getCurrentGameDir() + File.separator +
+                "currentGame.json");
+        if(gameFile.exists()){
+            gameFile.delete();
+        }
+
+        Assert.assertEquals(game.constructGameFile(), 0);
+        assertTrue(gameFile.exists());
+    }
 }
