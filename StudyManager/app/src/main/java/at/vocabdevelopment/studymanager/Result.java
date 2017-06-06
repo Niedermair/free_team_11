@@ -47,9 +47,9 @@ public class Result extends Activity implements View.OnClickListener
                 if (choice == DialogInterface.BUTTON_POSITIVE){
                     int constructFileResult = game.deleteGameFile();
                     if(constructFileResult != 0){
-                        Toast.makeText(getApplicationContext(), getApplicationContext().getString(R.string.toast_error_game_delete), Toast.LENGTH_SHORT).show();
                         Intent start = new Intent(getApplicationContext(), Start.class);
                         startActivity(start);
+                        Toast.makeText(getApplicationContext(), getApplicationContext().getString(R.string.toast_error_game_delete), Toast.LENGTH_SHORT).show();
                         finish();
                     } else {
                         Intent start = new Intent(getApplicationContext(), Start.class);
@@ -80,9 +80,9 @@ public class Result extends Activity implements View.OnClickListener
             case R.id.returnToStart:
                 int constructFileResult = game.deleteGameFile();
                 if(constructFileResult != 0){
-                    Toast.makeText(this, R.string.toast_error_game_delete, Toast.LENGTH_SHORT).show();
                     Intent start = new Intent(getApplicationContext(), Start.class);
                     startActivity(start);
+                    Toast.makeText(this, R.string.toast_error_game_delete, Toast.LENGTH_SHORT).show();
                     finish();
                     break;
                 }else{

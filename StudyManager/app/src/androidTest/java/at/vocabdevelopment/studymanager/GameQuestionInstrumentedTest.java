@@ -31,13 +31,14 @@ public class GameQuestionInstrumentedTest
     private String exampleQuestionName = "Q-Name";
     private String exampleQuestion = "Q-Question";
     private String exampleAnswer = "Q-Answer";
+    private Game game;
 
     public void setupIntentData() {
         Intent test = new Intent();
         Challenge challenge = new Challenge(challengeName, new ArrayList<Question>());
         Question question1 = new Question(exampleQuestionName, exampleQuestion, exampleAnswer);
         challenge.addQuestion(question1);
-        Game game = new Game(challenge, Game.HARD);
+        game = new Game(challenge, Game.HARD);
         test.putExtra("game", game);
         mActivityRule.launchActivity(test);
     }
@@ -68,6 +69,8 @@ public class GameQuestionInstrumentedTest
     public void testQuitGameApprove() throws Exception{
         setupIntentData();
 
+        String question_name = game.getCurrentQuestionIndex().getQuestion();
+
         onView(withId(R.id.quitGameBtn)).perform(click());
 
         onView(withText(R.string.dialog_exit_challenge)).check(matches(isDisplayed()));
@@ -76,10 +79,13 @@ public class GameQuestionInstrumentedTest
         onView(withText(R.string.toast_success_game_saved))
                 .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
                 .check(matches(isDisplayed()));
+        Thread.sleep(2500);
 
         onView(withId(R.id.buttonContinueChallenge)).check(matches(isDisplayed()));
         onView(withId(R.id.buttonBrowseChallenges)).check(matches(isDisplayed()));
-        Thread.sleep(2500);
+
+        onView(withId(R.id.buttonContinueChallenge)).perform(click());
+        onView(withId(R.id.questionTxtView)).check(matches(withText(question_name)));
     }
 
     @Test
@@ -98,6 +104,8 @@ public class GameQuestionInstrumentedTest
     public void testBackButtonApprove() throws Exception{
         setupIntentData();
 
+        String question_name = game.getCurrentQuestionIndex().getQuestion();
+
         onView(isRoot()).perform(pressBack());
 
         onView(withText(R.string.dialog_exit_challenge)).check(matches(isDisplayed()));
@@ -106,10 +114,13 @@ public class GameQuestionInstrumentedTest
         onView(withText(R.string.toast_success_game_saved))
                 .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
                 .check(matches(isDisplayed()));
+        Thread.sleep(2500);
 
         onView(withId(R.id.buttonContinueChallenge)).check(matches(isDisplayed()));
         onView(withId(R.id.buttonBrowseChallenges)).check(matches(isDisplayed()));
-        Thread.sleep(2500);
+
+        onView(withId(R.id.buttonContinueChallenge)).perform(click());
+        onView(withId(R.id.questionTxtView)).check(matches(withText(question_name)));
     }
 
     @Test
