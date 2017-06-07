@@ -78,18 +78,10 @@ public class Result extends Activity implements View.OnClickListener
         {
             case R.id.returnToStart:
                 int constructFileResult = game.deleteGameFile();
-                if(constructFileResult != 0){
-                    Intent start = new Intent(getApplicationContext(), Start.class);
-                    startActivity(start);
-                    Toast.makeText(this, R.string.toast_error_game_delete, Toast.LENGTH_SHORT).show();
-                    finish();
-                    break;
-                }else{
-                    Intent start = new Intent(getApplicationContext(), Start.class);
-                    startActivity(start);
-                    finish();
-                    break;
-                }
+                Intent start = new Intent(getApplicationContext(), Start.class);
+                startActivity(start);
+                finish();
+                break;
         }
     }
 }

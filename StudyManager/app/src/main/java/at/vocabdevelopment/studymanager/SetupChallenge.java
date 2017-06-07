@@ -101,7 +101,7 @@ public class SetupChallenge extends Activity implements View.OnClickListener {
             case R.id.buttonStart:
                 if (difficulty != NOT_SET) {
                     Game game = new Game(challenge, difficulty, active);
-                    if(game.hasNextQuestion())
+                    if(game.getDeck().size() > 0)
                     {
                         Intent startGame = new Intent(getApplicationContext(), GameQuestion.class);
                         startGame.putExtra("game", game);
