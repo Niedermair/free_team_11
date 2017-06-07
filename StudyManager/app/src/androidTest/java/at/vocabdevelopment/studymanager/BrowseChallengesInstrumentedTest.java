@@ -5,7 +5,6 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.view.KeyEvent;
 
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,11 +15,8 @@ import java.util.ArrayList;
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
-//<<<<<<< HEAD
 import static android.support.test.espresso.action.ViewActions.pressBack;
-//=======
 import static android.support.test.espresso.action.ViewActions.pressKey;
-//>>>>>>> feature_searchLogic
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
@@ -32,7 +28,6 @@ import static junit.framework.Assert.assertNull;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.Matchers.anything;
-import static org.hamcrest.object.HasToString.hasToString;
 
 @RunWith(AndroidJUnit4.class)
 public class BrowseChallengesInstrumentedTest {
@@ -135,7 +130,7 @@ public class BrowseChallengesInstrumentedTest {
     }
 
     @Test
-    public void testFilteredAndSelectedChallenge() throws Exception {
+    public void testOnQueryTextChange() throws Exception {
         File challengeFile = new File(StudyManager.getStorageDir() + File.separator + searchedChallengeName + ".json");
         if(challengeFile.exists()){
             challengeFile.delete();
@@ -156,13 +151,44 @@ public class BrowseChallengesInstrumentedTest {
         onData(anything()).inAdapterView(withId(R.id.listViewChallenges)).perform(click());
 
         onView(withId(R.id.buttonSelectChallenge)).perform(click());
-
         onView(withId(R.id.textViewSetupChallengeChallengeName)).check(matches(withText("Searched Challenge XYZ")));
 
         if(challengeFile.exists()){
             challengeFile.delete();
         }
     }
+
+
+    @Test
+    public void testOnQueryTextSubmit() throws Exception {
+        File challengeFile = new File(StudyManager.getStorageDir() + File.separator + searchedChallengeName + ".json");
+        if(challengeFile.exists()){
+            challengeFile.delete();
+        }
+
+        Challenge challenge = new Challenge(searchedChallengeName, new ArrayList<Question>());
+        Question question1 = new Question(exampleQuestionName1, exampleQuestion1, exampleAnswer1);
+        Question question2 = new Question(exampleQuestionName2, exampleQuestion2, exampleAnswer2);
+        challenge.addQuestion(question1);
+        challenge.addQuestion(question2);
+        challenge.constructChallengeFile();
+
+        mActivityRule.launchActivity(new Intent());
+
+        onView(withId(R.id.searchViewChallenges)).perform(typeText("Searched Challenge XYZ"), pressKey(KeyEvent.KEYCODE_ENTER));
+        onView(withId(R.id.searchViewChallenges)).perform(typeText("Searched Challenge XYZ"));
+        onView(withId(R.id.searchViewChallenges)).perform(typeText(""), pressKey(KeyEvent.KEYCODE_ENTER));
+
+        onData(anything()).inAdapterView(withId(R.id.listViewChallenges)).perform(click());
+
+        onView(withId(R.id.buttonSelectChallenge)).perform(click());
+        onView(withId(R.id.textViewSetupChallengeChallengeName)).check(matches(withText("Searched Challenge XYZ")));
+
+        if(challengeFile.exists()){
+            challengeFile.delete();
+        }
+    }
+
 
     @Test
     public void testBackButton() throws Exception{

@@ -26,6 +26,7 @@ public class SetupChallenge extends Activity implements View.OnClickListener {
     public Button buttonTotalDeck;
     public Drawable defaultBackground;
     private int difficulty;
+    private boolean active;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +73,8 @@ public class SetupChallenge extends Activity implements View.OnClickListener {
             startActivity(start);
             finish();
         }
+        active = false;
+        buttonTotalDeck.setBackgroundColor(BLUE);
     }
 
     @Override
@@ -97,11 +100,16 @@ public class SetupChallenge extends Activity implements View.OnClickListener {
                 break;
             case R.id.buttonStart:
                 if (difficulty != NOT_SET) {
-                    Game game = new Game(challenge, difficulty);
-                    Intent startGame = new Intent(getApplicationContext(), GameQuestion.class);
-                    startGame.putExtra("game", game);
-                    startActivity(startGame);
-                    finish();
+                    Game game = new Game(challenge, difficulty, active);
+                    if(game.getDeck().size() > 0)
+                    {
+                        Intent startGame = new Intent(getApplicationContext(), GameQuestion.class);
+                        startGame.putExtra("game", game);
+                        startActivity(startGame);
+                        finish();
+                    }else{
+                        Toast.makeText(this, "No active questions in deck.", Toast.LENGTH_SHORT).show();
+                    }
                 }
                 else {
                     Toast.makeText(this, getApplicationContext().getString(R.string.toast_error_difficulty), Toast.LENGTH_SHORT).show();
@@ -126,10 +134,12 @@ public class SetupChallenge extends Activity implements View.OnClickListener {
                 difficulty = Game.HARD;
                 break;
             case R.id.buttonActiveDeck:
+                active = true;
                 buttonActiveDeck.setBackgroundColor(BLUE);
                 buttonTotalDeck.setBackground(defaultBackground);
                 break;
             case R.id.buttonTotalDeck:
+                active = false;
                 buttonTotalDeck.setBackgroundColor(BLUE);
                 buttonActiveDeck.setBackground(defaultBackground);
                 break;

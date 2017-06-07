@@ -85,8 +85,6 @@ public class Start extends Activity implements View.OnClickListener{
                 startActivity(browseChallenges);
                 finish();
                 break;
-            default:
-                throw new IllegalArgumentException("Action can not be handled.");
         }
     }
 
@@ -96,8 +94,7 @@ public class Start extends Activity implements View.OnClickListener{
                                            @NonNull int[] grantResults) {
         switch (requestCode) {
             case 401: {
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
                     buttonContinueChallenge.setEnabled(true);
                     buttonSearchChallenge.setEnabled(true);
@@ -114,11 +111,7 @@ public class Start extends Activity implements View.OnClickListener{
     }
 
     public void createExternalStorageFolders(){
-        if (!StudyManager.getStorageDir().exists()) {
-            StudyManager.getStorageDir().mkdirs();
-        }
-        if (!StudyManager.getCurrentGameDir().exists()) {
-            StudyManager.getCurrentGameDir().mkdirs();
-        }
+        StudyManager.getStorageDir().mkdirs();
+        StudyManager.getCurrentGameDir().mkdirs();
     }
 }

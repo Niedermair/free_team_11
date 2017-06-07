@@ -29,6 +29,7 @@ public class GameAnswerInstrumentedTest
     private String exampleQuestionName = "Q-Name";
     private String exampleQuestion = "Q-Question";
     private String exampleAnswer = "Q-Answer";
+    private Game game;
 
     public void setupIntentData()
     {
@@ -36,7 +37,20 @@ public class GameAnswerInstrumentedTest
         Challenge challenge = new Challenge(challengeName, new ArrayList<Question>());
         Question question1 = new Question(exampleQuestionName, exampleQuestion, exampleAnswer);
         challenge.addQuestion(question1);
-        Game game = new Game(challenge, Game.HARD);
+        game = new Game(challenge, Game.HARD, false);
+        test.putExtra("game", game);
+        mActivityRule.launchActivity(test);
+    }
+
+    public void setupIntentDataMultipleQuestions()
+    {
+        Intent test = new Intent();
+        Challenge challenge = new Challenge(challengeName, new ArrayList<Question>());
+        Question question1 = new Question(exampleQuestionName, exampleQuestion, exampleAnswer);
+        Question question2 = new Question(exampleQuestionName, exampleQuestion, exampleAnswer);
+        challenge.addQuestion(question1);
+        challenge.addQuestion(question2);
+        game = new Game(challenge, Game.HARD, false);
         test.putExtra("game", game);
         mActivityRule.launchActivity(test);
     }
@@ -49,9 +63,23 @@ public class GameAnswerInstrumentedTest
     }
 
     @Test
+    public void testCorrectButtonMultipleQuestions() throws Exception
+    {
+        setupIntentDataMultipleQuestions();
+        onView(withId(R.id.correctBtn)).perform(click());
+    }
+
+    @Test
     public void testWrongButton() throws Exception
     {
         setupIntentData();
+        onView(withId(R.id.wrongBtn)).perform(click());
+    }
+
+    @Test
+    public void testWrongButtonMultipleQuestions() throws Exception
+    {
+        setupIntentDataMultipleQuestions();
         onView(withId(R.id.wrongBtn)).perform(click());
     }
 
@@ -65,7 +93,9 @@ public class GameAnswerInstrumentedTest
 
     @Test
     public void testBackButtonApprove() throws Exception{
-        setupIntentData();
+        setupIntentDataMultipleQuestions();
+
+        String question_name = game.getCurrentQuestionIndex().getQuestion();
 
         onView(isRoot()).perform(pressBack());
 
@@ -75,10 +105,13 @@ public class GameAnswerInstrumentedTest
         onView(withText(R.string.toast_success_game_saved))
                 .inRoot(withDecorView(not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
                 .check(matches(isDisplayed()));
+        Thread.sleep(2500);
 
         onView(withId(R.id.buttonContinueChallenge)).check(matches(isDisplayed()));
         onView(withId(R.id.buttonBrowseChallenges)).check(matches(isDisplayed()));
-        Thread.sleep(2500);
+
+        onView(withId(R.id.buttonContinueChallenge)).perform(click());
+        onView(withId(R.id.questionTxtView)).check(matches(withText(question_name)));
     }
 
     @Test

@@ -12,12 +12,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.Description;
 
 public class Result extends Activity implements View.OnClickListener
 {
     public TextView resultTxtView;
     public Button returnToStart;
-    private Game game;
+    public Game game;
 
     public DialogInterface.OnClickListener dialogExitChallengeClickListener;
 
@@ -33,13 +34,12 @@ public class Result extends Activity implements View.OnClickListener
 
         returnToStart = (Button) findViewById(R.id.returnToStart);
         PieChart pieChart = (PieChart) findViewById(R.id.ChartView);
-
-
         pieChart.setData(game.generatePieData());
+        pieChart.getData().setValueTextSize(40);
+        pieChart.getDescription().setEnabled(false);
+        pieChart.getLegend().setEnabled(false);
         pieChart.invalidate();
-
         returnToStart.setOnClickListener(this);
-
 
         dialogExitChallengeClickListener = new DialogInterface.OnClickListener() {
             @Override
@@ -47,12 +47,15 @@ public class Result extends Activity implements View.OnClickListener
                 if (choice == DialogInterface.BUTTON_POSITIVE){
                     int constructFileResult = game.deleteGameFile();
                     if(constructFileResult != 0){
+                        Intent start = new Intent(getApplicationContext(), Start.class);
+                        startActivity(start);
                         Toast.makeText(getApplicationContext(), getApplicationContext().getString(R.string.toast_error_game_delete), Toast.LENGTH_SHORT).show();
+                        finish();
+                    } else {
+                        Intent start = new Intent(getApplicationContext(), Start.class);
+                        startActivity(start);
+                        finish();
                     }
-
-                    Intent start = new Intent(getApplicationContext(), Start.class);
-                    startActivity(start);
-                    finish();
                 }
             }
         };
@@ -76,10 +79,6 @@ public class Result extends Activity implements View.OnClickListener
         {
             case R.id.returnToStart:
                 int constructFileResult = game.deleteGameFile();
-                if(constructFileResult != 0){
-                    Toast.makeText(this, R.string.toast_error_game_delete, Toast.LENGTH_SHORT).show();
-                }
-
                 Intent start = new Intent(getApplicationContext(), Start.class);
                 startActivity(start);
                 finish();

@@ -46,14 +46,9 @@ public class GameAnswer extends Activity implements View.OnClickListener
             public void onClick(DialogInterface dialog, int choice) {
                 if (choice == DialogInterface.BUTTON_POSITIVE){
                     int constructFileResult = game.constructGameFile();
-
-                    if(constructFileResult == 0){
-                        Toast.makeText(getApplicationContext(), getApplicationContext().getString(R.string.toast_success_game_saved), Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(getApplicationContext(), getApplicationContext().getString(R.string.toast_error_save_data), Toast.LENGTH_SHORT).show();
-                    }
                     Intent start = new Intent(getApplicationContext(), Start.class);
                     startActivity(start);
+                    Toast.makeText(getApplicationContext(), getApplicationContext().getString(R.string.toast_success_game_saved), Toast.LENGTH_SHORT).show();
                     finish();
                 }
             }
@@ -82,7 +77,6 @@ public class GameAnswer extends Activity implements View.OnClickListener
                     correctStartQuestion.putExtra("game", game);
                     startActivity(correctStartQuestion);
                     finish();
-                    break;
                 }
                 else {
                     Intent correctStartQuestion = new Intent(getApplicationContext(), Result.class);
@@ -98,7 +92,6 @@ public class GameAnswer extends Activity implements View.OnClickListener
                     wrongStartQuestion.putExtra("game", game);
                     startActivity(wrongStartQuestion);
                     finish();
-                    break;
                 }
                 else {
                     Intent wrongStartQuestion = new Intent(getApplicationContext(), Result.class);

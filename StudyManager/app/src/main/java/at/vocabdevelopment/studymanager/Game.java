@@ -32,12 +32,15 @@ public class Game implements Serializable {
     private int attempts;
     private int numberOfQuestions;
 
-    public Game(Challenge challenge, int difficulty)
+
+    private boolean active;
+
+    public Game(Challenge challenge, int difficulty, boolean active)
     {
         this.challenge = challenge;
         this.difficulty = difficulty;
-        this.deck = challenge.getQuestionList();
-        this.numberOfQuestions = deck.size();
+        this.active = active;
+        activeDeck(active);
         this.attemptsList = new ArrayList<>();
         Collections.shuffle(this.deck);
         this.currentQuestionIndex = 0;
@@ -93,9 +96,10 @@ public class Game implements Serializable {
 
     public PieData generatePieData() {
         List<PieEntry> pieEntries = new ArrayList<>();
-        pieEntries.add(new PieEntry(wrongCounter, "wrong"));
-        pieEntries.add(new PieEntry(numberOfQuestions - wrongCounter, "correct"));
-        PieDataSet pieDataSet = new PieDataSet(pieEntries, "Your Result");
+        pieEntries.add(new PieEntry(wrongCounter, ""));
+        pieEntries.add(new PieEntry(numberOfQuestions - wrongCounter, ""));
+        PieDataSet pieDataSet = new PieDataSet(pieEntries, "");
+        pieDataSet.setLabel("");
         PieData pieData = new PieData(pieDataSet);
 
         pieDataSet.setColors(ColorTemplate.COLORFUL_COLORS);
@@ -155,6 +159,8 @@ public class Game implements Serializable {
             gameWriter.value(this.getWrongCounter());
             gameWriter.name("attempts");
             gameWriter.value(this.getAttempts());
+            gameWriter.name("active");
+            gameWriter.value(active);
 
             gameWriter.name("attemptsList");
             gameWriter.beginArray();
@@ -194,6 +200,27 @@ public class Game implements Serializable {
         return 0;
     }
 
+    public void activeDeck(boolean active)
+    {
+        deck = new ArrayList<Question>();
+        if(active)
+        {
+            deck = new ArrayList<Question>();
+            for(Question q: challenge.getQuestionList())
+            {
+                if(q.getActiveStatus())
+                {
+                    deck.add(q);
+                }
+            }
+        }
+        else
+        {
+            this.deck = challenge.getQuestionList();
+        }
+        numberOfQuestions = deck.size();
+    }
+
     public Challenge getChallenge() {
         return challenge;
     }
@@ -227,11 +254,9 @@ public class Game implements Serializable {
         this.challenge = challenge;
     }
 
-
     public void setDeck(ArrayList<Question> deck) {
         this.deck = deck;
     }
-
 
     public void setDifficulty(int difficulty) {
         this.difficulty = difficulty;
@@ -251,5 +276,13 @@ public class Game implements Serializable {
 
     public void setAttempts(int attempts) {
         this.attempts = attempts;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public boolean isActive() {
+        return active;
     }
 }
