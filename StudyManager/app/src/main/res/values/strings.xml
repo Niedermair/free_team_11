@@ -29,6 +29,7 @@
     <string name="toast_error_no_saved_game">There is no challenge to continue!</string>
     <string name="toast_success_game_saved">Game saved!</string>
     <string name="toast_error_game_delete">Ups! Error while deleting game file.</string>
+    <string name="toast_no_active_questions">No active questions in deck.</string>
     <string name="permission_information">We need to access your External storage. Please grant the corresponding permissions.</string>
     <string name="edit_challenge">Edit</string>
     <string name="toast_select_challenge">"Please select a challenge…"</string>
