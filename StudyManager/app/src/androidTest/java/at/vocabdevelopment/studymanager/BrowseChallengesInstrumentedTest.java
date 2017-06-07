@@ -153,6 +153,8 @@ public class BrowseChallengesInstrumentedTest {
         onView(withId(R.id.searchViewChallenges)).perform(click(), pressKey(KeyEvent.KEYCODE_ENTER));
         onView(withId(R.id.searchViewChallenges)).perform(typeText("Searched Challenge XYZ"));
 
+        onData(anything()).inAdapterView(withId(R.id.listViewChallenges)).perform(click());
+
         onView(withId(R.id.buttonSelectChallenge)).perform(click());
         onView(withId(R.id.textViewSetupChallengeChallengeName)).check(matches(withText("Searched Challenge XYZ")));
 
@@ -182,6 +184,7 @@ public class BrowseChallengesInstrumentedTest {
         onView(withId(R.id.searchViewChallenges)).perform(typeText("Searched Challenge XYZ"));
         onView(withId(R.id.searchViewChallenges)).perform(click(), pressKey(KeyEvent.KEYCODE_ENTER));
 
+        onData(anything()).inAdapterView(withId(R.id.listViewChallenges)).perform(click());
 
         onView(withId(R.id.buttonSelectChallenge)).perform(click());
         onView(withId(R.id.textViewSetupChallengeChallengeName)).check(matches(withText("Searched Challenge XYZ")));

@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.Description;
 
 public class Result extends Activity implements View.OnClickListener
 {
@@ -34,6 +35,8 @@ public class Result extends Activity implements View.OnClickListener
         returnToStart = (Button) findViewById(R.id.returnToStart);
         PieChart pieChart = (PieChart) findViewById(R.id.ChartView);
         pieChart.setData(game.generatePieData());
+        pieChart.getDescription().setEnabled(false);
+        pieChart.getLegend().setEnabled(false);
         pieChart.invalidate();
         returnToStart.setOnClickListener(this);
 
