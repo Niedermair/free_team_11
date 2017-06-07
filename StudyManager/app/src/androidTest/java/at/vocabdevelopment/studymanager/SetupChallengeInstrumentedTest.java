@@ -5,6 +5,7 @@ import android.support.test.rule.ActivityTestRule;
 
 import junit.framework.Assert;
 
+import org.hamcrest.CoreMatchers;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -41,6 +42,20 @@ public class SetupChallengeInstrumentedTest {
         Question question2 = new Question(exampleQuestionName2, exampleQuestion2, exampleAnswer2);
         challenge.addQuestion(question1);
         challenge.addQuestion(question2);
+        data.putExtra("challenge", challenge);
+        mActivityRule.launchActivity(data);
+    }
+
+    public void setupIntentDataInactive()
+    {
+        Intent data = new Intent();
+        Challenge challenge = new Challenge(challengeName, new ArrayList<Question>());
+        Question question1 = new Question(exampleQuestionName1, exampleQuestion1, exampleAnswer1);
+        Question question2 = new Question(exampleQuestionName2, exampleQuestion2, exampleAnswer2);
+        challenge.addQuestion(question1);
+        challenge.addQuestion(question2);
+        question1.setActiveStatus(false);
+        question2.setActiveStatus(false);
         data.putExtra("challenge", challenge);
         mActivityRule.launchActivity(data);
     }
@@ -158,5 +173,18 @@ public class SetupChallengeInstrumentedTest {
         onView(withId(R.id.questionTxtView)).check(matches(isDisplayed()));
         onView(withId(R.id.showAnswerBtn)).check(matches(isDisplayed()));
         onView(withId(R.id.quitGameBtn)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testActiveDeckWithoutActiveQuestions() throws Exception
+    {
+        setupIntentDataInactive();
+        onView(withId(R.id.buttonHard)).perform(click());
+        onView(withId(R.id.buttonActiveDeck)).perform(click());
+        onView(withId(R.id.buttonStart)).perform(click());
+        onView(withText(R.string.toast_no_active_questions))
+                .inRoot(withDecorView(CoreMatchers.not(is(mActivityRule.getActivity().getWindow().getDecorView()))))
+                .check(matches(isDisplayed()));
+        Thread.sleep(2500);
     }
 }

@@ -101,10 +101,15 @@ public class SetupChallenge extends Activity implements View.OnClickListener {
             case R.id.buttonStart:
                 if (difficulty != NOT_SET) {
                     Game game = new Game(challenge, difficulty, active);
-                    Intent startGame = new Intent(getApplicationContext(), GameQuestion.class);
-                    startGame.putExtra("game", game);
-                    startActivity(startGame);
-                    finish();
+                    if(game.hasNextQuestion())
+                    {
+                        Intent startGame = new Intent(getApplicationContext(), GameQuestion.class);
+                        startGame.putExtra("game", game);
+                        startActivity(startGame);
+                        finish();
+                    }else{
+                        Toast.makeText(this, "No active questions in deck.", Toast.LENGTH_SHORT).show();
+                    }
                 }
                 else {
                     Toast.makeText(this, getApplicationContext().getString(R.string.toast_error_difficulty), Toast.LENGTH_SHORT).show();
