@@ -112,7 +112,6 @@ class StudyManager {
                     while(reader.hasNext()){
                         String name = reader.nextName();
                         if(name.equals("name")){
-                            // game.setChallenge(getChallenge(reader.nextString()));
                             challenge.setName(reader.nextString());
                         } else {
                             reader.skipValue();
@@ -216,7 +215,6 @@ class StudyManager {
 
             return game;
         }else{
-
             throw new FileNotFoundException();
         }
     }

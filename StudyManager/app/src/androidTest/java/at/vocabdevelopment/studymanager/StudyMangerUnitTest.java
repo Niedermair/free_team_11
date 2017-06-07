@@ -313,6 +313,74 @@ public class StudyMangerUnitTest extends StudyManager {
         }
     }
 
+    @Test
+    public void testGetGameInvalid2() throws Exception {
+
+        File gameFile = new File(StudyManager.getCurrentGameDir() + File.separator +
+                "currentGame.json");
+        if(gameFile.exists()){
+            gameFile.delete();
+        }
+
+        JsonWriter gameWriter = new JsonWriter(new FileWriter(gameFile));
+        gameWriter.beginObject();
+
+        gameWriter.name("challenge");
+        gameWriter.beginArray();
+        gameWriter.beginObject();
+        gameWriter.name("name");
+        gameWriter.value("challengeName");
+        gameWriter.name("invalid");
+        gameWriter.value("something");
+        gameWriter.endObject();
+        gameWriter.endArray();
+
+        gameWriter.name("questions");
+        gameWriter.beginArray();
+        gameWriter.beginObject();
+        gameWriter.name("name");
+        gameWriter.value("questionName");
+        gameWriter.name("question");
+        gameWriter.value("question");
+        gameWriter.name("answer");
+        gameWriter.value("answer");
+        gameWriter.name("activeStatus");
+        gameWriter.value("false");
+        gameWriter.name("invalid");
+        gameWriter.value("something");
+        gameWriter.endObject();
+        gameWriter.endArray();
+
+        gameWriter.name("invalid");
+        gameWriter.value(-1);
+        gameWriter.name("invalid");
+        gameWriter.value(-1);
+        gameWriter.name("invalid");
+        gameWriter.value(-1);
+        gameWriter.name("invalid");
+        gameWriter.value(-1);
+
+        gameWriter.name("invalid");
+        gameWriter.beginArray();
+        gameWriter.endArray();
+        gameWriter.endObject();
+
+        gameWriter.close();
+
+        Game gameRead = StudyManager.getGame();
+
+        assertEquals(gameRead.getChallenge().getName(), "challengeName");
+        assertEquals(gameRead.getChallenge().getQuestionList().size(), 1);
+        assertEquals(gameRead.getDeck().size(), 1);
+        assertEquals(gameRead.getWrongCounter(), 0);
+        assertEquals(gameRead.getAttemptsList().size(), 0);
+        assertEquals(gameRead.getAttempts(), 0);
+
+        if(gameFile.exists()){
+            gameFile.delete();
+        }
+    }
+
     @Test public void testGetValidGameWithSideDeck() throws Exception
     {
         File gameFile = new File(StudyManager.getCurrentGameDir() + File.separator +

@@ -1,6 +1,5 @@
 package at.vocabdevelopment.studymanager;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.support.test.rule.ActivityTestRule;
 

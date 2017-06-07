@@ -1,9 +1,7 @@
 package at.vocabdevelopment.studymanager;
 
 import android.content.Intent;
-import android.support.test.espresso.core.deps.guava.base.Strings;
 import android.support.test.rule.ActivityTestRule;
-import android.util.Log;
 
 import org.junit.Rule;
 import org.junit.Test;
